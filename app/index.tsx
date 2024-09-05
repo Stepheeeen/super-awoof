@@ -25,7 +25,7 @@ export default function SplashScreen() {
     <View style={tw`flex-1 justify-center items-center bg-[#0F1219] mt-[-15%] md:mt-[30%]`}>
       <Image
         source={require('../assets/images/logo-normal.png')} // Replace with your logo path
-        style={tw`mb-3 md:[mt-[30%]`}
+        style={tw`mb-3 md:[mt-[30%]`} 
         resizeMode="contain"
       />
 
