@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "super-awoof",
-    "slug": "super-awoof",
+    "name": "src",
+    "slug": "src",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
