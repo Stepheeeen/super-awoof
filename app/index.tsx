@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, View } from "react-native";
 import tw from 'twrnc';
 import LoadingProgressBar from "@/component/reusable/Loading";
 import { useRouter } from 'expo-router';
@@ -34,24 +34,24 @@ export default function SplashScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    padding: 24,
-  },
-  main: {
-    flex: 1,
-    justifyContent: "center",
-    maxWidth: 960,
-    marginHorizontal: "auto",
-  },
-  title: {
-    fontSize: 64,
-    fontWeight: "bold",
-  },
-  subtitle: {
-    fontSize: 36,
-    color: "#0F1219",
-  },
-});
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     alignItems: "center",
+//     padding: 24,
+//   },
+//   main: {
+//     flex: 1,
+//     justifyContent: "center",
+//     maxWidth: 960,
+//     marginHorizontal: "auto",
+//   },
+//   title: {
+//     fontSize: 64,
+//     fontWeight: "bold",
+//   },
+//   subtitle: {
+//     fontSize: 36,
+//     color: "#0F1219",
+//   },
+// });
