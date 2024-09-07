@@ -6,14 +6,12 @@ import tailwind from 'twrnc';
 
 const DefaultButton = ({ text, onPress }: { text: string, onPress: any, }) => {
     return (
-        <TouchableOpacity style={tailwind`hover:opacity-70`}>
         <Pressable onPress={onPress}>
             <View style={styles.button}>
                 <Text style={styles.buttonText}>{text}</Text>
                 <View style={styles.darkGreenLine} />
             </View>
         </Pressable>
-        </TouchableOpacity>
     );
 };
 
