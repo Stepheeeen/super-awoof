@@ -24,7 +24,7 @@ const Onboarding = () => {
         <Text style={tailwind`text-center text-[16px] font-normal text-white leading-[23px]`}>Spin the reels and stand a chance to hit the jackpot! Every play gives you a shot at earning more, with easy coin purchases and rewards</Text>
       </View>
 
-      <View style={tailwind`w-[90%`}>
+      <View style={tailwind`w-[80%`}>
         <DefaultButton onPress={() => { router.push('/Onboarding/tab2') }} text="Continue" />
       </View>
 
