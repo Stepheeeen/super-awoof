@@ -15,7 +15,7 @@ export default function SplashScreen() {
         const next = prev + 10;
         if (next >= 100) {
           clearInterval(interval);
-          setTimeout(() => router.push('/Onboarding'), 0);
+          setTimeout(() => router.push('/Onboarding/tab1'), 0);
         }
         return next;
       });
