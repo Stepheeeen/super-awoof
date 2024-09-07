@@ -20,8 +20,8 @@ const Onboarding = () => {
 
                 </View>
                 <View style={tailwind`flex items-center px-2`}>
-                    <Text style={tailwind`mb-4 text-[25px] text-white font-[500]`}>Easy to Play, Big Rewards</Text>
-                    <Text style={tailwind`text-center text-[18px] font-[500] text-white leading-[24px]`}>Deposit as little as N1000 to get 400 coins and start spinning. Get ready for thrilling gameplay and cash rewards</Text>
+                    <Text style={tailwind`mb-4 text-[25px] text-white font-bold`}>Easy to Play, Big Rewards</Text>
+                    <Text style={tailwind`text-center text-[18px] font-normal text-white leading-[24px]`}>Deposit as little as N1000 to get 400 coins and start spinning. Get ready for thrilling gameplay and cash rewards</Text>
                 </View>
 
 

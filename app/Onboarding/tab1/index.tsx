@@ -20,8 +20,8 @@ const Onboarding = () => {
           
       </View>
       <View style={tailwind`flex items-center px-3 mt-[-60px]`}>
-        <Text style={tailwind`mb-4 text-[25px] text-white font-[500]`}>Win Big with Super Awoof</Text>
-        <Text style={tailwind`text-center text-[16px] font-[500] text-white leading-[23px]`}>Spin the reels and stand a chance to hit the jackpot! Every play gives you a shot at earning more, with easy coin purchases and rewards</Text>
+        <Text style={tailwind`mb-4 text-[25px] text-white font-bold`}>Win Big with Super Awoof</Text>
+        <Text style={tailwind`text-center text-[16px] font-normal text-white leading-[23px]`}>Spin the reels and stand a chance to hit the jackpot! Every play gives you a shot at earning more, with easy coin purchases and rewards</Text>
       </View>
 
       <View style={tailwind`w-[90%`}>
