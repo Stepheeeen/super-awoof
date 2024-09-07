@@ -7,7 +7,7 @@ const Onboarding = () => {
     const router = useRouter()
     return (
         <View style={tailwind`h-full w-full flex flex-col items-center justify-between py-[40px] px-1 bg-[#0F1219]`}>
-            <Image source={require('../../../assets/images/coins.png')} style={tailwind`w-[93%] rounded-lg h-[300px]`} />
+            <Image source={require('../../../assets/images/coins.png')} style={tailwind`w-[93%] rounded-lg`} />
 
                 <View style={tailwind`flex flex-row gap-1 mt-[-9]`}>
                     <Pressable onPress={() => { router.push('/Onboarding/tab1') }}>
@@ -25,8 +25,8 @@ const Onboarding = () => {
                 </View>
 
 
-            <View style={tailwind`w-full`}>
-                <DefaultButton onPress={() => { router.push('/Onboarding/tab2') }} text="Get Started" />
+            <View style={tailwind`w-[90%]`}>
+                <DefaultButton onPress={() => { router.push('/Auth/signin/email') }} text="Get Started" />
             </View>
 
         </View>
