@@ -90,7 +90,7 @@ const OTPInput = ({ duration = 15000 }) => {
                     </View>
 
                     <View style={tailwind`mt-[25%] w-[95%] mx-auto`}>
-                        <DefaultButton onPress={''} text="Register" />
+                        <DefaultButton onPress={() => {router.push('/Pages')}} text="Register" />
                     </View>
 
                 </ScrollView>
