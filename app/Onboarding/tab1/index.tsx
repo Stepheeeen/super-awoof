@@ -28,7 +28,6 @@ const Onboarding = () => {
       <View style={tailwind`w-[90%]`}>
         <DefaultButton onPress={() => { router.push('/Onboarding/tab2') }} text="Continue"/>
       </View>
-
     </View>
   );
 };
