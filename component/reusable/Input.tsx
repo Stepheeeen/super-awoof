@@ -3,7 +3,7 @@ import { Pressable, Text, TextInput, View } from "react-native";
 import tailwind from "twrnc";
 
 
-export const PasswordInput = ({ placeholder, label, customCss }: { placeholder: string, label: string, customCss: string, }) => {
+export const PasswordInput = ({ placeholder, label, customCss, onPress, hidden }: { placeholder: string, label: string, customCss: string, onPress: any, hidden: string, }) => {
     const [isPasswordVisible, setPasswordVisible] = useState(false); // State to manage password visibility
 
     // Toggle password visibility
@@ -19,11 +19,19 @@ export const PasswordInput = ({ placeholder, label, customCss }: { placeholder: 
                 placeholderTextColor="gray"
                 secureTextEntry={!isPasswordVisible} // Ensures the input is hidden
             />
-            <Pressable onPress={togglePasswordVisibility} style={tailwind`w-full flex justify-end items-end`}>
-                <Text style={tailwind`mr-2 text-[#00A859] text-[15px] mt-1 font-normal`}>
-                    {isPasswordVisible ? 'Hide' : 'Show'}
-                </Text>
-            </Pressable>
+            <View style={tailwind`w-full flex flex-row justify-between items-end`}>
+                <Pressable onPress={onPress}>
+                    <Text style={tailwind`ml-2 text-[#00A859] text-[15px] mt-1 font-normal ${hidden}`}>
+                        Forgot password?
+                    </Text>
+                </Pressable>
+
+                <Pressable onPress={togglePasswordVisibility} >
+                    <Text style={tailwind`mr-2 text-[#00A859] text-[15px] mt-1 font-normal`}>
+                        {isPasswordVisible ? 'Hide' : 'Show'}
+                    </Text>
+                </Pressable>
+            </View>
         </View>
     )
 }

@@ -27,8 +27,8 @@ const index = () => {
                     </Text>
 
                 </Pressable>
-                <PasswordInput placeholder="********" label="Create Password" customCss="mt-3 w-[95%] mx-auto" />
-                <PasswordInput placeholder="********" label="Confirm Password" customCss="mt-3 w-[95%] mx-auto" />
+                <PasswordInput placeholder="********" label="Create Password" customCss="mt-3 w-[95%] mx-auto" hidden="opacity-0" onPress={''}/>
+                <PasswordInput placeholder="********" label="Confirm Password" customCss="mt-3 w-[95%] mx-auto" hidden="opacity-0" onPress={''} />
 
                 <View style={tailwind`mt-10 w-[95%] mx-auto`}>
                     <DefaultButton onPress={''} text="Register" />

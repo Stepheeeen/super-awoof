@@ -21,7 +21,7 @@ const index = () => {
         </Text>
 
       </Pressable>
-      <PasswordInput placeholder="********" label="Password" customCss="mt-5 w-[95%] mx-auto" />
+      <PasswordInput placeholder="********" label="Password" customCss="mt-5 w-[95%] mx-auto" hidden="" onPress={()=> {router.push('/Auth/forgotPassword')}}  />
 
       <View style={tailwind`mt-10 w-[95%] mx-auto`}>
         <DefaultButton onPress={''} text="Login" />
