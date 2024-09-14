@@ -9,9 +9,9 @@ const index = () => {
   const router = useRouter()
   return (
     <View style={tailwind`h-full bg-[#0F1219] w-full px-1 py-5`}>
-      <View style={tailwind`w-full mt-[10%] mb-6 px-3`}>
+      <View style={tailwind`w-full mt-[7%] mb-6 px-3`}>
         <Text style={tailwind`text-white font-bold text-[27px]`}>Hello, Welcome Back!</Text>
-        <Text style={tailwind`text-white font-normal text-[18px] mt-2 mb-4`}>Login To Your Account.</Text>
+        <Text style={tailwind`text-white font-normal text-[18px] mt-2`}>Login To Your Account.</Text>
       </View>
 
       <DefaultInput label="Email Address" placeholder="adebayohaliah@gmail.com" customCss="w-[95%] mx-auto" />
@@ -23,7 +23,7 @@ const index = () => {
       </Pressable>
       <PasswordInput placeholder="********" label="Password" customCss="mt-5 w-[95%] mx-auto" hidden="" onPress={()=> {router.push('/Auth/forgotPassword')}}  />
 
-      <View style={tailwind`mt-10 w-[95%] mx-auto`}>
+      <View style={tailwind`mt-8 w-[95%] mx-auto`}>
         <DefaultButton onPress={''} text="Login" />
       </View>
       <View style={tailwind`flex flex-row w-full items-center justify-center mt-3`}>
