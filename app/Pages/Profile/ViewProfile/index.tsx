@@ -10,7 +10,7 @@ const index = () => {
         style={tailwind`flex flex-row items-center w-full justify-between px-5 py-6 h-[13%] absolute top-0 bg-[#0F1219] z-10 `}
       >
         <Image
-          source={require("../../../assets/images/favicon.png")}
+          source={require("../../../../assets/images/favicon.png")}
           style={tailwind`w-[50px] h-[50px]`}
         />
         <Text style={tailwind`ml-[-15px] font-semibold text-[22px] text-white`}>Profile</Text>
@@ -25,7 +25,17 @@ const index = () => {
       </View>
 
       <View style={tailwind`mt-[20%] py-6 px-3`}>
-        
+        <DefaultInput
+          label="Email Address"
+          placeholder="adebayohaliah@gmail.com"
+          customCss="w-[95%] mx-auto"
+        />
+
+        <DefaultInput
+          label="Email Address"
+          placeholder="adebayohaliah@gmail.com"
+          customCss="w-[95%] mx-auto my-7"
+        />
       </View>
 
       <TabBar />
