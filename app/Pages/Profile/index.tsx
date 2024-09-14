@@ -17,10 +17,6 @@ const index = () => {
         <Pressable
           style={tailwind`flex flex-row items-center py-[2px] px-2 rounded`}
         >
-          {/* <Image source={require('../../../assets/images/AwoofCoin.png')} style={tailwind``} />
-          <Text style={tailwind`text-white text-[17px] mb-1 ml-1`}>
-            6000
-          </Text> */}
         </Pressable>
       </View>
 

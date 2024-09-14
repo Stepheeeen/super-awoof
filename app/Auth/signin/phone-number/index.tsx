@@ -14,14 +14,14 @@ const index = () => {
         <Text style={tailwind`text-white font-normal text-[18px] mt-2 mb-4`}>Login To Your Account.</Text>
       </View>
 
-      <DefaultInput label="Email Address" placeholder="adebayohaliah@gmail.com" customCss="w-[95%] mx-auto" />
+      <DefaultInput label="Phone Number"  placeholder="09120397347" customCss="w-[95%] mx-auto" />
       <Pressable onPress={() => { router.push('/Auth/signin/email') }}>
         <Text style={tailwind`text-[#00A859] ml-3 mt-2 text-[14px] font-normal`}>
           Use Email Address Instead
         </Text>
 
       </Pressable>
-      <PasswordInput placeholder="********" label="Password" customCss="mt-5 w-[95%] mx-auto" />
+      <PasswordInput placeholder="********" label="Password" customCss="mt-5 w-[95%] mx-auto" hidden="" onPress={()=>{}}/>
 
       <View style={tailwind`mt-10 w-[95%] mx-auto`}>
         <DefaultButton onPress={''} text="Login" />
