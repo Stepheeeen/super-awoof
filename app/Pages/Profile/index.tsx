@@ -7,8 +7,12 @@ import { TbLogout2 } from "react-icons/tb";
 import { GoTrash } from "react-icons/go";
 import { IoIosArrowForward } from "react-icons/io";
 import tailwind from "twrnc";
+import Modal from "@/component/reusable/Modal";
+import { useState } from "react";
 
 const index = () => {
+  const [modalVisible, setModalVisible] = useState(false);
+  const [deleteAccount, setDeleteAccount] = useState(false);
   return (
     <View style={tailwind`h-full bg-[#0F1219] w-full`}>
       <View
@@ -52,26 +56,28 @@ const index = () => {
           <IoIosArrowForward color="#B7B7B7" size={25} />
         </Pressable>
 
-        <hr style={tailwind`w-[87%] border-1 my-5 bg-[#343434]`}/>
+        <hr style={tailwind`w-[87%] border-1 my-5 bg-[#343434]`} />
 
         <Pressable
           style={tailwind`flex flex-row items-center w-full justify-between py-2 px-5 mt-3`}
+          onPress={() => setModalVisible(true)}
         >
           <View style={tailwind`flex flex-row`}>
             <TbLogout2 color="#B7B7B7" size={30} />
-            <Text style={tailwind`text-white text-[18px] ml-3`}>
-              Logout
-            </Text>
+            <Text style={tailwind`text-white text-[18px] ml-3`}>Logout</Text>
           </View>
 
           <IoIosArrowForward color="#B7B7B7" size={25} />
         </Pressable>
-        
+
         <Pressable
           style={tailwind`flex flex-row items-center w-full justify-between py-2 px-5 my-1`}
+          onPress={() => {
+            setDeleteAccount(true);
+          }}
         >
           <View style={tailwind`flex flex-row pl-1`}>
-            <GoTrash color="#B7B7B7" size={25}/>
+            <GoTrash color="#B7B7B7" size={25} />
             <Text style={tailwind`text-white text-[18px] ml-3`}>
               Delete Account
             </Text>
@@ -82,6 +88,36 @@ const index = () => {
       </View>
 
       <TabBar />
+
+      <Modal
+        modalVisible={modalVisible}
+        onClose={() => {
+          setModalVisible(false);
+        }}
+        ButtonText={"Log out"}
+        HeadText="Logging Out?"
+        SubText="Are you sure you want to log out from your SupaAwoof account?"
+        handleClick={() => {}}
+        cancelText={
+          <Text style={tailwind`underline my-2 text-white`}>No, Cancel</Text>
+        }
+        ModalHeadText=""
+      />
+
+      <Modal
+        modalVisible={deleteAccount}
+        onClose={() => {
+          setDeleteAccount(false);
+        }}
+        ButtonText={"Delete Account"}
+        HeadText="Delete Account?"
+        SubText="Are you sure you want to delete your SupaAwoof account?"
+        handleClick={() => {}}
+        cancelText={
+          <Text style={tailwind`underline my-2 text-white`}>No, Cancel</Text>
+        }
+        ModalHeadText=""
+      />
     </View>
   );
 };
