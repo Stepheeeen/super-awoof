@@ -1,6 +1,11 @@
 import { DefaultInput } from "@/component/reusable/Input";
 import TabBar from "@/component/reusable/TabBar";
 import { Image, Pressable, Text, View } from "react-native";
+import { CgProfile } from "react-icons/cg";
+import { GrPowerReset } from "react-icons/gr";
+import { TbLogout2 } from "react-icons/tb";
+import { GoTrash } from "react-icons/go";
+import { IoIosArrowForward } from "react-icons/io";
 import tailwind from "twrnc";
 
 const index = () => {
@@ -13,15 +18,67 @@ const index = () => {
           source={require("../../../assets/images/favicon.png")}
           style={tailwind`w-[50px] h-[50px]`}
         />
-        <Text style={tailwind`ml-[-15px] font-semibold text-[22px] text-white`}>Profile</Text>
+        <Text style={tailwind`ml-[-15px] font-semibold text-[22px] text-white`}>
+          Profile
+        </Text>
         <Pressable
           style={tailwind`flex flex-row items-center py-[2px] px-2 rounded`}
-        >
-        </Pressable>
+        ></Pressable>
       </View>
 
-      <View style={tailwind`mt-[20%] py-6 px-3`}>
+      <View style={tailwind`mt-[20%] py-6 w-full`}>
+        <Pressable
+          style={tailwind`flex flex-row items-center w-full justify-between py-2 px-5`}
+        >
+          <View style={tailwind`flex flex-row`}>
+            <CgProfile color="#B7B7B7" size={30} />
+            <Text style={tailwind`text-white text-[18px] ml-3`}>
+              View Profile
+            </Text>
+          </View>
+
+          <IoIosArrowForward color="#B7B7B7" size={25} />
+        </Pressable>
+        <Pressable
+          style={tailwind`flex flex-row items-center w-full justify-between py-2 px-5 mt-1 mb-3`}
+        >
+          <View style={tailwind`flex flex-row`}>
+            <GrPowerReset color="#B7B7B7" size={30} />
+            <Text style={tailwind`text-white text-[18px] ml-3`}>
+              Reset Password
+            </Text>
+          </View>
+
+          <IoIosArrowForward color="#B7B7B7" size={25} />
+        </Pressable>
+
+        <hr style={tailwind`w-[87%] border-1 my-5 bg-[#343434]`}/>
+
+        <Pressable
+          style={tailwind`flex flex-row items-center w-full justify-between py-2 px-5 mt-3`}
+        >
+          <View style={tailwind`flex flex-row`}>
+            <TbLogout2 color="#B7B7B7" size={30} />
+            <Text style={tailwind`text-white text-[18px] ml-3`}>
+              Logout
+            </Text>
+          </View>
+
+          <IoIosArrowForward color="#B7B7B7" size={25} />
+        </Pressable>
         
+        <Pressable
+          style={tailwind`flex flex-row items-center w-full justify-between py-2 px-5 my-1`}
+        >
+          <View style={tailwind`flex flex-row pl-1`}>
+            <GoTrash color="#B7B7B7" size={25}/>
+            <Text style={tailwind`text-white text-[18px] ml-3`}>
+              Delete Account
+            </Text>
+          </View>
+
+          <IoIosArrowForward color="#B7B7B7" size={25} />
+        </Pressable>
       </View>
 
       <TabBar />
