@@ -31,10 +31,6 @@ const index = () => {
                 <SlotMachine/>
             </View>
           </View>
-
-          <TouchableOpacity onPress={()=>{}} style={tailwind`mt-5 p-4 bg-yellow-500 rounded-lg`}>
-            <Text style={tailwind`text-white font-bold`}>Spin</Text>
-          </TouchableOpacity>
         </View>
       </View>
 
