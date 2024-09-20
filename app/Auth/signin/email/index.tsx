@@ -2,6 +2,7 @@ import { DefaultButton } from "@/component/reusable/Button";
 import { DefaultInput, PasswordInput } from "@/component/reusable/Input";
 import { useRouter } from "expo-router";
 import { Pressable, Text, TextInput, View } from "react-native";
+// import axios from 'axios'
 import tailwind from "twrnc";
 
 const index = () => {
