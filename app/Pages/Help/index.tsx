@@ -52,6 +52,8 @@ const index = () => {
           label="Email Address"
           placeholder="adebayohaliah@gmail.com"
           customCss="w-[95%] mx-auto"
+          onChangeText={()=>{}}
+          value={''}
         />
 
         <View style={tailwind`mt-6`}>

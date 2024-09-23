@@ -18,12 +18,14 @@ const Index = () => {
       });
 
       // Handle successful response
-      console.log('Funding successful:', response.data);
+      // console.log('Funding successful:', response.data);
       // Navigate to the next screen or show success message
+      alert(response.data.message)
       router.push('/Pages');
-    } catch (error) {
+    } catch (error:any) {
       // Handle error response
-      console.error('Funding failed:', error);
+      alert(error.response.data.message)
+      // console.error('Funding failed:', error);
       // Optionally show an error message to the user
     }
   };

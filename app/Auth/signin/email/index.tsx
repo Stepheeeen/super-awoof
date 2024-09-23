@@ -23,7 +23,7 @@ const Index = () => {
       });
 
       console.log(response.data); // Handle successful response
-      alert(`Success", ${response.data.message}`);
+      alert(`Login Successfull`);
 
       // Redirect to the dashboard or other authenticated route
       router.push('/Pages'); 
