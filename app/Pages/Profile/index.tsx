@@ -1,14 +1,13 @@
 import { DefaultInput } from "@/component/reusable/Input";
+import { useState } from "react";
 import TabBar from "@/component/reusable/TabBar";
 import { Image, Pressable, Text, View } from "react-native";
-import { CgProfile } from "react-icons/cg";
-import { GrPowerReset } from "react-icons/gr";
-import { TbLogout2 } from "react-icons/tb";
-import { GoTrash } from "react-icons/go";
-import { IoIosArrowForward } from "react-icons/io";
+import AntDesign from "@expo/vector-icons/AntDesign";
+import Feather from "@expo/vector-icons/Feather";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import EvilIcons from "@expo/vector-icons/EvilIcons";
 import tailwind from "twrnc";
 import Modal from "@/component/reusable/Modal";
-import { useState } from "react";
 
 const Index = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -27,69 +26,67 @@ const Index = () => {
         </Text>
         <Pressable
           style={tailwind`flex flex-row items-center py-[2px] px-2 rounded`}
-          onPress={()=>{}}
+          onPress={() => {}}
         ></Pressable>
       </View>
 
       <View style={tailwind`mt-[20%] py-6 w-full`}>
         <Pressable
-          style={tailwind`flex flex-row items-center w-full justify-between py-2 px-5`}
+          style={tailwind`flex flex-row items-center w-full justify-between py-3 px-5`}
         >
-          <View style={tailwind`flex flex-row`}>
-            {/* <CgProfile color="#B7B7B7" size={30} /> */}
+          <View style={tailwind`flex flex-row items-center`}>
+            <AntDesign name="profile" size={25} color="white" />
             <Text style={tailwind`text-white text-[18px] ml-3`}>
               View Profile
             </Text>
           </View>
 
-          {/* <IoIosArrowForward color="#B7B7B7" size={25} /> */}
+          <MaterialIcons name="navigate-next" size={25} color="white" />
         </Pressable>
         <Pressable
-          style={tailwind`flex flex-row items-center w-full justify-between py-2 px-5 mt-1 mb-3`}
-          onPress={()=>{}}
+          style={tailwind`flex flex-row items-center w-full justify-between py-3 px-5 mt-1 mb-3`}
+          onPress={() => {}}
         >
           <View style={tailwind`flex flex-row`}>
-            {/* <GrPowerReset color="#B7B7B7" size={30} /> */}
+            <MaterialIcons name="lock-reset" size={25} color="white" />
             <Text style={tailwind`text-white text-[18px] ml-3`}>
               Reset Password
             </Text>
           </View>
 
-          {/* <IoIosArrowForward color="#B7B7B7" size={25} /> */}
+          <MaterialIcons name="navigate-next" size={25} color="white" />
         </Pressable>
 
-        {/* <hr style={tailwind`w-[87%] border-1 my-5 bg-[#343434]`} /> */}
+        <View style={tailwind`w-[87%] mx-auto my-5 h-[1px] bg-[#343434]`}></View>
 
         <Pressable
-          style={tailwind`flex flex-row items-center w-full justify-between py-2 px-5 mt-3`}
+          style={tailwind`flex flex-row items-center w-full justify-between py-3 px-5 mt-3`}
           onPress={() => setModalVisible(true)}
         >
           <View style={tailwind`flex flex-row`}>
-            {/* <TbLogout2 color="#B7B7B7" size={30} /> */}
+            <Feather name="power" size={23} color="white" />
             <Text style={tailwind`text-white text-[18px] ml-3`}>Logout</Text>
           </View>
 
-          {/* <IoIosArrowForward color="#B7B7B7" size={25} /> */}
+          <MaterialIcons name="navigate-next" size={25} color="white" />
         </Pressable>
 
         <Pressable
-          style={tailwind`flex flex-row items-center w-full justify-between py-2 px-5 my-1`}
+          style={tailwind`flex flex-row items-center w-full justify-between py-3 px-5 my-1`}
           onPress={() => {
             setDeleteAccount(true);
           }}
         >
-          <View style={tailwind`flex flex-row pl-1`}>
-            {/* <GoTrash color="#B7B7B7" size={25} /> */}
-            <Text style={tailwind`text-white text-[18px] ml-3`}>
+          <View style={tailwind`flex flex-row items-center ml-[-4px]`}>
+            <EvilIcons name="trash" size={30} color="white" />
+            <Text style={tailwind`text-white text-[18px] ml-2 mt-1`}>
               Delete Account
             </Text>
           </View>
 
-          {/* <IoIosArrowForward color="#B7B7B7" size={25} /> */}
+          <MaterialIcons name="navigate-next" size={25} color="white" />
         </Pressable>
       </View>
-
-      <TabBar />
 
       <Modal
         modalVisible={modalVisible}
@@ -120,6 +117,8 @@ const Index = () => {
         }
         ModalHeadText=""
       />
+
+      <TabBar />
     </View>
   );
 };

@@ -39,7 +39,7 @@ const ModalContainer = ({
             </Text>
             <View>
               <Text
-                style={tailwind`text-white text-center text-[22px] font-[600]`}
+                style={tailwind`text-white text-center text-[22px] font-semibold`}
               >
                 {HeadText}
               </Text>
