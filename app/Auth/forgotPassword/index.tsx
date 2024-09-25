@@ -14,7 +14,7 @@ const index = () => {
         <Text style={tailwind`text-white font-normal text-[18px] mt-2 mb-4`}>Enter your email address and we’ll send you a password reset link</Text>
       </View>
 
-      <DefaultInput label="Email Address" placeholder="adebayohaliah@gmail.com" customCss="w-[95%] mx-auto" />
+      <DefaultInput onChangeText={() => {}} value={''} label="Email Address" placeholder="adebayohaliah@gmail.com" customCss="w-[95%] mx-auto" />
 
       <View style={tailwind`mt-10 w-[95%] mx-auto`}>
         <DefaultButton onPress={()=> {router.push('/Auth/OTP')} } text="Reset" />

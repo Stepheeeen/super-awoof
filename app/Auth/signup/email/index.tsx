@@ -42,6 +42,7 @@ const Index = () => {
       });
       console.log(response.data); // Handle successful response
       alert(response.data.message || "Account created successfully!");
+      await AsyncStorage.setItem('LoginMode', response?.data?.loginMode);
       router.push("/Auth/signup/email/OTP"); // Redirect to sign in page after successful registration
     } catch (error: any) {
       if (error.response) {
@@ -158,3 +159,9 @@ const Index = () => {
 };
 
 export default Index;
+
+
+
+
+
+// bearer token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjYwMDM3MjksInN1YiI6IjY2ZGVlNDAzZjJlMmQxMjA2YjI4ZjNkYyIsImlhdCI6MTcyNTg4MzcyOX0._V_HGzQp_J0wU8gtLQctknAgMcfbfxypSTQNFVATP2k

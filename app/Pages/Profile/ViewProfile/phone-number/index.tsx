@@ -4,6 +4,7 @@ import { useRouter } from "expo-router";
 import { Pressable, Text, TextInput, View } from "react-native";
 import IonIcons from "@expo/vector-icons/Ionicons"
 import tailwind from "twrnc";
+import TabBar from "@/component/reusable/TabBar";
 
 const index = () => {
   const router = useRouter();
@@ -36,6 +37,8 @@ const index = () => {
           value={""}
         />
       </View>
+
+      <TabBar/>
     </View>
   );
 };

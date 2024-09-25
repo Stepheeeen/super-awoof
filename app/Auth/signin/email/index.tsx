@@ -1,18 +1,19 @@
+import { useState } from "react"; // Import useState for handling form data
 import { DefaultButton } from "@/component/reusable/Button";
 import { DefaultInput, PasswordInput } from "@/component/reusable/Input";
 import { useRouter } from "expo-router";
 import { Pressable, Text, View, Alert } from "react-native";
-import axios from 'axios';
+import axios from "axios";
 import tailwind from "twrnc";
-import { useState } from "react"; // Import useState for handling form data
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Index = () => {
   const router = useRouter();
-  const apiUrl = 'https://super-awoof-d6b48f0a17a5.herokuapp.com/api/v1/';
+  const apiUrl = "https://super-awoof-d6b48f0a17a5.herokuapp.com/api/v1/";
 
   // Form data state
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   // Handle login form submission
   const handleLogin = async () => {
@@ -21,26 +22,31 @@ const Index = () => {
         email,
         password,
       });
-
-      console.log(response.data); // Handle successful response
-      alert(`Login Successfull`);
-
+      Alert.alert("Success", "Login Successful");
+      console.log(response?.data);
       // Redirect to the dashboard or other authenticated route
-      router.push('/Pages'); 
-
+      router.push("/Pages");
+      await AsyncStorage.setItem("refreshToken", response?.data?.refreshToken);
+      await AsyncStorage.setItem("accessToken", response?.data?.accessToken);
     } catch (error: any) {
-      if (error.response) {
-        // Server responded with a status other than 200 range
-        console.error(error.response.data); // Log error data for debugging
-        alert(error.response.data.message);
+      if (
+        error.response.data.message ===
+        "Please verify your account in order to login"
+      ) {
+        // console.error(error.response.data.message); // Log error data for debugging
+        Alert.alert("Error", error.response.data.message);
+        router.push("/Auth/passwordReset");
       } else if (error.request) {
-        // Request was made but no response was received
-        console.error(error.request);
-        alert("Error, No response from server. Please check your network and try again.");
+        // console.error(error.request);
+        Alert.alert(
+          "Error",
+          "No response from server. Please check your network and try again."
+        );
       } else {
-        // Something happened while setting up the request
-        console.error('Error', error.message);
-        alert(`"Error", ${error.message}`);
+        Alert.alert(
+          "Error",
+          error.response.data.message || "An error occurred. Please try again."
+        );
       }
     }
   };
@@ -70,7 +76,9 @@ const Index = () => {
           router.push("/Auth/signin/phone-number");
         }}
       >
-        <Text style={tailwind`text-[#00A859] ml-3 mt-2 text-[14px] font-normal`}>
+        <Text
+          style={tailwind`text-[#00A859] ml-3 mt-2 text-[14px] font-normal`}
+        >
           Use Phone Number Instead
         </Text>
       </Pressable>
@@ -93,7 +101,9 @@ const Index = () => {
         <DefaultButton onPress={handleLogin} text="Login" />
       </View>
 
-      <View style={tailwind`flex flex-row w-full items-center justify-center mt-3`}>
+      <View
+        style={tailwind`flex flex-row w-full items-center justify-center mt-3`}
+      >
         <Text style={tailwind`text-white`}>Don’t have an account?</Text>
         <Pressable
           onPress={() => {

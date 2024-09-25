@@ -61,7 +61,7 @@ const index = () => {
             Message
           </Text>
           <TextInput
-            style={tailwind`border mx-auto border-[#34363B] rounded-lg p-3 bg-[#20232A] text-white w-[95%] text-[16px] font-normal`}
+            style={tailwind`border mx-auto border-[#34363B] rounded-lg p-3 bg-[#20232A] h-[220px] text-white w-[95%] text-[16px] font-normal`}
             multiline={true}
             numberOfLines={7} // Adjust as needed
             placeholder="Write message here..."

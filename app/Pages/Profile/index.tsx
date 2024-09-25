@@ -1,17 +1,128 @@
 import { DefaultInput } from "@/component/reusable/Input";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TabBar from "@/component/reusable/TabBar";
-import { Image, Pressable, Text, View } from "react-native";
+import { Image, Pressable, Text, View, Alert } from "react-native";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Feather from "@expo/vector-icons/Feather";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import EvilIcons from "@expo/vector-icons/EvilIcons";
 import tailwind from "twrnc";
 import Modal from "@/component/reusable/Modal";
+import { router } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
+import { useRouter } from "expo-router";
 
 const Index = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [deleteAccount, setDeleteAccount] = useState(false);
+  const [refreshToken, setRefreshToken] = useState("");
+  const [accessToken, setAccessToken] = useState("");
+  const [profile, setProfile] = useState("Email");
+
+  const router = useRouter();
+
+  // API Endpoint URLs
+  const logoutUrl =
+    "https://super-awoof-d6b48f0a17a5.herokuapp.com/api/v1/account/logout";
+  const deleteAccountUrl =
+    "https://super-awoof-d6b48f0a17a5.herokuapp.com/api/v1/account/";
+  const getProfileUrl =
+    "https://super-awoof-d6b48f0a17a5.herokuapp.com/api/v1/account";
+
+  useEffect(() => {
+    const getLoginMode = async () => {
+      const access = await AsyncStorage.getItem("accessToken");
+      try {
+        const response = await axios.get(getProfileUrl, {
+          headers: {
+            Authorization: `Bearer ${access}`,
+          },
+        });
+        setProfile(response?.data?.loginMode);
+      } catch (error) {
+        console.log("error getting loginMode", error);
+      }
+    };
+
+    getLoginMode();
+  }, [profile]);
+
+  useEffect(() => {
+    const getDataAndProfile = async () => {
+      try {
+        // First, get the tokens from AsyncStorage
+        const refresh = await AsyncStorage.getItem("refreshToken");
+        const access = await AsyncStorage.getItem("accessToken");
+
+        if (refresh) {
+          setRefreshToken(refresh);
+        }
+        if (access) {
+          setAccessToken(access);
+        }
+
+        // If accessToken is available, fetch profile data
+        if (access) {
+          try {
+            const response = await axios.get(getProfileUrl, {
+              headers: {
+                Authorization: `Bearer ${access}`,
+              },
+            });
+            // console.log("Profile data:", response.data);
+
+            // Extract loginMode and pass it to Profile
+            setProfile(response.data.loginMode);
+          } catch (e) {
+            console.error("Error fetching profile data:", e);
+          }
+        } else {
+          console.error("No access token found.");
+        }
+      } catch (e) {
+        console.error("Error reading token from AsyncStorage:", e);
+      }
+    };
+    getDataAndProfile();
+  }, []);
+
+  // Logout Function
+  const handleLogout = async () => {
+    try {
+      const response = await axios.post(
+        logoutUrl,
+        {},
+        {
+          headers: { Authorization: `Bearer ${refreshToken}` },
+        }
+      );
+      if (response.status === 200) {
+        Alert.alert("Success", "Logged out successfully");
+        router.push("/Auth/signin/email");
+      }
+    } catch (error) {
+      console.error("Logout Error:", error);
+      Alert.alert("Error", "Failed to log out");
+    }
+  };
+
+  // Delete Account Function
+  const handleDeleteAccount = async () => {
+    try {
+      const response = await axios.delete(deleteAccountUrl, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+      if (response.status === 200) {
+        Alert.alert("Success", "Account deleted successfully");
+        router.push("/Auth/signup/email");
+      }
+    } catch (error) {
+      console.error("Delete Account Error:", error);
+      Alert.alert("Error", "Failed to delete account");
+    }
+  };
+
   return (
     <View style={tailwind`h-full bg-[#0F1219] w-full`}>
       <View
@@ -33,6 +144,14 @@ const Index = () => {
       <View style={tailwind`mt-[20%] py-6 w-full`}>
         <Pressable
           style={tailwind`flex flex-row items-center w-full justify-between py-3 px-5`}
+          onPress={() => {
+            console.log(profile);
+            router.push(
+              profile === "Phone"
+                ? "/Pages/Profile/ViewProfile/phone-number"
+                : "/Pages/Profile/ViewProfile/email"
+            );
+          }}
         >
           <View style={tailwind`flex flex-row items-center`}>
             <AntDesign name="profile" size={25} color="white" />
@@ -40,24 +159,25 @@ const Index = () => {
               View Profile
             </Text>
           </View>
-
           <MaterialIcons name="navigate-next" size={25} color="white" />
         </Pressable>
+
         <Pressable
           style={tailwind`flex flex-row items-center w-full justify-between py-3 px-5 mt-1 mb-3`}
-          onPress={() => {}}
+          onPress={() => {router.push('/Auth/updatePassword')}}
         >
           <View style={tailwind`flex flex-row`}>
             <MaterialIcons name="lock-reset" size={25} color="white" />
             <Text style={tailwind`text-white text-[18px] ml-3`}>
-              Reset Password
+              Update Password
             </Text>
           </View>
-
           <MaterialIcons name="navigate-next" size={25} color="white" />
         </Pressable>
 
-        <View style={tailwind`w-[87%] mx-auto my-5 h-[1px] bg-[#343434]`}></View>
+        <View
+          style={tailwind`w-[87%] mx-auto my-5 h-[1px] bg-[#343434]`}
+        ></View>
 
         <Pressable
           style={tailwind`flex flex-row items-center w-full justify-between py-3 px-5 mt-3`}
@@ -67,15 +187,12 @@ const Index = () => {
             <Feather name="power" size={23} color="white" />
             <Text style={tailwind`text-white text-[18px] ml-3`}>Logout</Text>
           </View>
-
           <MaterialIcons name="navigate-next" size={25} color="white" />
         </Pressable>
 
         <Pressable
           style={tailwind`flex flex-row items-center w-full justify-between py-3 px-5 my-1`}
-          onPress={() => {
-            setDeleteAccount(true);
-          }}
+          onPress={() => setDeleteAccount(true)}
         >
           <View style={tailwind`flex flex-row items-center ml-[-4px]`}>
             <EvilIcons name="trash" size={30} color="white" />
@@ -83,20 +200,17 @@ const Index = () => {
               Delete Account
             </Text>
           </View>
-
           <MaterialIcons name="navigate-next" size={25} color="white" />
         </Pressable>
       </View>
 
       <Modal
         modalVisible={modalVisible}
-        onClose={() => {
-          setModalVisible(false);
-        }}
+        onClose={() => setModalVisible(false)}
         ButtonText={"Log out"}
         HeadText="Logging Out?"
         SubText="Are you sure you want to log out from your SupaAwoof account?"
-        handleClick={() => {}}
+        handleClick={handleLogout}
         cancelText={
           <Text style={tailwind`underline my-2 text-white`}>No, Cancel</Text>
         }
@@ -105,13 +219,11 @@ const Index = () => {
 
       <Modal
         modalVisible={deleteAccount}
-        onClose={() => {
-          setDeleteAccount(false);
-        }}
+        onClose={() => setDeleteAccount(false)}
         ButtonText={"Delete Account"}
         HeadText="Delete Account?"
         SubText="Are you sure you want to delete your SupaAwoof account?"
-        handleClick={() => {}}
+        handleClick={handleDeleteAccount}
         cancelText={
           <Text style={tailwind`underline my-2 text-white`}>No, Cancel</Text>
         }
