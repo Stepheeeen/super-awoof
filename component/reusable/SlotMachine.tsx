@@ -26,7 +26,7 @@ import tailwind from "twrnc";
 
 const icons = [icon1, icon2, icon3, icon4, icon5, icon6, icon7];
 
-const SlotMachine = () => {
+const SlotMachine = ({submitWinner}: {submitWinner: ()=> Promise<void>}) => {
   const [winner, setWinner] = useState<boolean | null>(null);
   const [spinning, setSpinning] = useState(false);
   const [reels, setReels] = useState([
@@ -103,8 +103,11 @@ const SlotMachine = () => {
     const reel3Symbol = reels[2][0]; // First item of reel 3
     const isWinner = reel1Symbol === reel2Symbol && reel2Symbol === reel3Symbol; // All reels match
   
+    if(isWinner){
+    submitWinner();
+    }
+
     setWinner(isWinner); // Update winner state
-    console.log('winner:', isWinner);
   };
 
   const playWinningSound = async () => {

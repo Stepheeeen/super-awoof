@@ -6,10 +6,11 @@ import tailwind from "twrnc";
 import axios from "axios";
 import { useState } from "react"; // Import useState for form handling
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { baseUrl } from "@/app/constants";
 
 const Index = () => {
   const router = useRouter();
-  const apiUrl = "https://super-awoof-d6b48f0a17a5.herokuapp.com/api/v1/";
+  const apiUrl = baseUrl;
 
   // Form data state
   const [fullName, setFullName] = useState("");

@@ -6,8 +6,38 @@ import TabBar from '@/component/reusable/TabBar'
 import { Image, ImageBackground, Pressable, Text, TouchableOpacity, View } from 'react-native'
 import Sound from 'react-native-sound';
 import tailwind from 'twrnc'
+import { baseUrl } from '../constants';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useEffect, useState } from 'react';
 
 const index = () => {
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    const func = async ()=> {
+      const userData = await AsyncStorage.getItem("user") as any;
+      setUser(JSON.parse(userData));
+    }
+    func();
+  }, [user])
+  
+  const submitWinner = async ()=> {
+    try {
+      const access = await AsyncStorage.getItem("accessToken");
+
+      const response = await axios.post(`${baseUrl}/system/winner`, {
+        amount: 100,
+      }, {headers: {
+        Authorization: `Bearer ${access}`
+      }});
+
+      console.log(response.data);
+    } catch (e:any) {
+      console.error(e);
+    }
+  }
+
   return (
     <View style={tailwind`h-full bg-[#0F1219] w-full`}>
       <View style={tailwind`flex flex-row items-center w-full justify-between px-4 pt-6 h-[10%] absolute top-0`}>
@@ -16,7 +46,7 @@ const index = () => {
         <Pressable style={tailwind`flex flex-row items-center bg-[#20232A] py-[2px] px-2 rounded`}>
           <Image source={require('../../assets/images/AwoofCoin.png')} style={tailwind``} />
           <Text style={tailwind`text-white text-[17px] mb-1 ml-1`}>
-            6000
+            {user.coins || 0}
           </Text>
         </Pressable>
       </View>
@@ -28,7 +58,7 @@ const index = () => {
             <Image source={require('../../assets/images/Slot_Bg.png')} style={tailwind`w-full h-full`} />
 
             <View style={tailwind`absolute top-0 w-full h-full left-0 p-5 flex-row`}>
-                <SlotMachine/>
+                <SlotMachine submitWinner = {submitWinner}/>
             </View>
           </View>
         </View>

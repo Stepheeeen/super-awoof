@@ -6,10 +6,11 @@ import { Pressable, Text, View, Alert } from "react-native";
 import axios from "axios";
 import tailwind from "twrnc";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { baseUrl } from "@/app/constants";
 
 const Index = () => {
   const router = useRouter();
-  const apiUrl = "https://super-awoof-d6b48f0a17a5.herokuapp.com/api/v1/";
+  const apiUrl = `${baseUrl}/api/v1/`;
 
   // Form data state
   const [email, setEmail] = useState("");
@@ -18,16 +19,24 @@ const Index = () => {
   // Handle login form submission
   const handleLogin = async () => {
     try {
-      const response = await axios.post(`${apiUrl}account/login`, {
+      const response = await axios.post(`${apiUrl}/account/login`, {
         email,
         password,
       });
       Alert.alert("Success", "Login Successful");
       console.log(response?.data);
+      
+      const accountData = {... response?.data?.account, coins: response?.data?.coins, paymentMethod: response?.data?.paymentMethod, mno: response?.data?.mno };
+      
+      Promise.all([
+        await AsyncStorage.setItem("user", JSON.stringify(accountData)),
+        await AsyncStorage.setItem("refreshToken", response?.data?.refreshToken),
+        await AsyncStorage.setItem("accessToken", response?.data?.accessToken),
+      ])
+      
       // Redirect to the dashboard or other authenticated route
       router.push("/Pages");
-      await AsyncStorage.setItem("refreshToken", response?.data?.refreshToken);
-      await AsyncStorage.setItem("accessToken", response?.data?.accessToken);
+
     } catch (error: any) {
       if (
         error.response.data.message ===

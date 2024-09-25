@@ -12,6 +12,7 @@ import { router } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { useRouter } from "expo-router";
+import { baseUrl } from "@/app/constants";
 
 const Index = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -24,11 +25,11 @@ const Index = () => {
 
   // API Endpoint URLs
   const logoutUrl =
-    "https://super-awoof-d6b48f0a17a5.herokuapp.com/api/v1/account/logout";
+    `${baseUrl}account/logout`;
   const deleteAccountUrl =
-    "https://super-awoof-d6b48f0a17a5.herokuapp.com/api/v1/account/";
+    `${baseUrl}account/`;
   const getProfileUrl =
-    "https://super-awoof-d6b48f0a17a5.herokuapp.com/api/v1/account";
+    `${baseUrl}account`;
 
   useEffect(() => {
     const getLoginMode = async () => {
