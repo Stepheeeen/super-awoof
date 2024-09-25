@@ -29,7 +29,11 @@ const icons = [icon1, icon2, icon3, icon4, icon5, icon6, icon7];
 const SlotMachine = () => {
   const [winner, setWinner] = useState<boolean | null>(null);
   const [spinning, setSpinning] = useState(false);
-  const [reels, setReels] = useState([getInitialIcons(), getInitialIcons(), getInitialIcons()]);
+  const [reels, setReels] = useState([
+    getInitialIcons(),
+    getInitialIcons(),
+    getInitialIcons(),
+  ]);
 
   const spinner1 = useRef(new Animated.Value(0)).current;
   const spinner2 = useRef(new Animated.Value(0)).current;
@@ -41,6 +45,13 @@ const SlotMachine = () => {
     }
   }, [winner]);
 
+  useEffect(() => {
+    // Check winner whenever the reels update
+    if (!spinning) {
+        checkWinner(); // Call winner check after spinning ends and reels are updated
+    }
+}, [reels, spinning]);
+
   // Get three different initial icons for each reel
   function getInitialIcons() {
     return icons.sort(() => 0.5 - Math.random()).slice(0, 3);
@@ -48,13 +59,13 @@ const SlotMachine = () => {
 
   const startSpin = async () => {
     if (spinning) return; // Prevent spinning if already spinning
-
     setWinner(null); // Reset winner status
     setSpinning(true); // Set spinning state to true
-
+  
     // Randomize the icons for each reel
-    setReels([getRandomIcons(), getRandomIcons(), getRandomIcons()]);
-
+    const newReels = [getRandomIcons(), getRandomIcons(), getRandomIcons()];
+    setReels(newReels); // Set the new randomized icons
+  
     // Spin animation for each spinner
     Animated.timing(spinner1, {
       toValue: -iconSize * numIcons,
@@ -63,6 +74,7 @@ const SlotMachine = () => {
     }).start(() => {
       spinner1.setValue(0); // Reset animation
     });
+  
     Animated.timing(spinner2, {
       toValue: -iconSize * numIcons,
       duration: 1200,
@@ -70,18 +82,15 @@ const SlotMachine = () => {
     }).start(() => {
       spinner2.setValue(0); // Reset animation
     });
+  
     Animated.timing(spinner3, {
       toValue: -iconSize * numIcons,
       duration: 1400,
       useNativeDriver: true,
     }).start(() => {
       spinner3.setValue(0); // Reset animation
-      checkWinner(); // Check winner after spin completes
+      setSpinning(false); // Stop spinning after the last reel stops
     });
-
-    // Play spin sound (if available)
-    // const { sound } = await Audio.Sound.createAsync(require('../../assets/audio/spin.wav'));
-    // await sound.playAsync();
   };
 
   const getRandomIcons = () => {
@@ -89,17 +98,13 @@ const SlotMachine = () => {
   };
 
   const checkWinner = () => {
-    // Check if the first symbol of each reel matches
     const reel1Symbol = reels[0][0]; // First item of reel 1
     const reel2Symbol = reels[1][0]; // First item of reel 2
     const reel3Symbol = reels[2][0]; // First item of reel 3
-
-    const isWinner =
-      reel1Symbol === reel2Symbol && reel2Symbol === reel3Symbol; // All reels match
-
-    setWinner(isWinner); // Set winner state immediately
-
-    setSpinning(false); // Set spinning state to false after spinning
+    const isWinner = reel1Symbol === reel2Symbol && reel2Symbol === reel3Symbol; // All reels match
+  
+    setWinner(isWinner); // Update winner state
+    console.log('winner:', isWinner);
   };
 
   const playWinningSound = async () => {
@@ -200,157 +205,3 @@ const styles = StyleSheet.create({
 });
 
 export default SlotMachine;
-
-// import React, { useState, useRef } from 'react';
-// import { View, Text, Image, TouchableOpacity, StyleSheet, Animated, Dimensions } from 'react-native';
-// import { Audio } from 'expo-av';
-
-// const { width } = Dimensions.get('window');
-// const iconHeight = 188;  // Adjust this based on your image sprite height
-
-// const images = [
-//   require('../../assets/images/fish.png'),
-//   require('../../assets/images/seven.png'),
-//   require('../../assets/images/gem.png'),
-//   require('../../assets/images/chest.png'),
-//   require('../../assets/images/coins.png'),
-//   require('../../assets/images/heart.png'),
-//   require('../../assets/images/lock.png'),
-//   // Add more images up to 21 if needed
-// ];
-
-// const SlotMachine = () => {
-//   const [winner, setWinner] = useState<boolean | null>(null);
-//   const [spinSound, setSpinSound] = useState<Audio.Sound | null>(null);
-
-//   const spinner1 = useRef(new Animated.Value(0)).current;
-//   const spinner2 = useRef(new Animated.Value(0)).current;
-//   const spinner3 = useRef(new Animated.Value(0)).current;
-
-//   const startSpin = async () => {
-//     setWinner(null); // Reset winner status
-
-//     // Spin animation for each spinner
-//     Animated.timing(spinner1, { toValue: -iconHeight * images.length, duration: 1000, useNativeDriver: true }).start();
-//     Animated.timing(spinner2, { toValue: -iconHeight * images.length, duration: 1400, useNativeDriver: true }).start();
-//     Animated.timing(spinner3, { toValue: -iconHeight * images.length, duration: 2200, useNativeDriver: true }).start();
-
-//     // Play spin sound (using expo-av)
-//     // const { sound } = await Audio.Sound.createAsync(require('../../assets/audio/winning_slot.wav')); // Your spin sound
-//     // setSpinSound(sound);
-//     // await sound.playAsync();
-
-//     // Check if all reels match after spinning
-//     checkWinner();
-//   };
-
-//   const checkWinner = () => {
-//     // Logic to check if all three spinners landed on the same item
-//     const isWinner = Math.random() > 0.5; // Simulated result
-//     setWinner(isWinner);
-
-//     if (isWinner) {
-//       playWinningSound();  // Play winning sound
-//     }
-//   };
-
-//   const playWinningSound = async () => {
-//     const { sound } = await Audio.Sound.createAsync(require('../../assets/audio/winning_slot.wav'));
-//     await sound.playAsync();
-//   };
-
-//   return (
-//     <View style={styles.container}>
-//       {/* Display the result */}
-//       <Text style={styles.resultText}>
-//         {/* {winner === null ? 'Spinning...' : winner ? '🤑 Pure skill! 🤑' : 'You lose!'} */}
-//       </Text>
-
-//       {/* Slot machine */}
-//       <View style={styles.spinnerContainer}>
-//         {/* First spinner */}
-//         <Animated.View
-//           style={[styles.spinner, { transform: [{ translateY: spinner1 }] }]}
-//         >
-//           {images.map((image, index) => (
-//             <Image
-//               key={index}
-//               source={image}
-//               style={styles.icon}
-//             />
-//           ))}
-//         </Animated.View>
-//         {/* Second spinner */}
-//         <Animated.View
-//           style={[styles.spinner, { transform: [{ translateY: spinner2 }] }]}
-//         >
-//           {images.map((image, index) => (
-//             <Image
-//               key={index}
-//               source={image}
-//               style={styles.icon}
-//             />
-//           ))}
-//         </Animated.View>
-//         {/* Third spinner */}
-//         <Animated.View
-//           style={[styles.spinner, { transform: [{ translateY: spinner3 }] }]}
-//         >
-//           {images.map((image, index) => (
-//             <Image
-//               key={index}
-//               source={image}
-//               style={styles.icon}
-//             />
-//           ))}
-//         </Animated.View>
-//       </View>
-
-//       {/* Spin button */}
-//       <TouchableOpacity style={styles.spinButton} onPress={startSpin}>
-//         <Text style={styles.buttonText}>Spin</Text>
-//       </TouchableOpacity>
-//     </View>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: '#292929',
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//   },
-//   resultText: {
-//     fontSize: 24,
-//     color: 'aliceblue',
-//     marginBottom: 20,
-//   },
-//   spinnerContainer: {
-//     flexDirection: 'row',
-//     // height: iconHeight,
-//     overflow: 'hidden',
-//   },
-//   spinner: {
-//     flexDirection: 'column',
-//     // height: iconHeight * 7, // Adjust based on the number of images
-//   },
-//   icon: {
-//     width: 128,
-//     // height: iconHeight,
-//   },
-//   spinButton: {
-//     marginTop: 20,
-//     paddingVertical: 10,
-//     paddingHorizontal: 40,
-//     backgroundColor: 'purple',
-//     borderRadius: 8,
-//   },
-//   buttonText: {
-//     color: 'white',
-//     fontSize: 18,
-//     fontWeight: 'bold',
-//   },
-// });
-
-// export default SlotMachine;
