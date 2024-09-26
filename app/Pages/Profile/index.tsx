@@ -165,7 +165,7 @@ const Index = () => {
 
         <Pressable
           style={tailwind`flex flex-row items-center w-full justify-between py-3 px-5 mt-1 mb-3`}
-          onPress={() => {router.push('/Auth/updatePassword')}}
+          onPress={() => {router.push('/Auth/passwordReset')}}
         >
           <View style={tailwind`flex flex-row`}>
             <MaterialIcons name="lock-reset" size={25} color="white" />

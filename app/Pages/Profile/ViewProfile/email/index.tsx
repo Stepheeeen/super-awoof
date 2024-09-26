@@ -14,7 +14,7 @@ const index = () => {
       >
         <Pressable
           onPress={() => {
-            router.back;
+            router.back();
           }}
         >
             <IonIcons name="arrow-back" size={25} color="white" />
@@ -27,11 +27,11 @@ const index = () => {
         <Text></Text>
       </View>
 
-      <View style={tailwind`w-full mt-[20%] mb-2 px-3`}>
+      <View style={tailwind`w-full mt-[25%] mb-2 px-3`}>
         <DefaultInput
           label="Full Name"
           placeholder="Adebayo Halah"
-          customCss="w-[95%] mx-auto"
+          customCss="w-[95%] mx-auto my-4"
           onChangeText={() => {}}
           value={""}
         />

@@ -22,11 +22,29 @@ import icon4 from "../../assets/images/icon4.png";
 import icon5 from "../../assets/images/icon5.png";
 import icon6 from "../../assets/images/icon6.png";
 import icon7 from "../../assets/images/icon7.png";
+import icon8 from "../../assets/images/icon7.png";
+import icon9 from "../../assets/images/icon7.png";
+import icon10 from "../../assets/images/icon7.png";
 import tailwind from "twrnc";
 
-const icons = [icon1, icon2, icon3, icon4, icon5, icon6, icon7];
+const icons = [
+  icon1,
+  icon2,
+  icon3,
+  icon4,
+  icon5,
+  icon6,
+  icon7,
+  icon8,
+  icon9,
+  icon10,
+];
 
-const SlotMachine = ({submitWinner}: {submitWinner: ()=> Promise<void>}) => {
+const SlotMachine = ({
+  submitWinner,
+}: {
+  submitWinner: () => Promise<void>;
+}) => {
   const [winner, setWinner] = useState<boolean | null>(null);
   const [spinning, setSpinning] = useState(false);
   const [reels, setReels] = useState([
@@ -48,9 +66,9 @@ const SlotMachine = ({submitWinner}: {submitWinner: ()=> Promise<void>}) => {
   useEffect(() => {
     // Check winner whenever the reels update
     if (!spinning) {
-        checkWinner(); // Call winner check after spinning ends and reels are updated
+      checkWinner(); // Call winner check after spinning ends and reels are updated
     }
-}, [reels, spinning]);
+  }, [reels, spinning]);
 
   // Get three different initial icons for each reel
   function getInitialIcons() {
@@ -61,31 +79,31 @@ const SlotMachine = ({submitWinner}: {submitWinner: ()=> Promise<void>}) => {
     if (spinning) return; // Prevent spinning if already spinning
     setWinner(null); // Reset winner status
     setSpinning(true); // Set spinning state to true
-  
+
     // Randomize the icons for each reel
     const newReels = [getRandomIcons(), getRandomIcons(), getRandomIcons()];
     setReels(newReels); // Set the new randomized icons
-  
+
     // Spin animation for each spinner
     Animated.timing(spinner1, {
-      toValue: -iconSize * numIcons,
-      duration: 1000,
-      useNativeDriver: true,
-    }).start(() => {
-      spinner1.setValue(0); // Reset animation
-    });
-  
-    Animated.timing(spinner2, {
       toValue: -iconSize * numIcons,
       duration: 1200,
       useNativeDriver: true,
     }).start(() => {
-      spinner2.setValue(0); // Reset animation
+      spinner1.setValue(0); // Reset animation
     });
-  
-    Animated.timing(spinner3, {
+
+    Animated.timing(spinner2, {
       toValue: -iconSize * numIcons,
       duration: 1400,
+      useNativeDriver: true,
+    }).start(() => {
+      spinner2.setValue(0); // Reset animation
+    });
+
+    Animated.timing(spinner3, {
+      toValue: -iconSize * numIcons,
+      duration: 1600,
       useNativeDriver: true,
     }).start(() => {
       spinner3.setValue(0); // Reset animation
@@ -102,9 +120,9 @@ const SlotMachine = ({submitWinner}: {submitWinner: ()=> Promise<void>}) => {
     const reel2Symbol = reels[1][0]; // First item of reel 2
     const reel3Symbol = reels[2][0]; // First item of reel 3
     const isWinner = reel1Symbol === reel2Symbol && reel2Symbol === reel3Symbol; // All reels match
-  
-    if(isWinner){
-    submitWinner();
+
+    if (isWinner) {
+      submitWinner();
     }
 
     setWinner(isWinner); // Update winner state
@@ -131,29 +149,37 @@ const SlotMachine = ({submitWinner}: {submitWinner: ()=> Promise<void>}) => {
       {/* Slot machine */}
       <View style={styles.spinnerContainer}>
         {/* First spinner */}
-        <Animated.View
-          style={[styles.spinner, { transform: [{ translateY: spinner1 }] }]}
-        >
-          {reels[0].map((icon, index) => (
-            <Image key={index} source={icon} style={styles.icon} />
-          ))}
-        </Animated.View>
+        <View style={tailwind`bg-[#02291654] flex items-center rounded-lg px-1`}>
+          <Animated.View
+            style={[styles.spinner, { transform: [{ translateY: spinner1 }] }]}
+          >
+            {reels[0].map((icon, index) => (
+              <Image key={index} source={icon} style={styles.icon} />
+            ))}
+          </Animated.View>
+        </View>
+
         {/* Second spinner */}
-        <Animated.View
-          style={[styles.spinner, { transform: [{ translateY: spinner2 }] }]}
-        >
-          {reels[1].map((icon, index) => (
-            <Image key={index} source={icon} style={styles.icon} />
-          ))}
-        </Animated.View>
+        <View style={tailwind`bg-[#02291654] flex items-center rounded-lg px-1`}>
+          <Animated.View
+            style={[styles.spinner, { transform: [{ translateY: spinner2 }] }]}
+          >
+            {reels[1].map((icon, index) => (
+              <Image key={index} source={icon} style={styles.icon} />
+            ))}
+          </Animated.View>
+        </View>
+
         {/* Third spinner */}
-        <Animated.View
-          style={[styles.spinner, { transform: [{ translateY: spinner3 }] }]}
-        >
-          {reels[2].map((icon, index) => (
-            <Image key={index} source={icon} style={styles.icon} />
-          ))}
-        </Animated.View>
+        <View style={tailwind`bg-[#02291654] flex items-center rounded-lg px-1`}>
+          <Animated.View
+            style={[styles.spinner, { transform: [{ translateY: spinner3 }] }]}
+          >
+            {reels[2].map((icon, index) => (
+              <Image key={index} source={icon} style={styles.icon} />
+            ))}
+          </Animated.View>
+        </View>
       </View>
 
       {/* Spin button */}
@@ -181,23 +207,28 @@ const styles = StyleSheet.create({
   },
   spinnerContainer: {
     flexDirection: "row",
-    gap: 7,
+    // gap: 7,
     height: 130, // Container height should match the icon size
     overflow: "hidden",
     backgroundColor: "transparent", // Spinner container's background color is transparent
+    width: "100%",
+    display: "flex",
+    justifyContent: "space-between",
   },
   spinner: {
-    width: "auto",
+    width: "100%",
     padding: 5,
     height: iconSize * numIcons, // Height to accommodate all icons
-    backgroundColor: "#02281654", // Spinner background color
+    // backgroundColor: "#02281654", // Spinner background color
     borderRadius: 10,
+    display: "flex",
+    alignItems: "center",
   },
   icon: {
     width: iconSize,
     height: iconSize,
-    borderRadius: 10, // Rounded corners
-    marginVertical: 20, // Margin top and bottom
+    // borderRadius: 10, // Rounded corners
+    marginTop: 25, // Margin top and bottom
     padding: 25, // Padding around icon
   },
   buttonText: {
