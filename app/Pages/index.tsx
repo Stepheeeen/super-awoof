@@ -20,7 +20,7 @@ const index = () => {
       setUser(JSON.parse(userData));
     }
     func();
-  }, [user])
+  }, [])
   
   const submitWinner = async ()=> {
     try {
@@ -46,7 +46,7 @@ const index = () => {
         <Pressable style={tailwind`flex flex-row items-center bg-[#20232A] py-[2px] px-2 rounded`}>
           <Image source={require('../../assets/images/AwoofCoin.png')} style={tailwind``} />
           <Text style={tailwind`text-white text-[17px] mb-1 ml-1`}>
-            {user.coins || 0}
+            {user?.coins || 0}
           </Text>
         </Pressable>
       </View>

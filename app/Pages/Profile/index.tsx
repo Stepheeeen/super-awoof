@@ -25,11 +25,11 @@ const Index = () => {
 
   // API Endpoint URLs
   const logoutUrl =
-    `${baseUrl}account/logout`;
+    `${baseUrl}/account/logout`;
   const deleteAccountUrl =
-    `${baseUrl}account/`;
+    `${baseUrl}/account/`;
   const getProfileUrl =
-    `${baseUrl}account`;
+    `${baseUrl}/account`;
 
   useEffect(() => {
     const getLoginMode = async () => {

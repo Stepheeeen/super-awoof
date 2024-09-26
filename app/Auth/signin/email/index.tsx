@@ -10,7 +10,7 @@ import { baseUrl } from "@/app/constants";
 
 const Index = () => {
   const router = useRouter();
-  const apiUrl = `${baseUrl}/api/v1/`;
+  const apiUrl = `${baseUrl}`;
 
   // Form data state
   const [email, setEmail] = useState("");
@@ -28,16 +28,15 @@ const Index = () => {
       
       const accountData = {... response?.data?.account, coins: response?.data?.coins, paymentMethod: response?.data?.paymentMethod, mno: response?.data?.mno };
       
-      Promise.all([
         await AsyncStorage.setItem("user", JSON.stringify(accountData)),
         await AsyncStorage.setItem("refreshToken", response?.data?.refreshToken),
         await AsyncStorage.setItem("accessToken", response?.data?.accessToken),
-      ])
       
       // Redirect to the dashboard or other authenticated route
       router.push("/Pages");
 
     } catch (error: any) {
+      console.log(error)
       if (
         error.response.data.message ===
         "Please verify your account in order to login"
