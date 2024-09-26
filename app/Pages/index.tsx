@@ -33,6 +33,7 @@ const index = () => {
       }});
 
       console.log(response.data);
+      setUser({...user, coins: response?.data?.coins || user.coins})
     } catch (e:any) {
       console.error(e);
     }
