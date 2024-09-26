@@ -14,9 +14,9 @@ const TabBar = () => {
     const HelpNotActiveIcon = require('../../assets/images/helpNotActiveIcon.png');
 
     const Navbar = [
-        { path: '/Pages/Profile', pagename: 'Profile', ActiveIcon: ProfileActiveIcon, NotActiveIcon: ProfileNotActiveIcon, onPress: () => router.push('/Pages/Profile'), },
         { path: '/Pages', pagename: 'Home', ActiveIcon: HomeActiveIcon, NotActiveIcon: HomeNotActiveIcon, onPress: () => router.push('/Pages'), },
         { path: '/Pages/Help', pagename: 'Help', ActiveIcon: HelpActiveIcon, NotActiveIcon: HelpNotActiveIcon, onPress: () => router.push('/Pages/Help'), },
+        { path: '/Pages/Profile', pagename: 'Profile', ActiveIcon: ProfileActiveIcon, NotActiveIcon: ProfileNotActiveIcon, onPress: () => router.push('/Pages/Profile'), },
     ]
 
 
