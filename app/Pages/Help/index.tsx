@@ -57,7 +57,7 @@ const index = () => {
         />
 
         <View style={tailwind`mt-6`}>
-          <Text style={tailwind`text-white mb-2 ml-4 text-[17px] font-thin`}>
+          <Text style={tailwind`text-white mb-2 ml-4 text-[17px] font-normal`}>
             Message
           </Text>
           <TextInput

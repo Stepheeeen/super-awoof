@@ -120,7 +120,7 @@ const index = () => {
         }
         SubText=""
         handleClick={() => {
-          router.push("/");
+          router.push("/Pages/Extras/Deposit");
         }}
         cancelText={""}
         ModalHeadText=""

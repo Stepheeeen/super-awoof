@@ -195,12 +195,12 @@ const Index = () => {
           onPress={() => setDeleteAccount(true)}
         >
           <View style={tailwind`flex flex-row items-center ml-[-4px]`}>
-            <EvilIcons name="trash" size={30} color="white" />
-            <Text style={tailwind`text-white text-[18px] ml-2 mt-1`}>
+            <EvilIcons name="trash" size={30} color="#Ff4757" />
+            <Text style={tailwind`text-[#Ff4757] text-[18px] ml-2 mt-1`}>
               Delete Account
             </Text>
           </View>
-          <MaterialIcons name="navigate-next" size={25} color="white" />
+          <MaterialIcons name="navigate-next" size={25} color="#Ff4757" />
         </Pressable>
       </View>
 
