@@ -2,6 +2,7 @@ import React, { ReactNode, useState } from "react";
 import { Modal, View, Text, Button, StyleSheet, Pressable } from "react-native";
 import { DefaultButton } from "./Button";
 import tailwind from "twrnc";
+import AntDesign from "@expo/vector-icons/AntDesign";
 
 const ModalContainer = ({
   modalVisible,
@@ -16,7 +17,7 @@ const ModalContainer = ({
   modalVisible: any;
   onClose: any;
   ButtonText: any;
-  HeadText: string;
+  HeadText: any;
   SubText: string;
   handleClick: any;
   cancelText: any;
@@ -32,18 +33,24 @@ const ModalContainer = ({
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalView}>
-            <Text
-              style={tailwind`text-white text-[22px] font-semibold mt-[-25px]`}
+            <Pressable
+              onPress={onClose}
+              style={tailwind`absolute top-4 right-4`}
             >
+              <AntDesign name="close" size={24} color="white" />
+            </Pressable>
+            <View style={tailwind`w-full flex items-center justify-center`}>
               {ModalHeadText}
-            </Text>
+            </View>
             <View>
               <Text
                 style={tailwind`text-white text-center text-[22px] font-semibold`}
               >
                 {HeadText}
               </Text>
-              <Text style={tailwind`text-white text-center text-[17px] my-3 font-light`}>
+              <Text
+                style={tailwind`text-white text-center text-[17px] my-3 font-light`}
+              >
                 {SubText}
               </Text>
             </View>

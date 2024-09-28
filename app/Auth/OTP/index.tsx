@@ -62,7 +62,7 @@ const OTPInput = ({ duration = 15000 }) => {
                     </View>
 
                     <View style={tailwind`mt-[25%] w-[95%] mx-auto`}>
-                        <DefaultButton onPress={() => {router.push('/Auth/resetPassword')}} text="Continue" />
+                        <DefaultButton onPress={() => {router.push('/')}} text="Continue" />
                     </View>
 
                 </ScrollView>

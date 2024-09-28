@@ -1,74 +1,112 @@
-import axios from "axios";
-import tailwind from "twrnc";
-import { useState } from "react";
-import { useRouter } from "expo-router";
-import IonIcons from "@expo/vector-icons/Ionicons";
-import { DefaultInput } from "@/component/reusable/Input";
 import { DefaultButton } from "@/component/reusable/Button";
-import { Pressable, Text, View, Alert } from "react-native";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { PasswordInput } from "@/component/reusable/Input";
+import { useRouter } from "expo-router";
+import { useEffect, useState } from "react";
+import { ScrollView, Text, View } from "react-native";
+import tailwind from "twrnc";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from 'axios';
+import TabBar from "@/component/reusable/TabBar";
 
-const PasswordReset = () => {
+const Index = () => {
   const router = useRouter();
-  const [email, setEmail] = useState('');
+  const apiUrl = 'https://super-awoof-d6b48f0a17a5.herokuapp.com/api/v1/account/update/password';
 
-  // API Endpoint for requesting a password reset
-  const requestPasswordResetUrl = "https://super-awoof-d6b48f0a17a5.herokuapp.com/api/v1/account/request-password-reset";
+  // State for old and new password
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
-  // Function to handle password reset request
-  const handleRequestReset = async () => {
+  const handlePasswordUpdate = async () => {
+    if (newPassword !== confirmPassword) {
+      setErrorMessage("New passwords do not match.");
+      return;
+    }
+
     try {
-      const response = await axios.post(requestPasswordResetUrl, { email });
+      const emailReset = await AsyncStorage.getItem("passwordEmailReset");
+
+      const response = await axios.put(apiUrl, {
+        email: emailReset,
+        old_password: oldPassword, // Old password field
+        new_password: newPassword, // New password field
+      });
 
       if (response.status === 200) {
-        Alert.alert("Success", "A password reset link has been sent to your email.");
-        router.push("/Auth/passwordReset/OTP"); // Redirect to OTP page
+        // Password update successful
+        router.push("/Auth/signin/email");
+      } else {
+        // Handle errors (e.g., invalid password or other issues)
+        setErrorMessage(response.data.message || "An error occurred. Please try again.");
       }
-      await AsyncStorage.setItem('passwordEmailReset', email);
-    } catch (error) {
-      console.error("Error requesting password reset:", error);
-      Alert.alert("Error", "Failed to send reset link. Please check your email.");
+    } catch (error:any) {
+      console.log('Error during password update:', error);
+      setErrorMessage(
+        error.response?.data?.message || "An error occurred. Please try again."
+      );
     }
   };
 
   return (
-    <View style={tailwind`h-full bg-[#0F1219] w-full px-1 py-5`}>
-      <View
-        style={tailwind`flex flex-row items-center w-full justify-between px-3 py-6 h-[13%] absolute top-0 bg-[#0F1219] z-10`}
+    <View style={tailwind`h-full bg-[#0F1219] w-full px-1 py-5 overflow-scroll`}>
+      <ScrollView
+        style={tailwind`flex-1`}
+        showsVerticalScrollIndicator={false}
       >
-        <Pressable onPress={() => router.back()}>
-          <IonIcons name="arrow-back" size={25} color="white" />
-        </Pressable>
+        <View style={tailwind`w-full mt-[5%] mb-4 px-3`}>
+          <Text style={tailwind`text-white font-bold text-[27px]`}>
+            Update Password
+          </Text>
+          <Text style={tailwind`text-white font-normal text-[18px] mt-2 mb-4`}>
+            Please enter your old password and your new password
+          </Text>
+        </View>
 
-        <Text style={tailwind`ml-[-25px] font-semibold text-[22px] text-white`}>
-          Reset
-        </Text>
+        {errorMessage ? (
+          <Text style={tailwind`text-red-500 text-center mb-4`}>{errorMessage}</Text>
+        ) : null}
 
-        <Text></Text>
-      </View>
-
-      <View style={tailwind`w-full mt-[20%] mb-2 px-3`}>
-        <Text style={tailwind`text-white font-normal text-[16px] mt-2 mb-4`}>
-          Enter your email address and we’ll send you a password reset link
-        </Text>
-      </View>
-
-      <DefaultInput
-        label="Email Address"
-        placeholder="Email/phone number"
-        customCss="w-[95%] mx-auto"
-        onChangeText={setEmail}  // Update email state on input change
-        value={email}
-      />
-
-      <View style={tailwind`mt-8 w-[95%] mx-auto`}>
-        <DefaultButton
-          onPress={handleRequestReset}  // Call function to request reset
-          text="Reset"
+        <PasswordInput
+          onChangeText={setOldPassword}
+          value={oldPassword}
+          placeholder="Old Password"
+          label="Old Password"
+          customCss="mt-3 w-[95%] mx-auto"
+          hidden="opacity-0"
+          onPress={""}
         />
-      </View>
+
+        <PasswordInput
+          onChangeText={setNewPassword}
+          value={newPassword}
+          placeholder="New Password"
+          label="New Password"
+          customCss="mt-3 w-[95%] mx-auto"
+          hidden="opacity-0"
+          onPress={""}
+        />
+
+        <PasswordInput
+          onChangeText={setConfirmPassword}
+          value={confirmPassword}
+          placeholder="Confirm New Password"
+          label="Confirm New Password"
+          customCss="mt-3 w-[95%] mx-auto"
+          hidden="opacity-0"
+          onPress={""}
+        />
+        <View style={tailwind`mt-10 w-[95%] mx-auto`}>
+          <DefaultButton
+            onPress={handlePasswordUpdate}
+            text="Update Password"
+          />
+        </View>
+      </ScrollView>
+
+      <TabBar/>
     </View>
   );
 };
 
-export default PasswordReset;
+export default Index;

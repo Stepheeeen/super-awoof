@@ -24,12 +24,9 @@ const Index = () => {
   const router = useRouter();
 
   // API Endpoint URLs
-  const logoutUrl =
-    `${baseUrl}/account/logout`;
-  const deleteAccountUrl =
-    `${baseUrl}/account/`;
-  const getProfileUrl =
-    `${baseUrl}/account`;
+  const logoutUrl = `${baseUrl}/account/logout`;
+  const deleteAccountUrl = `${baseUrl}/account/`;
+  const getProfileUrl = `${baseUrl}/account`;
 
   useEffect(() => {
     const getLoginMode = async () => {
@@ -165,7 +162,9 @@ const Index = () => {
 
         <Pressable
           style={tailwind`flex flex-row items-center w-full justify-between py-3 px-5 mt-1 mb-3`}
-          onPress={() => {router.push('/Auth/passwordReset')}}
+          onPress={() => {
+            router.push("/Auth/passwordReset");
+          }}
         >
           <View style={tailwind`flex flex-row`}>
             <MaterialIcons name="lock-reset" size={25} color="white" />
@@ -209,7 +208,13 @@ const Index = () => {
         modalVisible={modalVisible}
         onClose={() => setModalVisible(false)}
         ButtonText={"Log out"}
-        HeadText="Logging Out?"
+        HeadText={
+          <Text
+            style={tailwind`text-white text-[22px] font-semibold mt-[-25px]`}
+          >
+            Logging Out?
+          </Text>
+        }
         SubText="Are you sure you want to log out from your SupaAwoof account?"
         handleClick={handleLogout}
         cancelText={
@@ -222,7 +227,13 @@ const Index = () => {
         modalVisible={deleteAccount}
         onClose={() => setDeleteAccount(false)}
         ButtonText={"Delete Account"}
-        HeadText="Delete Account?"
+        HeadText={
+          <Text
+            style={tailwind`text-white text-[22px] font-semibold mt-[-25px]`}
+          >
+            Delete Account?
+          </Text>
+        }
         SubText="Are you sure you want to delete your SupaAwoof account?"
         handleClick={handleDeleteAccount}
         cancelText={

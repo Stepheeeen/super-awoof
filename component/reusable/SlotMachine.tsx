@@ -26,6 +26,8 @@ import icon8 from "../../assets/images/icon7.png";
 import icon9 from "../../assets/images/icon7.png";
 import icon10 from "../../assets/images/icon7.png";
 import tailwind from "twrnc";
+import ModalContainer from "./Modal";
+import { router } from "expo-router";
 
 const icons = [
   icon1,
@@ -47,6 +49,7 @@ const SlotMachine = ({
 }) => {
   const [winner, setWinner] = useState<boolean | null>(null);
   const [spinning, setSpinning] = useState(false);
+  const [winningModal, setWinningModal] = useState(false);
   const [reels, setReels] = useState([
     getInitialIcons(),
     getInitialIcons(),
@@ -123,6 +126,9 @@ const SlotMachine = ({
 
     if (isWinner) {
       submitWinner();
+      setTimeout(() => {
+        setWinningModal(true);
+      }, 500);
     }
 
     setWinner(isWinner); // Update winner state
@@ -136,61 +142,113 @@ const SlotMachine = ({
   };
 
   return (
-    <View style={styles.container}>
-      {/* Display the result */}
-      <Text style={styles.resultText}>
-        {winner === null
-          ? "Spinning..."
-          : winner
-          ? "🤑 Pure skill! Jackpot! 🤑"
-          : "You lose!"}
-      </Text>
+    <>
+      <View style={tailwind`w-[95%] relative h-[300px]`}>
+        <Image
+          source={require("../../assets/images/Slot_Bg.png")}
+          style={tailwind`w-full h-full`}
+        />
 
-      {/* Slot machine */}
-      <View style={styles.spinnerContainer}>
-        {/* First spinner */}
-        <View style={tailwind`bg-[#02291654] flex items-center rounded-lg px-1`}>
-          <Animated.View
-            style={[styles.spinner, { transform: [{ translateY: spinner1 }] }]}
-          >
-            {reels[0].map((icon, index) => (
-              <Image key={index} source={icon} style={styles.icon} />
-            ))}
-          </Animated.View>
-        </View>
+        <View
+          style={tailwind`absolute top-0 w-full h-full left-0 p-5 flex-row`}
+        >
+          <View style={styles.container}>
+            {/* Display the result */}
+            <Text style={styles.resultText}>
+              {winner === null
+                ? "Spinning..."
+                : winner
+                ? "🤑 Pure skill! Jackpot! 🤑"
+                : "You lose!"}
+            </Text>
 
-        {/* Second spinner */}
-        <View style={tailwind`bg-[#02291654] flex items-center rounded-lg px-1`}>
-          <Animated.View
-            style={[styles.spinner, { transform: [{ translateY: spinner2 }] }]}
-          >
-            {reels[1].map((icon, index) => (
-              <Image key={index} source={icon} style={styles.icon} />
-            ))}
-          </Animated.View>
-        </View>
+            {/* Slot machine */}
+            <View style={styles.spinnerContainer}>
+              {/* First spinner */}
+              <View
+                style={tailwind`bg-[#02291654] flex items-center rounded-lg px-1`}
+              >
+                <Animated.View
+                  style={[
+                    styles.spinner,
+                    { transform: [{ translateY: spinner1 }] },
+                  ]}
+                >
+                  {reels[0].map((icon, index) => (
+                    <Image key={index} source={icon} style={styles.icon} />
+                  ))}
+                </Animated.View>
+              </View>
 
-        {/* Third spinner */}
-        <View style={tailwind`bg-[#02291654] flex items-center rounded-lg px-1`}>
-          <Animated.View
-            style={[styles.spinner, { transform: [{ translateY: spinner3 }] }]}
-          >
-            {reels[2].map((icon, index) => (
-              <Image key={index} source={icon} style={styles.icon} />
-            ))}
-          </Animated.View>
+              {/* Second spinner */}
+              <View
+                style={tailwind`bg-[#02291654] flex items-center rounded-lg px-1`}
+              >
+                <Animated.View
+                  style={[
+                    styles.spinner,
+                    { transform: [{ translateY: spinner2 }] },
+                  ]}
+                >
+                  {reels[1].map((icon, index) => (
+                    <Image key={index} source={icon} style={styles.icon} />
+                  ))}
+                </Animated.View>
+              </View>
+
+              {/* Third spinner */}
+              <View
+                style={tailwind`bg-[#02291654] flex items-center rounded-lg px-1`}
+              >
+                <Animated.View
+                  style={[
+                    styles.spinner,
+                    { transform: [{ translateY: spinner3 }] },
+                  ]}
+                >
+                  {reels[2].map((icon, index) => (
+                    <Image key={index} source={icon} style={styles.icon} />
+                  ))}
+                </Animated.View>
+              </View>
+            </View>
+          </View>
         </View>
       </View>
-
       {/* Spin button */}
       <TouchableOpacity
-        style={tailwind`mt-5 p-4 bg-yellow-500 rounded-lg`}
+        style={tailwind`mt-[80px]`}
         onPress={startSpin}
         disabled={spinning}
       >
-        <Text style={tailwind`text-white font-bold`}>Spin</Text>
+        <Image
+          source={require("../../assets/images/SpinBtn.png")}
+          style={tailwind``}
+        />
       </TouchableOpacity>
-    </View>
+
+      <ModalContainer
+        modalVisible={winningModal}
+        onClose={() => setWinningModal(false)}
+        ButtonText={"Proceed"}
+        HeadText={
+          <View
+            style={tailwind`ml-[50%] w-full flex justify-center items-center`}
+          >
+            <Image source={require("../../assets/images/Trophy.png")} />
+            <Text style={tailwind`text-white mt-5 text-[28px] font-bold ml-2`}>
+              JACKPOT
+            </Text>
+          </View>
+        }
+        SubText="Congratulations, you just won Jackpot. Proceed to redeem your cash price."
+        handleClick={() => {
+          router.push("/Pages/WinnerForm");
+        }}
+        cancelText={""}
+        ModalHeadText=""
+      />
+    </>
   );
 };
 
@@ -203,7 +261,7 @@ const styles = StyleSheet.create({
   resultText: {
     fontSize: 24,
     color: "aliceblue",
-    marginBottom: 20,
+    marginBottom: 30,
   },
   spinnerContainer: {
     flexDirection: "row",
@@ -218,6 +276,7 @@ const styles = StyleSheet.create({
   spinner: {
     width: "100%",
     padding: 5,
+    paddingHorizontal: 7,
     height: iconSize * numIcons, // Height to accommodate all icons
     // backgroundColor: "#02281654", // Spinner background color
     borderRadius: 10,
