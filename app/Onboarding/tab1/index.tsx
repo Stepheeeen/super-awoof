@@ -6,8 +6,8 @@ import tailwind from "twrnc";
 const Onboarding = () => {
   const router = useRouter()
   return (
-    <View style={tailwind`h-full w-full flex flex-col items-center justify-between py-[40px] px-1 bg-[#0F1219]`}>
-      <Image source={require('../../../assets/images/slot_machine.png')} style={tailwind`w-[93%] rounded-lg`} />
+    <View style={tailwind`h-full w-full flex flex-col md:flex-row items-center justify-between py-[40px] px-1 bg-[#0F1219]`}>
+      <Image source={require('../../../assets/images/slot_machine.png')} style={tailwind`w-[93%] md:w-1/2 rounded-lg`} />
 
       <View style={tailwind`flex flex-row gap-1 mt-[-9]`}>
         <Pressable onPress={() => { router.push('/Onboarding/tab1') }}>

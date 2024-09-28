@@ -55,7 +55,7 @@ const PasswordReset = () => {
 
       <DefaultInput
         label="Email Address"
-        placeholder="adebayohaliah@gmail.com"
+        placeholder="Email/phone number"
         customCss="w-[95%] mx-auto"
         onChangeText={setEmail}  // Update email state on input change
         value={email}

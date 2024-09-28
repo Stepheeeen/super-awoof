@@ -48,7 +48,7 @@ const Index = () => {
         // console.error(error.request);
         Alert.alert(
           "Error",
-          "No response from server. Please check your network and try again."
+          "Validation Failed"
         );
       } else {
         Alert.alert(

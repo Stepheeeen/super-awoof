@@ -122,7 +122,7 @@ const OTPInput = ({ duration = 15000 }) => {
             >
 
                 <View style={tailwind`w-full mt-[5%] mb-4 px-3`}>
-                    <Text style={tailwind`text-white font-bold text-[27px]`}>Email Verification Code</Text>
+                    <Text style={tailwind`text-white font-bold text-[27px]`}>Verification Code</Text>
                     <Text style={tailwind`text-white font-normal text-[18px] mt-2 `}>
                         Check 080********567 for your 4-digit OTP.
                     </Text>
