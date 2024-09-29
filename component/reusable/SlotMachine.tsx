@@ -7,11 +7,13 @@ import {
   StyleSheet,
   Animated,
   Dimensions,
+  Linking,
+  Alert,
 } from "react-native";
 import { Audio } from "expo-av";
 
 const { width } = Dimensions.get("window");
-const iconSize = 90; // Size of each icon image
+const iconSize = 80; // Size of each icon image
 const numIcons = 7; // Number of different icons
 
 // Import images statically
@@ -141,6 +143,20 @@ const SlotMachine = ({
     await sound.playAsync();
   };
 
+  const handleWinnerLink = async () => {
+    const url = "https://forms.gle/a7JwchrYgKJKzWjZ8"; // Replace with your external link
+
+    // Check if the URL can be opened
+    const supported = await Linking.canOpenURL(url);
+    if (supported) {
+      // Open the URL
+      await Linking.openURL(url);
+    } else {
+      // Show an alert if the URL can't be opened
+      Alert.alert(`Don't know how to open this URL: ${url}`);
+    }
+  };
+
   return (
     <>
       <View style={tailwind`w-[95%] relative h-[300px]`}>
@@ -150,7 +166,7 @@ const SlotMachine = ({
         />
 
         <View
-          style={tailwind`absolute top-0 w-full h-full left-0 p-5 flex-row`}
+          style={tailwind`absolute top-0 w-full h-full left-0 p-5 px-3 flex-row`}
         >
           <View style={styles.container}>
             {/* Display the result */}
@@ -158,8 +174,8 @@ const SlotMachine = ({
               {winner === null
                 ? "Spinning..."
                 : winner
-                ? "🤑 Pure skill! Jackpot! 🤑"
-                : "You lose!"}
+                ? "🤑! Jackpot ! 🤑"
+                : "You lose, Keep going!"}
             </Text>
 
             {/* Slot machine */}
@@ -242,9 +258,7 @@ const SlotMachine = ({
           </View>
         }
         SubText="Congratulations, you just won Jackpot. Proceed to redeem your cash price."
-        handleClick={() => {
-          router.push("/Pages/WinnerForm");
-        }}
+        handleClick={handleWinnerLink}
         cancelText={""}
         ModalHeadText=""
       />

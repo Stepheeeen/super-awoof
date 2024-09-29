@@ -10,6 +10,8 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Linking,
+  Alert,
 } from "react-native";
 import Sound from "react-native-sound";
 import tailwind from "twrnc";
@@ -24,6 +26,7 @@ const index = () => {
   const [user, setUser] = useState<any>(null);
   const [deposit, setDeposit] = useState(false);
   const router = useRouter();
+
 
   useEffect(() => {
     const func = async () => {
@@ -55,6 +58,8 @@ const index = () => {
       console.error(e);
     }
   };
+
+
 
   return (
     <>

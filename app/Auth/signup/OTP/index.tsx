@@ -122,15 +122,15 @@ const OTPInput = ({ duration = 15000 }) => {
                 <View style={tailwind`w-full mt-[5%] mb-4 px-3`}>
                     <Text style={tailwind`text-white font-bold text-[27px]`}>Email Verification Code</Text>
                     <Text style={tailwind`text-white font-normal text-[18px] mt-2 `}>
-                        Check 080********567 for your 4-digit OTP.
+                        Check your email for your 4-digit OTP.
                     </Text>
                 </View>
 
                 {/* Scrolling Marquee Text */}
                 <View style={tailwind`w-full flex items-center justify-center mb-4`}>
-                    <Animated.Text style={[tailwind`w-full ml-[90%] text-[#FFFF45]`, animatedStyle]}>
+                    {/* <Animated.Text style={[tailwind`w-full ml-[90%] text-[#FFFF45]`, animatedStyle]}>
                         Only MTN users can use this feature
-                    </Animated.Text>
+                    </Animated.Text> */}
                 </View>
 
                 {/* OTP Input Fields */}

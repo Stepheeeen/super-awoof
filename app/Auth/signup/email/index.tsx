@@ -34,35 +34,38 @@ const Index = () => {
       alert("Passwords do not match!");
       return;
     }
-
+  
     try {
-      const response = await axios.post(`${apiUrl}account/register`, {
-        fullname: fullName, // Use 'fullname' key as required by the backend
-        email,
-        password,
+      const response = await axios.post(`${apiUrl}/account/register`, {
+        fullname: fullName,
+        email: email,
+        password: password,
       });
+  
       console.log(response.data); // Handle successful response
       alert(response.data.message || "Account created successfully!");
-      await AsyncStorage.setItem('LoginMode', response?.data?.loginMode);
-      router.push("/Auth/signup/email/OTP"); // Redirect to sign in page after successful registration
+  
+      // Only save to AsyncStorage if loginMode is defined
+      // if (response?.data?.loginMode) {
+      //   await AsyncStorage.setItem('LoginMode', response.data.loginMode);
+      // } else {
+      //   console.warn("LoginMode is undefined, not saving to AsyncStorage.");
+      // }
+  
+      router.push("/Auth/signup/OTP"); // Redirect after successful registration
     } catch (error: any) {
       if (error.response) {
-        // Server responded with a status other than 200 range
         console.error(error.response.data); // Log error data for debugging
         alert(
           error.response.data.message ||
-            "Registration failed! Please try again."
+          "Registration failed! Please try again."
         );
       } else if (error.request) {
-        // Request was made but no response was received
         console.error(error.request);
-        alert(
-          "Error, No response from server. Please check your network and try again."
-        );
+        alert("Error, No response from server. Please check your network and try again.");
       } else {
-        // Something happened while setting up the request
         console.error("Error", error.message);
-        alert(`"Error", ${error.message}`);
+        alert(`Error: ${error.message}`);
       }
     }
   };
@@ -118,17 +121,13 @@ const Index = () => {
           customCss="mt-3 w-[95%] mx-auto"
           hidden="opacity-0"
           value={password}
-          onPress={() => {
-            router.push("/Auth/signin/email");
-          }}
+          onPress={() => {}}
           onChangeText={setPassword} // Update state on password input
         />
 
         {/* Confirm Password Input */}
         <PasswordInput
-          onPress={() => {
-            router.push("/Auth/signin/email");
-          }}
+          onPress={() => {}}
           placeholder="********"
           label="Confirm Password"
           customCss="mt-3 w-[95%] mx-auto"

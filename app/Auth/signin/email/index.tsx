@@ -10,7 +10,6 @@ import { baseUrl } from "@/app/constants";
 
 const Index = () => {
   const router = useRouter();
-  const apiUrl = `${baseUrl}`;
 
   // Form data state
   const [email, setEmail] = useState("");
@@ -19,42 +18,42 @@ const Index = () => {
   // Handle login form submission
   const handleLogin = async () => {
     try {
-      const response = await axios.post(`${apiUrl}/account/login`, {
-        email,
-        password,
+      const response = await axios.post(`${baseUrl}/account/login`, {
+        email: email,
+        password: password,
       });
       Alert.alert("Success", "Login Successful");
       console.log(response?.data);
       
-      const accountData = {... response?.data?.account, coins: response?.data?.coins, paymentMethod: response?.data?.paymentMethod, mno: response?.data?.mno };
+      const accountData = { ...response?.data?.account, coins: response?.data?.coins, paymentMethod: response?.data?.paymentMethod, mno: response?.data?.mno };
       
-        await AsyncStorage.setItem("user", JSON.stringify(accountData)),
-        await AsyncStorage.setItem("refreshToken", response?.data?.refreshToken),
-        await AsyncStorage.setItem("accessToken", response?.data?.accessToken),
+      await AsyncStorage.setItem("user", JSON.stringify(accountData));
+      await AsyncStorage.setItem("refreshToken", response?.data?.refreshToken);
+      await AsyncStorage.setItem("accessToken", response?.data?.accessToken);
       
       // Redirect to the dashboard or other authenticated route
       router.push("/Pages");
-
+      
     } catch (error: any) {
-      console.log(error)
-      if (
-        error.response.data.message ===
-        "Please verify your account in order to login"
-      ) {
-        // console.error(error.response.data.message); // Log error data for debugging
-        Alert.alert("Error", error.response.data.message);
-        router.push("/Auth/passwordReset");
-      } else if (error.request) {
-        // console.error(error.request);
-        Alert.alert(
-          "Error",
-          "Validation Failed"
-        );
+      console.error("Login error:", error); // Enhanced logging
+      if (error.response) {
+        console.error("Error response data:", error.response.data);
+        console.error("Error status:", error.response.status);
+        if (
+          error.response.data.message ===
+          "Please verify your account in order to login"
+        ) {
+          // console.error(error.response.data.message); // Log error data for debugging
+          Alert.alert("Error", error.response.data.message);
+          router.push("/Auth/OTP");
+        }
+        else if (error.response.status === 404) {
+          Alert.alert("Error", error.response.data.message);
+        } else {
+          Alert.alert("Error", error.response.data.message || "An error occurred. Please try again.");
+        }
       } else {
-        Alert.alert(
-          "Error",
-          error.response.data.message || "An error occurred. Please try again."
-        );
+        Alert.alert("Error", "An error occurred. Please try again.");
       }
     }
   };

@@ -1,14 +1,24 @@
-import React from 'react';
-import { Pressable, StyleSheet, Text, TouchableOpacity, View, } from 'react-native';
+import React, { useState } from 'react';
+import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
 import tailwind from 'twrnc';
 
+const DefaultButton = ({ text, onPress }: { text: string, onPress: () => Promise<void> }) => {
+    const [loading, setLoading] = useState(false);
 
+    const handlePress = async () => {
+        setLoading(true); // Set loading to true when button is pressed
+        await onPress();   // Execute the onPress function
+        setLoading(false); // Set loading back to false after function execution
+    };
 
-const DefaultButton = ({ text, onPress }: { text: string, onPress: any, }) => {
     return (
-        <Pressable onPress={onPress}>
+        <Pressable onPress={handlePress} disabled={loading}>
             <View style={styles.button}>
-                <Text style={styles.buttonText}>{text}</Text>
+                {loading ? (
+                    <ActivityIndicator size="small" color="#ffffff" />
+                ) : (
+                    <Text style={styles.buttonText}>{text}</Text>
+                )}
                 <View style={styles.darkGreenLine} />
             </View>
         </Pressable>
@@ -36,7 +46,7 @@ const styles = StyleSheet.create({
         borderBottomRightRadius: 5,
         borderBottomLeftRadius: 5,
         position: 'absolute',
-        opacity: .5,
+        opacity: 0.5,
         bottom: 4,
     },
     buttonText: {

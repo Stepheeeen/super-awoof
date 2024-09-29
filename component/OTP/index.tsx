@@ -87,15 +87,6 @@ const OTPInput = () => {
 
   return (
     <View style={tailwind`h-full bg-[#0F1219] w-full px-1 py-5`}>
-      <ScrollView style={tailwind`flex-1`}>
-        <View style={tailwind`w-full mt-[5%] mb-4 px-3`}>
-          <Text style={tailwind`text-white font-bold text-[27px]`}>
-            Verification Code
-          </Text>
-          <Text style={tailwind`text-white font-normal text-[18px] mt-2`}>
-            Check your email for your 4-digit OTP.
-          </Text>
-        </View>
 
         <View style={tailwind`flex-row justify-around mt-3`}>
           {otp.map((digit, index) => (
@@ -122,7 +113,6 @@ const OTPInput = () => {
         <View style={tailwind`mt-[25%] w-[95%] mx-auto`}>
           <DefaultButton onPress={handleVerifyOTP} text="Verify OTP" />
         </View>
-      </ScrollView>
     </View>
   );
 };
