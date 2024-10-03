@@ -95,7 +95,7 @@ const SlotMachine = ({
     // Spin animation for each spinner
     Animated.timing(spinner1, {
       toValue: -iconSize * numIcons,
-      duration: 1000,
+      duration: 1200,
       useNativeDriver: true,
     }).start(() => {
       spinner1.setValue(0); // Reset animation
@@ -103,7 +103,7 @@ const SlotMachine = ({
 
     Animated.timing(spinner2, {
       toValue: -iconSize * numIcons,
-      duration: 1200,
+      duration: 1400,
       useNativeDriver: true,
     }).start(() => {
       spinner2.setValue(0); // Reset animation
@@ -111,7 +111,7 @@ const SlotMachine = ({
 
     Animated.timing(spinner3, {
       toValue: -iconSize * numIcons,
-      duration: 1400,
+      duration: 1600,
       useNativeDriver: true,
     }).start(() => {
       spinner3.setValue(0); // Reset animation
