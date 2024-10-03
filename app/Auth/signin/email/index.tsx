@@ -72,7 +72,7 @@ const Index = () => {
       {/* Email Input */}
       <DefaultInput
         label="Email Address"
-        placeholder="adebayohaliah@gmail.com"
+        placeholder="johndoe@gmail.com"
         customCss="w-[95%] mx-auto"
         value={email}
         onChangeText={setEmail} // Update email state

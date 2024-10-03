@@ -30,6 +30,7 @@ import icon10 from "../../assets/images/icon7.png";
 import tailwind from "twrnc";
 import ModalContainer from "./Modal";
 import { router } from "expo-router";
+import { difficultyType } from "../types";
 
 const icons = [
   icon1,
@@ -46,8 +47,10 @@ const icons = [
 
 const SlotMachine = ({
   submitWinner,
+  difficulty
 }: {
-  submitWinner: () => Promise<void>;
+  submitWinner: () => Promise<void>,
+  difficulty: difficultyType,
 }) => {
   const [winner, setWinner] = useState<boolean | null>(null);
   const [spinning, setSpinning] = useState(false);
@@ -86,13 +89,13 @@ const SlotMachine = ({
     setSpinning(true); // Set spinning state to true
 
     // Randomize the icons for each reel
-    const newReels = [getRandomIcons(), getRandomIcons(), getRandomIcons()];
+    const newReels = getReelOutcome();
     setReels(newReels); // Set the new randomized icons
 
     // Spin animation for each spinner
     Animated.timing(spinner1, {
       toValue: -iconSize * numIcons,
-      duration: 1200,
+      duration: 1000,
       useNativeDriver: true,
     }).start(() => {
       spinner1.setValue(0); // Reset animation
@@ -100,7 +103,7 @@ const SlotMachine = ({
 
     Animated.timing(spinner2, {
       toValue: -iconSize * numIcons,
-      duration: 1400,
+      duration: 1200,
       useNativeDriver: true,
     }).start(() => {
       spinner2.setValue(0); // Reset animation
@@ -108,7 +111,7 @@ const SlotMachine = ({
 
     Animated.timing(spinner3, {
       toValue: -iconSize * numIcons,
-      duration: 1600,
+      duration: 1400,
       useNativeDriver: true,
     }).start(() => {
       spinner3.setValue(0); // Reset animation
@@ -156,6 +159,31 @@ const SlotMachine = ({
       Alert.alert(`Don't know how to open this URL: ${url}`);
     }
   };
+
+  const getReelOutcome = () => {
+    let isWinningOutcome = false;
+    const randomNum = Math.random();
+
+    switch(difficulty){
+      case "medium":
+        isWinningOutcome = randomNum < 0.6;
+        break;
+      case "hard":
+        isWinningOutcome = randomNum < 0.3;
+      case "difficult":
+        isWinningOutcome = randomNum <0.1;
+      case "impossible":
+        isWinningOutcome = false;
+        break;
+    }
+
+    if(isWinningOutcome) {
+      const winningSymbol = icons[Math.floor(Math.random() * icons.length)];
+       return [[winningSymbol, icons[1], icons[2]], [winningSymbol, icons[3], icons[4]], [winningSymbol, icons[5], icons[6]]];
+    }else{
+      return [getRandomIcons(), getRandomIcons(), getRandomIcons()];
+    }
+  }
 
   return (
     <>

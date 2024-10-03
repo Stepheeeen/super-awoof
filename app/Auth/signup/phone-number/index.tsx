@@ -90,7 +90,7 @@ const Index = ({ duration = 15000 }) => {
                 {/* Full Name Input */}
                 <DefaultInput
                     label="Full Name"
-                    placeholder="Adebayo Haliah"
+                    placeholder="John Doe"
                     customCss="w-[95%] mx-auto"
                     value={fullName}
                     onChangeText={setFullName} // Update state with user input

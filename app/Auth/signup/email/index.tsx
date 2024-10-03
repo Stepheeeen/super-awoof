@@ -87,7 +87,7 @@ const Index = () => {
         {/* Full Name Input */}
         <DefaultInput
           label="Full Name"
-          placeholder="Adebayo Haliah"
+          placeholder="John Doe"
           customCss="w-[95%] mx-auto"
           value={fullName}
           onChangeText={setFullName} // Update state on text input
@@ -96,7 +96,7 @@ const Index = () => {
         {/* Email Address Input */}
         <DefaultInput
           label="Email Address"
-          placeholder="adebayohaliah@gmail.com"
+          placeholder="johndoe@gmail.com"
           customCss="w-[95%] mx-auto mt-5"
           value={email}
           onChangeText={setEmail} // Update state on text input
