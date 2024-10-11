@@ -18,7 +18,7 @@ const ModalContainer = ({
   onClose: any;
   ButtonText: any;
   HeadText: any;
-  SubText: string;
+  SubText: any;
   handleClick: any;
   cancelText: any;
   ModalHeadText: string;

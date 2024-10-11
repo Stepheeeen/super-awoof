@@ -6,6 +6,8 @@ import tailwind from "twrnc";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useState } from "react";
 import axios from "axios";
+import ToastComponent from "@/component/reusable/ToastComponent";
+import Toast from "react-native-toast-message";
 
 const ForgotPassword = () => {
   const router = useRouter();
@@ -18,7 +20,10 @@ const ForgotPassword = () => {
   // Function to handle password reset request
   const handleRequestReset = async () => {
     if (!email) {
-      Alert.alert("Error", "Please enter a valid email or phone number.");
+      Toast.show({
+        type: "error",
+        text1: "Please enter a valid email or phone number."
+      })
       return;
     }
 
@@ -26,19 +31,19 @@ const ForgotPassword = () => {
       const response = await axios.post(requestPasswordResetUrl, { email });
 
       if (response.status === 200) {
-        Alert.alert(
-          "Success",
-          "A password reset link has been sent to your email."
-        );
+        Toast.show({
+          type: "success",
+          text1: "A password reset link has been sent to your email."
+        })
         await AsyncStorage.setItem("passwordEmailReset", email); // Store email in AsyncStorage
         router.push("/Auth/forgotPassword/OTP");
       }
     } catch (error) {
       console.error("Error requesting password reset:", error);
-      Alert.alert(
-        "Error",
-        "Failed to send reset link. Please check your email."
-      );
+      Toast.show({
+        type: "error",
+        text1: "Failed to send reset link. Please check your email."
+      })
     }
   };
 
@@ -65,6 +70,8 @@ const ForgotPassword = () => {
       <View style={tailwind`mt-10 w-[95%] mx-auto`}>
         <DefaultButton onPress={handleRequestReset} text="Reset" />
       </View>
+
+      <ToastComponent/>
     </View>
   );
 };

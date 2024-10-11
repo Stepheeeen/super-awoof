@@ -2,7 +2,6 @@ import { DefaultButton } from "@/component/reusable/Button";
 import SlotMachine from "@/component/reusable/SlotMachine";
 import Spinner from "@/component/reusable/Spinner";
 import TabBar from "@/component/reusable/TabBar";
-// import React, { useRef, useState, RefObject } from 'react';
 import {
   Image,
   ImageBackground,
@@ -10,10 +9,8 @@ import {
   Text,
   TouchableOpacity,
   View,
-  Linking,
   Alert,
 } from "react-native";
-import Sound from "react-native-sound";
 import tailwind from "twrnc";
 import { baseUrl } from "../constants";
 import axios from "axios";
@@ -25,8 +22,15 @@ import { useRouter } from "expo-router";
 const index = () => {
   const [user, setUser] = useState<any>(null);
   const [deposit, setDeposit] = useState(false);
+  const [showBalanceModal, setShowBalanceModal] = useState(false);
   const router = useRouter();
 
+  // Check balance when coins change
+  useEffect(() => {
+    if (user?.coins === 0) {
+      setShowBalanceModal(true);
+    }
+  }, [user?.coins]);
 
   useEffect(() => {
     const func = async () => {
@@ -59,8 +63,6 @@ const index = () => {
     }
   };
 
-
-
   return (
     <>
       <View style={tailwind`h-full bg-[#0F1219] w-full`}>
@@ -92,13 +94,44 @@ const index = () => {
           <View
             style={tailwind`w-full flex items-center justify-center relative h-[530px]`}
           >
-            <SlotMachine difficulty={"difficult"} submitWinner={submitWinner} />
+            <SlotMachine
+              checkBalance={() => {
+                if (user?.coins === 0) setShowBalanceModal(true);
+              }}
+              difficulty={"difficult"}
+              submitWinner={submitWinner}
+            />
           </View>
         </View>
 
         <TabBar />
       </View>
 
+      {/* Insufficient Balance Modal */}
+      <ModalContainer
+        modalVisible={showBalanceModal}
+        onClose={() => setShowBalanceModal(false)}
+        ButtonText={"Deposit"}
+        HeadText={
+          <View style={tailwind`w-full flex justify-center items-center`}>
+            <Text style={tailwind`text-white text-[25px] font-normal mb-3`}>
+              Insufficient Balance
+            </Text>
+            <Text style={tailwind`text-white text-[17px] font-normal`}>
+              You have 0 coins. Please deposit to continue.
+            </Text>
+          </View>
+        }
+        SubText=""
+        handleClick={() => {
+          router.push("/Pages/Extras/Deposit");
+          setShowBalanceModal(false); // close the modal when navigating to deposit
+        }}
+        cancelText={""}
+        ModalHeadText=""
+      />
+
+      {/* Deposit Balance Modal */}
       <ModalContainer
         modalVisible={deposit}
         onClose={() => setDeposit(false)}
