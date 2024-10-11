@@ -84,6 +84,7 @@ const HelpPage = () => {
           </View>
 
           <DefaultInput
+            customInput={""}
             label="Your Name"
             placeholder="Your Name"
             customCss="w-[95%] mx-auto"
@@ -92,6 +93,7 @@ const HelpPage = () => {
           />
 
           <DefaultInput
+            customInput={""}
             label="Email Address"
             placeholder="adebayohaliah@gmail.com"
             customCss="w-[95%] mx-auto mt-4"

@@ -21,13 +21,10 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
 import ModalContainer from "@/component/reusable/Modal";
 import { useRouter } from "expo-router";
-import { difficultyType } from "@/component/types";
-import React from "react";
 
 const index = () => {
   const [user, setUser] = useState<any>(null);
   const [deposit, setDeposit] = useState(false);
-  const [algoLevel, setAlgoLevel] = useState<difficultyType>("medium");
   const router = useRouter();
 
 
@@ -35,32 +32,6 @@ const index = () => {
     const func = async () => {
       const userData = (await AsyncStorage.getItem("user")) as any;
       setUser(JSON.parse(userData));
-      
-      const access = await AsyncStorage.getItem("accessToken");
-
-      try {
-        const response = await axios.get(`${baseUrl}/system/algo-level`, {
-          headers: {
-            Authorization: `Bearer ${access}`,
-          }
-        })      
-        
-       switch (response?.data?.data) {
-        case "Hard":
-          setAlgoLevel("hard")
-          break;
-        case "Aggressive":
-          setAlgoLevel("difficult")
-        case "Impossible":
-          setAlgoLevel("impossible")
-        default:
-          setAlgoLevel("medium")
-          break;
-       }
-      } catch (e:any) {
-        console.error(e);
-      }
-
     };
     func();
   }, []);
@@ -121,7 +92,7 @@ const index = () => {
           <View
             style={tailwind`w-full flex items-center justify-center relative h-[530px]`}
           >
-            <SlotMachine submitWinner={submitWinner} difficulty={algoLevel} />
+            <SlotMachine difficulty={"difficult"} submitWinner={submitWinner} />
           </View>
         </View>
 

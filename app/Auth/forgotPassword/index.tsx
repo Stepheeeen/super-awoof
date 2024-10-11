@@ -26,13 +26,19 @@ const ForgotPassword = () => {
       const response = await axios.post(requestPasswordResetUrl, { email });
 
       if (response.status === 200) {
-        Alert.alert("Success", "A password reset link has been sent to your email.");
+        Alert.alert(
+          "Success",
+          "A password reset link has been sent to your email."
+        );
         await AsyncStorage.setItem("passwordEmailReset", email); // Store email in AsyncStorage
         router.push("/Auth/forgotPassword/OTP");
       }
     } catch (error) {
       console.error("Error requesting password reset:", error);
-      Alert.alert("Error", "Failed to send reset link. Please check your email.");
+      Alert.alert(
+        "Error",
+        "Failed to send reset link. Please check your email."
+      );
     }
   };
 
@@ -48,6 +54,7 @@ const ForgotPassword = () => {
       </View>
 
       <DefaultInput
+        customInput={""}
         onChangeText={setEmail}
         value={email}
         label="Email Address"

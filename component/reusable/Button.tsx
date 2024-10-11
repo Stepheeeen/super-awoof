@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
 import tailwind from 'twrnc';
 
-const DefaultButton = ({ text, onPress }: { text: string, onPress: () => Promise<void> }) => {
+const DefaultButton = ({ text, onPress }: { text: string, onPress: any }) => {
     const [loading, setLoading] = useState(false);
 
     const handlePress = async () => {
