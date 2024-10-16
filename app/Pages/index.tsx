@@ -95,6 +95,10 @@ const index = () => {
             style={tailwind`w-full flex items-center justify-center relative h-[530px]`}
           >
             <SlotMachine
+              handleClick={() => {
+                router.push("/Pages/Extras/Deposit/");
+                console.log("they clicked me")
+              }}
               checkBalance={() => {
                 if (user?.coins === 0) setShowBalanceModal(true);
               }}
@@ -106,30 +110,6 @@ const index = () => {
 
         <TabBar />
       </View>
-
-      {/* Insufficient Balance Modal */}
-      <ModalContainer
-        modalVisible={showBalanceModal}
-        onClose={() => setShowBalanceModal(false)}
-        ButtonText={"Deposit"}
-        HeadText={
-          <View style={tailwind`w-full flex justify-center items-center`}>
-            <Text style={tailwind`text-white text-[25px] font-normal mb-3`}>
-              Insufficient Balance
-            </Text>
-            <Text style={tailwind`text-white text-[17px] font-normal`}>
-              You have 0 coins. Please deposit to continue.
-            </Text>
-          </View>
-        }
-        SubText=""
-        handleClick={() => {
-          router.push("/Pages/Extras/Deposit");
-          setShowBalanceModal(false); // close the modal when navigating to deposit
-        }}
-        cancelText={""}
-        ModalHeadText=""
-      />
 
       {/* Deposit Balance Modal */}
       <ModalContainer
@@ -158,7 +138,7 @@ const index = () => {
         }
         SubText=""
         handleClick={() => {
-          router.push("/Pages/Extras/Deposit");
+          router.push("/Pages/Extras/Deposit/");
         }}
         cancelText={""}
         ModalHeadText=""

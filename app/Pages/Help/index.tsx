@@ -17,6 +17,7 @@ import axios from "axios";
 import { baseUrl } from "@/app/constants";
 import ToastComponent from "@/component/reusable/ToastComponent";
 import Toast from "react-native-toast-message";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const HelpPage = () => {
   const [email, setEmail] = useState(""); // State for email input
@@ -25,6 +26,8 @@ const HelpPage = () => {
   const [loading, setLoading] = useState(false); // State for loading indicator
 
   const onSubmit = async () => {
+    const token = await AsyncStorage.getItem("accessToken")
+
     // Basic input validation
     if (!email || !name || !message) {
       Toast.show({
@@ -42,7 +45,12 @@ const HelpPage = () => {
         title: name, // Set 'title' to be the name
         descr: email, // Set 'descr' to be the email
         body: message, // Set 'body' to be the message
-      });
+      },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
 
       console.log("SUCCESS!", response.data);
       Toast.show({

@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from "react";
+import { ReactNode, useState } from "react";
 import { Modal, View, Text, Button, StyleSheet, Pressable } from "react-native";
 import { DefaultButton } from "./Button";
 import tailwind from "twrnc";

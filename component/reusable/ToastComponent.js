@@ -1,21 +1,9 @@
-// // ToastComponent.tsx
-// import React, { useEffect, useRef } from 'react';
-// import Toast from 'react-native-toast-message';
-
-// const ToastComponent = () => {
-//   const ref = useRef()
-//   return <Toast ref={(ref) => Toast.setRef(ref)} />;
-// };
-
-// export default ToastComponent;
-
-// ToastComponent.tsx
-import React, {useRef} from 'react';
+import React, {forwardRef} from 'react';
 import { Text, View } from 'react-native';
 import Toast from 'react-native-toast-message';
 
 const ToastComponent = () => {
-  const ref = useRef()
+  const ref = forwardRef()
 
   return <Toast ref={(ref) => Toast.setRef(ref)} config={toastConfig} />;
 };
