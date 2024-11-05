@@ -10,7 +10,7 @@ import {
   Linking,
   Alert,
 } from "react-native";
-import { Audio } from "expo-av";
+// import { Audio } from "expo-av";
 
 const { width } = Dimensions.get("window");
 const iconSize = 80; // Size of each icon image
@@ -171,12 +171,12 @@ const SlotMachine = ({
     setWinner(isWinner); // Update winner state
   };
 
-  const playWinningSound = async () => {
-    const { sound } = await Audio.Sound.createAsync(
-      require("../../assets/audio/winning_slot.wav")
-    );
-    await sound.playAsync();
-  };
+  // const playWinningSound = async () => {
+  //   const { sound } = await Audio.Sound.createAsync(
+  //     require("../../assets/audio/winning_slot.wav")
+  //   );
+  //   await sound.playAsync();
+  // };
 
   const handleWinnerLink = async () => {
     const url = "https://forms.gle/a7JwchrYgKJKzWjZ8"; // Replace with your external link
@@ -337,9 +337,14 @@ const SlotMachine = ({
               Insufficient Balance
             </Text>
             <Text
-              style={tailwind`text-white text-center mt-6 text-[17px] font-normal`}
+              style={tailwind`text-white text-center mt-6 text-base font-normal`}
             >
-              You have 0 coins. Please deposit to continue.
+              You have 0 coins.
+            </Text>
+            <Text
+              style={tailwind`text-white text-center mt-2 text-base font-normal`}
+            >
+              Please deposit to continue.
             </Text>
           </View>
         }

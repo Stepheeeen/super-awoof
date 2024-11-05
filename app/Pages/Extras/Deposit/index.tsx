@@ -1,15 +1,16 @@
 import { DefaultButton } from "@/component/reusable/Button";
 import { DefaultInput } from "@/component/reusable/Input";
-import { Redirect, useRouter } from "expo-router";
-import { Alert } from 'react-native';
+import { useRouter } from "expo-router";
+import { Alert } from "react-native";
 import { useState } from "react";
-import { Pressable, Text, View, ActivityIndicator, Linking } from "react-native";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { Pressable, Text, View, ActivityIndicator, Modal } from "react-native";
 import tailwind from "twrnc";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { DisabledButton } from "@/component/reusable/DisabledButton";
-import { Paystack } from "react-native-paystack-webview";
 import axios from "axios";
 import { baseUrl } from "@/app/constants";
+import { WebView } from "react-native-webview";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Index = () => {
@@ -18,6 +19,7 @@ const Index = () => {
   const [isAmountValid, setIsAmountValid] = useState(true);
   const [isCoinValid, setIsCoinValid] = useState(true);
   const [showPaystack, setShowPaystack] = useState(false);
+  const [paymentUrl, setPaymentUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
@@ -36,79 +38,46 @@ const Index = () => {
   };
 
   const handlePaystackPayment = async () => {
-    const token = await AsyncStorage.getItem("accessToken");
-    console.log(token);
-  
     if (isAmountValid && isCoinValid) {
       setLoading(true); // Show loading indicator
-      setShowPaystack(true);
-  
+      
       try {
+        const token = await AsyncStorage.getItem("accessToken");
+        // console.log(token)
+
         // Send request to get the Paystack authorization URL
-        const response = await axios.post(
-          `${baseUrl}/wallet/fund`,
-          { amount },
-          {
-            headers: {
-              authorization: `Bearer ${token}`,
-            },
-          }
-        );
-  
-        // Open the Paystack payment URL in the browser
-        const authorizationUrl = response.data.authorization_url;
-        const key = response.data.reference; // Reference for verification
-        console.log(`Payment reference: ${key}`);
-  
-        // Check if the URL can be opened
-        const supported = await Linking.canOpenURL(authorizationUrl);
-  
-        if (supported) {
-          // Open the URL in the device's browser
-          await Linking.openURL(authorizationUrl);
-  
-          // Payment window is open now. 
-          // Wait for a confirmation that the user has completed the payment process.
-          // This could be triggered by the user coming back to the app.
-  
-          // After the payment is completed, verify the payment using the reference.
-          verifyPayment(key, token);
-  
-        } else {
-          console.error(`Cannot open this URL: ${authorizationUrl}`);
-        }
-  
-      } catch (error) {
-        console.error(error); // Log the error if something goes wrong
+        const response = await axios.post(`${baseUrl}/wallet/fund`, {
+          amount,
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        });
+        response.data;
+        console.log(response.data);
+
+        // Open the Paystack payment URL inside WebView
+        // const authorizationUrl = response.data.authorization_url;
+        // setPaymentUrl(authorizationUrl); // Set the payment URL for the WebView
+        // setShowPaystack(true); // Show the WebView
+      } catch (error: any) {
+        console.error(error.response.data);
+        // console.error(
+        //   "Payment initiation error:",
+        //   error.response?.data?.message || error.message
+        // );
+        // Alert.alert(
+        //   "Error",
+        //   "An error occurred while processing your payment."
+        // );
       } finally {
         setLoading(false); // Hide loading indicator
       }
     }
   };
-  
-  // Function to verify the payment
-  const verifyPayment = async (reference: any, token: any) => {
-    try {
-      const verifyResponse = await axios.get(`${baseUrl}/wallet/verify/${reference}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-  
-      if (verifyResponse.data.status === 'success') {
-        // Payment is verified
-        Alert.alert('Payment Verified', 'Your payment has been successfully verified!');
-        console.log('Payment verification successful', verifyResponse.data);
-      } else {
-        // Handle failed or pending payment status
-        Alert.alert('Payment Failed', 'Payment verification failed or incomplete.');
-        console.error('Payment verification failed or incomplete', verifyResponse.data);
-      }
-  
-    } catch (error) {
-      console.error('Error during payment verification', error);
-      Alert.alert('Verification Error', 'An error occurred while verifying your payment.');
-    }
+
+  const handleWebViewClose = () => {
+    setShowPaystack(false);
+    setPaymentUrl(null);
   };
 
   return (
@@ -156,7 +125,7 @@ const Index = () => {
             <DefaultButton onPress={handlePaystackPayment} text="Continue" />
           )}
 
-          <Pressable onPress={() => router.back()}>
+          <Pressable onPress={() => router.push("/Pages/")}>
             <Text
               style={tailwind`text-[#00A859] ml-2 mx-auto mt-3 text-[18px] underline`}
             >
@@ -164,10 +133,39 @@ const Index = () => {
             </Text>
           </Pressable>
         </View>
+
         <Text>
           {loading && <ActivityIndicator size="large" color="green" />}{" "}
-          {/* Show loading indicator */}
         </Text>
+        {/* Show loading indicator */}
+
+        {showPaystack && paymentUrl && (
+          <Modal
+            visible={showPaystack}
+            animationType="slide"
+            style={tailwind`pt-7`}
+          >
+            <WebView
+              style={tailwind`mt-[18%]`}
+              source={{ uri: paymentUrl }}
+              onNavigationStateChange={(navState: any) => {
+                if (navState.url.includes("payment successful")) {
+                  handleWebViewClose();
+                  Alert.alert(
+                    "Payment Verified",
+                    "Your payment has been successfully verified!"
+                  );
+                }
+              }}
+            />
+            <Pressable
+              style={tailwind`absolute top-10 right-10`}
+              onPress={handleWebViewClose}
+            >
+              <MaterialIcons name="cancel" size={30} color="red" />
+            </Pressable>
+          </Modal>
+        )}
       </View>
     </>
   );

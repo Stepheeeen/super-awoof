@@ -96,8 +96,8 @@ const index = () => {
           >
             <SlotMachine
               handleClick={() => {
-                router.push("/Pages/Extras/Deposit/");
-                console.log("they clicked me")
+                router.push("/Pages/Extras/Deposit");
+                // console.log("they clicked me")
               }}
               checkBalance={() => {
                 if (user?.coins === 0) setShowBalanceModal(true);
@@ -138,7 +138,7 @@ const index = () => {
         }
         SubText=""
         handleClick={() => {
-          router.push("/Pages/Extras/Deposit/");
+          router.push("/Pages/Extras/Deposit");
         }}
         cancelText={""}
         ModalHeadText=""
