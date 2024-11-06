@@ -1,29 +1,23 @@
-// App.tsx or index.tsx
-import React, { useState } from "react";
-import { View, Text } from "react-native";
-import ToastContainer from "@/component/reusable/ToastComponent";
+import React from 'react'
+import { StyleSheet, View, TouchableOpacity, Text } from 'react-native'
+import ToastManager, { Toast } from 'toastify-react-native'
 
 const App = () => {
-  const [toastVisible, setToastVisible] = useState(false);
 
-  const showToast = () => {
-    setToastVisible(true);
-  };
-
-  const hideToast = () => {
-    setToastVisible(false);
-  };
   return (
-    <>
-      {/* Your app content */}
-      <ToastContainer
-        message="Success! Your action was completed."
-        type="success"
-        visible={toastVisible}
-        onClose={hideToast}
-      />
-    </>
-  );
-};
+    <View style={styles.container}>
+      <ToastManager />
+    </View>
+  )
+}
 
-export default App;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+})
+
+export default App

@@ -1,12 +1,14 @@
 import { DefaultButton } from "@/component/reusable/Button";
 import { DefaultInput, PasswordInput } from "@/component/reusable/Input";
 import { useRouter } from "expo-router";
-import { Pressable, ScrollView, Text, View, Alert } from "react-native";
+import { Pressable, ScrollView, Text, View } from "react-native";
 import tailwind from "twrnc";
 import axios from "axios";
-import { useState } from "react"; // Import useState for form handling
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { baseUrl } from "@/app/constants";
+import ToastComponent from "@/component/reusable/ToastComponent";
+import Toast from "react-native-toast-message";
 
 const Index = () => {
   const router = useRouter();
@@ -24,144 +26,144 @@ const Index = () => {
       await AsyncStorage.setItem("userFullName", fullName);
       await AsyncStorage.setItem("userEmail", email);
     } catch (error) {
-      console.log("Error saving data", error);
+      showToast("Error saving data", "error");
     }
+  };
+
+  // Show toast notifications
+  const showToast = (message: string, type: "success" | "error") => {
+    Toast.show({
+      type: type,
+      text1: message,
+    });
   };
 
   // Handle form submission
   const handleRegister = async () => {
     if (password !== confirmPassword) {
-      alert("Passwords do not match!");
+      showToast("Passwords do not match!", "error");
       return;
     }
-  
+
     try {
       const response = await axios.post(`${apiUrl}/account/register`, {
         fullname: fullName,
         email: email,
         password: password,
       });
-  
-      console.log(response.data); // Handle successful response
-      alert(response.data.message || "Account created successfully!");
-  
-      // Only save to AsyncStorage if loginMode is defined
-      // if (response?.data?.loginMode) {
-      //   await AsyncStorage.setItem('LoginMode', response.data.loginMode);
-      // } else {
-      //   console.warn("LoginMode is undefined, not saving to AsyncStorage.");
-      // }
-  
-      router.push("/Auth/signup/OTP"); // Redirect after successful registration
+
+      showToast(
+        response.data.message || "Account created successfully!",
+        "success"
+      );
+      saveDataToLocalStorage();
+      setTimeout(() => {
+        router.push("/Auth/signup/OTP"); // Redirect after successful registration
+      }, 1500);
     } catch (error: any) {
       if (error.response) {
-        console.error(error.response.data); // Log error data for debugging
-        alert(
+        showToast(
           error.response.data.message ||
-          "Registration failed! Please try again."
+            "Registration failed! Please try again.",
+          "error"
         );
-      } else if (error.request) {
-        console.error(error.request);
-        alert("Error, No response from server. Please check your network and try again.");
       } else {
-        console.error("Error", error.message);
-        alert(`Error: ${error.message}`);
+        showToast(
+          "An error occurred. Please check your network and try again.",
+          "error"
+        );
       }
     }
   };
 
   return (
-    <View
-      style={tailwind`h-full bg-[#0F1219] w-full px-1 py-5 overflow-scroll`}
-    >
-      <ScrollView style={tailwind`flex-1`} showsVerticalScrollIndicator={false}>
-        <View style={tailwind`w-full mt-[5%] mb-4 px-3`}>
-          <Text style={tailwind`text-white font-bold text-[27px]`}>
-            Let’s Get Started
-          </Text>
-          <Text style={tailwind`text-white font-normal text-[18px] mt-2 mb-4`}>
-            Create An Account To Get Started.
-          </Text>
-        </View>
-
-        {/* Full Name Input */}
-        <DefaultInput
-          label="Full Name"
-          placeholder="John Doe"
-          customCss="w-[95%] mx-auto"
-          value={fullName}
-          onChangeText={setFullName} // Update state on text input
-        />
-
-        {/* Email Address Input */}
-        <DefaultInput
-          label="Email Address"
-          placeholder="johndoe@gmail.com"
-          customCss="w-[95%] mx-auto mt-5"
-          value={email}
-          onChangeText={setEmail} // Update state on text input
-        />
-
-        <Pressable
-          onPress={() => {
-            router.push("/Auth/signup/phone-number");
-          }}
+    <>
+      <View
+        style={tailwind`h-full bg-[#0F1219] w-full px-1 py-5 overflow-scroll`}
+      >
+        <ScrollView
+          style={tailwind`flex-1`}
+          showsVerticalScrollIndicator={false}
         >
-          <Text
-            style={tailwind`text-[#00A859] ml-3 mt-1 text-[14px] font-normal`}
-          >
-            Use Phone Number Instead
-          </Text>
-        </Pressable>
+          <View style={tailwind`w-full mt-[5%] mb-4 px-3`}>
+            <Text style={tailwind`text-white font-bold text-[27px]`}>
+              Let’s Get Started
+            </Text>
+            <Text
+              style={tailwind`text-white font-normal text-[18px] mt-2 mb-4`}
+            >
+              Create An Account To Get Started.
+            </Text>
+          </View>
 
-        {/* Password Input */}
-        <PasswordInput
-          placeholder="********"
-          label="Create Password"
-          customCss="mt-3 w-[95%] mx-auto"
-          hidden="opacity-0"
-          value={password}
-          onPress={() => {}}
-          onChangeText={setPassword} // Update state on password input
-        />
+          {/* Full Name Input */}
+          <DefaultInput
+            customInput={""}
+            label="Full Name"
+            placeholder="John Doe"
+            customCss="w-[95%] mx-auto"
+            value={fullName}
+            onChangeText={setFullName}
+          />
 
-        {/* Confirm Password Input */}
-        <PasswordInput
-          onPress={() => {}}
-          placeholder="********"
-          label="Confirm Password"
-          customCss="mt-3 w-[95%] mx-auto"
-          hidden="opacity-0"
-          value={confirmPassword}
-          onChangeText={setConfirmPassword} // Update state on confirm password input
-        />
+          {/* Email Address Input */}
+          <DefaultInput
+            customInput={""}
+            label="Email Address"
+            placeholder="johndoe@gmail.com"
+            customCss="w-[95%] mx-auto mt-5"
+            value={email}
+            onChangeText={setEmail}
+          />
 
-        <View style={tailwind`mt-10 w-[95%] mx-auto`}>
-          {/* Register Button */}
-          <DefaultButton onPress={handleRegister} text="Register" />
-        </View>
-
-        <View
-          style={tailwind`flex flex-row w-full items-center justify-center mt-3`}
-        >
-          <Text style={tailwind`text-white`}>Have an account already?</Text>
-          <Pressable
-            onPress={() => {
-              router.push("/Auth/signin/email");
-            }}
-          >
-            <Text style={tailwind`text-[#00A859] ml-2`}>Sign in</Text>
+          <Pressable onPress={() => router.push("/Auth/signup/phone-number")}>
+            <Text
+              style={tailwind`text-[#00A859] ml-3 mt-1 text-[14px] font-normal`}
+            >
+              Use Phone Number Instead
+            </Text>
           </Pressable>
-        </View>
-      </ScrollView>
-    </View>
+
+          {/* Password Input */}
+          <PasswordInput
+            hidden=""
+            onPress={() => {}}
+            placeholder="********"
+            label="Create Password"
+            customCss="mt-3 w-[95%] mx-auto"
+            value={password}
+            onChangeText={setPassword}
+          />
+
+          {/* Confirm Password Input */}
+          <PasswordInput
+            hidden=""
+            onPress={() => {}}
+            placeholder="********"
+            label="Confirm Password"
+            customCss="mt-3 w-[95%] mx-auto"
+            value={confirmPassword}
+            onChangeText={setConfirmPassword}
+          />
+
+          <View style={tailwind`mt-10 w-[95%] mx-auto`}>
+            {/* Register Button */}
+            <DefaultButton onPress={handleRegister} text="Register" />
+          </View>
+
+          <View
+            style={tailwind`flex flex-row w-full items-center justify-center mt-3`}
+          >
+            <Text style={tailwind`text-white`}>Have an account already?</Text>
+            <Pressable onPress={() => router.push("/Auth/signin/email")}>
+              <Text style={tailwind`text-[#00A859] ml-2`}>Sign in</Text>
+            </Pressable>
+          </View>
+        </ScrollView>
+      </View>
+      <ToastComponent />
+    </>
   );
 };
 
 export default Index;
-
-
-
-
-
-// bearer token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjYwMDM3MjksInN1YiI6IjY2ZGVlNDAzZjJlMmQxMjA2YjI4ZjNkYyIsImlhdCI6MTcyNTg4MzcyOX0._V_HGzQp_J0wU8gtLQctknAgMcfbfxypSTQNFVATP2k

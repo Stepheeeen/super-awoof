@@ -2,7 +2,7 @@ import { DefaultInput } from "@/component/reusable/Input";
 import TabBar from "@/component/reusable/TabBar";
 import { Image, Pressable, Text, View } from "react-native";
 import { useRouter } from "expo-router";
-import IonIcons from "@expo/vector-icons/Ionicons"
+import IonIcons from "@expo/vector-icons/Ionicons";
 import tailwind from "twrnc";
 
 const index = () => {
@@ -17,7 +17,7 @@ const index = () => {
             router.back();
           }}
         >
-            <IonIcons name="arrow-back" size={25} color="white" />
+          <IonIcons name="arrow-back" size={25} color="white" />
         </Pressable>
 
         <Text style={tailwind`ml-[-25px] font-semibold text-[22px] text-white`}>
@@ -29,6 +29,7 @@ const index = () => {
 
       <View style={tailwind`w-full mt-[25%] mb-2 px-3`}>
         <DefaultInput
+          customInput={""}
           label="Full Name"
           placeholder="Adebayo Halah"
           customCss="w-[95%] mx-auto my-4"
@@ -37,6 +38,7 @@ const index = () => {
         />
 
         <DefaultInput
+          customInput={""}
           label="Email"
           placeholder="adebayohaliah@gmail.com"
           customCss="w-[95%] mx-auto"

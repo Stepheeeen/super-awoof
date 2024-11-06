@@ -2,7 +2,7 @@ import { DefaultButton } from "@/component/reusable/Button";
 import { DefaultInput, PasswordInput } from "@/component/reusable/Input";
 import { useRouter } from "expo-router";
 import { Pressable, Text, TextInput, View } from "react-native";
-import IonIcons from "@expo/vector-icons/Ionicons"
+import IonIcons from "@expo/vector-icons/Ionicons";
 import tailwind from "twrnc";
 import TabBar from "@/component/reusable/TabBar";
 
@@ -18,7 +18,7 @@ const index = () => {
             router.back;
           }}
         >
-            <IonIcons name="arrow-back" size={25} color="white" />
+          <IonIcons name="arrow-back" size={25} color="white" />
         </Pressable>
 
         <Text style={tailwind`ml-[-25px] font-semibold text-[22px] text-white`}>
@@ -30,6 +30,7 @@ const index = () => {
 
       <View style={tailwind`w-full mt-[20%] mb-2 px-3`}>
         <DefaultInput
+          customInput={""}
           label="Phone Number"
           placeholder="09120397347"
           customCss="w-[95%] mx-auto"
@@ -38,7 +39,7 @@ const index = () => {
         />
       </View>
 
-      <TabBar/>
+      <TabBar />
     </View>
   );
 };

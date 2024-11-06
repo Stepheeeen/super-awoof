@@ -38,12 +38,12 @@ export const PasswordInput = ({ placeholder, label, customCss, onPress, hidden, 
     )
 }
 
-export const DefaultInput = ({ placeholder, label, customCss, value, onChangeText }: { placeholder: string, label: string, customCss: string, value: any, onChangeText: any, }) => {
+export const DefaultInput = ({ placeholder, label, customCss, value, onChangeText, customInput }: { placeholder: string, label: string, customCss: string, value: any, onChangeText: any, customInput: any;}) => {
     return (
         <View style={tailwind`${customCss}`}>
             <Text style={tailwind`text-white mb-2 ml-1 text-[17px] font-normal`}>{label}</Text>
             <TextInput
-                style={tailwind`border border-[#34363B] rounded-lg px-4 bg-[#20232A] text-white w-full h-[55px] text-[16px] font-normal`}
+                style={tailwind`border border-[#34363B] rounded-lg px-4 bg-[#20232A] text-white w-full h-[55px] text-[16px] font-normal ${customInput}`}
                 placeholder={placeholder}
                 placeholderTextColor="gray"
                 value={value}

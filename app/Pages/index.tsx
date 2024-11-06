@@ -2,7 +2,6 @@ import { DefaultButton } from "@/component/reusable/Button";
 import SlotMachine from "@/component/reusable/SlotMachine";
 import Spinner from "@/component/reusable/Spinner";
 import TabBar from "@/component/reusable/TabBar";
-// import React, { useRef, useState, RefObject } from 'react';
 import {
   Image,
   ImageBackground,
@@ -10,10 +9,8 @@ import {
   Text,
   TouchableOpacity,
   View,
-  Linking,
   Alert,
 } from "react-native";
-import Sound from "react-native-sound";
 import tailwind from "twrnc";
 import { baseUrl } from "../constants";
 import axios from "axios";
@@ -21,46 +18,24 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
 import ModalContainer from "@/component/reusable/Modal";
 import { useRouter } from "expo-router";
-import { difficultyType } from "@/component/types";
-import React from "react";
 
 const index = () => {
   const [user, setUser] = useState<any>(null);
   const [deposit, setDeposit] = useState(false);
-  const [algoLevel, setAlgoLevel] = useState<difficultyType>("medium");
+  const [showBalanceModal, setShowBalanceModal] = useState(false);
   const router = useRouter();
 
+  // Check balance when coins change
+  useEffect(() => {
+    if (user?.coins === 0) {
+      setShowBalanceModal(true);
+    }
+  }, [user?.coins]);
 
   useEffect(() => {
     const func = async () => {
       const userData = (await AsyncStorage.getItem("user")) as any;
       setUser(JSON.parse(userData));
-      
-      const access = await AsyncStorage.getItem("accessToken");
-
-      try {
-        const response = await axios.get(`${baseUrl}/system/algo-level`, {
-          headers: {
-            Authorization: `Bearer ${access}`,
-          }
-        })      
-        
-       switch (response?.data?.data) {
-        case "Hard":
-          setAlgoLevel("hard")
-          break;
-        case "Aggressive":
-          setAlgoLevel("difficult")
-        case "Impossible":
-          setAlgoLevel("impossible")
-        default:
-          setAlgoLevel("medium")
-          break;
-       }
-      } catch (e:any) {
-        console.error(e);
-      }
-
     };
     func();
   }, []);
@@ -87,8 +62,6 @@ const index = () => {
       console.error(e);
     }
   };
-
-
 
   return (
     <>
@@ -121,13 +94,24 @@ const index = () => {
           <View
             style={tailwind`w-full flex items-center justify-center relative h-[530px]`}
           >
-            <SlotMachine submitWinner={submitWinner} difficulty={algoLevel} />
+            <SlotMachine
+              handleClick={() => {
+                router.push("/Pages/Extras/Deposit");
+                // console.log("they clicked me")
+              }}
+              checkBalance={() => {
+                if (user?.coins === 0) setShowBalanceModal(true);
+              }}
+              difficulty={"difficult"}
+              submitWinner={submitWinner}
+            />
           </View>
         </View>
 
         <TabBar />
       </View>
 
+      {/* Deposit Balance Modal */}
       <ModalContainer
         modalVisible={deposit}
         onClose={() => setDeposit(false)}

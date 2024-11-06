@@ -12,7 +12,8 @@
   "include": [
     "**/*.ts",
     "**/*.tsx",
+    "**/*.js",
     ".expo/types/**/*.ts",
     "expo-env.d.ts"
-, "component/reusable/Spinner.tsx", "component/reusable/SlotMachine.jsx", "component/reusable/SlotMachine.jsx"  ]
+, "component/reusable/Spinner.tsx", "component/reusable/SlotMachine.jsx", "component/reusable/SlotMachine.jsx", "component/reusable/ToastComponent.js"  ]
 }

@@ -38,6 +38,7 @@ const Index = () => {
       </View>
 
       <DefaultInput
+        customInput={""}
         label="Phone Number"
         placeholder="09120397347"
         customCss="w-[95%] mx-auto"

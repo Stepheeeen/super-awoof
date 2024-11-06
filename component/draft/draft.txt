@@ -10,11 +10,11 @@ import {
   Linking,
   Alert,
 } from "react-native";
-// import { Audio } from "expo-av";
+import { Audio } from "expo-av";
 
 const { width } = Dimensions.get("window");
-const iconSize = 80; // Size of each icon image
-const numIcons = 7; // Number of different icons
+const iconSize = 80;
+const numIcons = 7;
 
 // Import images statically
 import icon1 from "../../assets/images/icon1.png";
@@ -24,25 +24,16 @@ import icon4 from "../../assets/images/icon4.png";
 import icon5 from "../../assets/images/icon5.png";
 import icon6 from "../../assets/images/icon6.png";
 import icon7 from "../../assets/images/icon7.png";
-import icon8 from "../../assets/images/icon7.png";
-import icon9 from "../../assets/images/icon7.png";
-import icon10 from "../../assets/images/icon7.png";
+// import icon8 from "../../assets/images/icon8.png"; // Assume icon8 is the jackpot icon
+// import icon9 from "../../assets/images/icon9.png";
+// import icon10 from "../../assets/images/icon10.png"; icon8, icon9, icon10,
 import tailwind from "twrnc";
 import ModalContainer from "./Modal";
 import { router } from "expo-router";
 import { difficultyType } from "../types";
 
 const icons = [
-  icon1,
-  icon2,
-  icon3,
-  icon4,
-  icon5,
-  icon6,
-  icon7,
-  icon8,
-  icon9,
-  icon10,
+  icon1, icon2, icon3, icon4, icon5, icon6, icon7, 
 ];
 
 const rewardPrices = {
@@ -54,12 +45,10 @@ const SlotMachine = ({
   submitWinner,
   difficulty,
   checkBalance,
-  handleClick,
 }: {
   submitWinner: () => Promise<void>;
   difficulty: difficultyType;
   checkBalance: any;
-  handleClick: any;
 }) => {
   const [winner, setWinner] = useState<boolean | null>(null);
   const [spinning, setSpinning] = useState(false);
@@ -78,24 +67,22 @@ const SlotMachine = ({
 
   useEffect(() => {
     if (winner) {
-      playWinningSound(); // Play sound as soon as user hits the jackpot
+      playWinningSound(); // Play sound if user hits the jackpot
     }
   }, [winner]);
 
   useEffect(() => {
-    // Check winner whenever the reels update
     if (!spinning) {
-      checkWinner(); // Call winner check after spinning ends and reels are updated
+      checkWinner();
     }
   }, [reels, spinning]);
 
-  // Get three different initial icons for each reel
   function getInitialIcons() {
     return icons.sort(() => 0.5 - Math.random()).slice(0, 3);
   }
 
   const startSpin = async () => {
-    if (spinning) return; // Prevent spinning if already spinning
+    if (spinning) return;
 
     const balanceIsSufficient = await checkBalance();
     if (!balanceIsSufficient) {
@@ -103,20 +90,18 @@ const SlotMachine = ({
       return;
     }
 
-    setWinner(null); // Reset winner status
-    setSpinning(true); // Set spinning state to true
+    setWinner(null);
+    setSpinning(true);
 
-    // Randomize the icons for each reel
     const newReels = getReelOutcome();
-    setReels(newReels); // Set the new randomized icons
+    setReels(newReels);
 
-    // Spin animation for each spinner
     Animated.timing(spinner1, {
       toValue: -iconSize * numIcons,
       duration: 1200,
       useNativeDriver: true,
     }).start(() => {
-      spinner1.setValue(0); // Reset animation
+      spinner1.setValue(0);
     });
 
     Animated.timing(spinner2, {
@@ -124,7 +109,7 @@ const SlotMachine = ({
       duration: 1400,
       useNativeDriver: true,
     }).start(() => {
-      spinner2.setValue(0); // Reset animation
+      spinner2.setValue(0);
     });
 
     Animated.timing(spinner3, {
@@ -132,27 +117,16 @@ const SlotMachine = ({
       duration: 1600,
       useNativeDriver: true,
     }).start(() => {
-      spinner3.setValue(0); // Reset animation
-      setSpinning(false); // Stop spinning after the last reel stops
+      spinner3.setValue(0);
+      setSpinning(false);
     });
   };
 
-  const getRandomIcons = () => {
-    return icons.sort(() => 0.5 - Math.random()).slice(0, numIcons); // Randomize icons for the reel
-  };
-
   const checkWinner = () => {
-    const reel1Symbol = reels[0][0]; // First item of reel 1
-    const reel2Symbol = reels[1][0]; // First item of reel 2
-    const reel3Symbol = reels[2][0]; // First item of reel 3
-    const isWinner = reel1Symbol === reel2Symbol && reel2Symbol === reel3Symbol; // All reels match
-
-    // if (isWinner) {
-    //   submitWinner();
-    //   setTimeout(() => {
-    //     setWinningModal(true);
-    //   }, 500);
-    // }
+    const reel1Symbol = reels[0][0];
+    const reel2Symbol = reels[1][0];
+    const reel3Symbol = reels[2][0];
+    const isWinner = reel1Symbol === reel2Symbol && reel2Symbol === reel3Symbol;
 
     if (isWinner) {
       if (reel1Symbol === icon7) {
@@ -168,26 +142,22 @@ const SlotMachine = ({
       }, 500);
     }
 
-    setWinner(isWinner); // Update winner state
+    setWinner(isWinner);
   };
 
-  // const playWinningSound = async () => {
-  //   const { sound } = await Audio.Sound.createAsync(
-  //     require("../../assets/audio/winning_slot.wav")
-  //   );
-  //   await sound.playAsync();
-  // };
+  const playWinningSound = async () => {
+    const { sound } = await Audio.Sound.createAsync(
+      require("../../assets/audio/winning_slot.wav")
+    );
+    await sound.playAsync();
+  };
 
   const handleWinnerLink = async () => {
-    const url = "https://forms.gle/a7JwchrYgKJKzWjZ8"; // Replace with your external link
-
-    // Check if the URL can be opened
+    const url = "https://forms.gle/a7JwchrYgKJKzWjZ8";
     const supported = await Linking.canOpenURL(url);
     if (supported) {
-      // Open the URL
       await Linking.openURL(url);
     } else {
-      // Show an alert if the URL can't be opened
       Alert.alert(`Don't know how to open this URL: ${url}`);
     }
   };
@@ -202,8 +172,10 @@ const SlotMachine = ({
         break;
       case "hard":
         isWinningOutcome = randomNum < 0.3;
+        break;
       case "difficult":
         isWinningOutcome = randomNum < 0.1;
+        break;
       case "impossible":
         isWinningOutcome = false;
         break;
@@ -228,12 +200,8 @@ const SlotMachine = ({
           source={require("../../assets/images/Slot_Bg.png")}
           style={tailwind`w-full h-full`}
         />
-
-        <View
-          style={tailwind`absolute top-0 w-full h-full left-0 p-5 px-3 flex-row`}
-        >
+        <View style={tailwind`absolute top-0 w-full h-full left-0 p-5 px-3 flex-row`}>
           <View style={styles.container}>
-            {/* Display the result */}
             <Text style={styles.resultText}>
               {winner === null
                 ? "Spinning..."
@@ -241,13 +209,8 @@ const SlotMachine = ({
                 ? "🤑! Jackpot ! 🤑"
                 : "You lose, Keep going!"}
             </Text>
-
-            {/* Slot machine */}
             <View style={styles.spinnerContainer}>
-              {/* First spinner */}
-              <View
-                style={tailwind`bg-[#02291654] flex items-center rounded-lg px-1`}
-              >
+              <View style={tailwind`bg-[#02291654] flex items-center rounded-lg px-1`}>
                 <Animated.View
                   style={[
                     styles.spinner,
@@ -259,11 +222,7 @@ const SlotMachine = ({
                   ))}
                 </Animated.View>
               </View>
-
-              {/* Second spinner */}
-              <View
-                style={tailwind`bg-[#02291654] flex items-center rounded-lg px-1`}
-              >
+              <View style={tailwind`bg-[#02291654] flex items-center rounded-lg px-1`}>
                 <Animated.View
                   style={[
                     styles.spinner,
@@ -275,11 +234,7 @@ const SlotMachine = ({
                   ))}
                 </Animated.View>
               </View>
-
-              {/* Third spinner */}
-              <View
-                style={tailwind`bg-[#02291654] flex items-center rounded-lg px-1`}
-              >
+              <View style={tailwind`bg-[#02291654] flex items-center rounded-lg px-1`}>
                 <Animated.View
                   style={[
                     styles.spinner,
@@ -295,7 +250,6 @@ const SlotMachine = ({
           </View>
         </View>
       </View>
-      {/* Spin button */}
       <TouchableOpacity
         style={tailwind`mt-[80px]`}
         onPress={startSpin}
@@ -312,93 +266,52 @@ const SlotMachine = ({
         onClose={() => setWinningModal(false)}
         ButtonText={"Proceed"}
         HeadText={
-          <View
-            style={tailwind`ml-[50%] w-full flex justify-center items-center`}
-          >
+          <View style={tailwind`ml-[50%] w-full flex justify-center items-center`}>
             <Image source={require("../../assets/images/Trophy.png")} />
             <Text style={tailwind`text-white mt-5 text-[28px] font-bold ml-2`}>
-              JACKPOT
+              {rewardPrice ? `₦${rewardPrice.toLocaleString()}` : ""}
             </Text>
           </View>
         }
-        SubText="Congratulations, you just won Jackpot. Proceed to redeem your cash price."
+        SubText={
+          <Text style={tailwind`text-center text-sm text-[#1B9C85]`}>
+            You've earned a prize of ₦{rewardPrice?.toLocaleString()}!
+          </Text>
+        }
+        cancelText={""}
+        ModalHeadText=""
         handleClick={handleWinnerLink}
-        cancelText={""}
-        ModalHeadText=""
-      />
-
-      <ModalContainer
-        modalVisible={fundAcct}
-        onClose={() => setFundAcct(false)}
-        ButtonText={"Deposit"}
-        HeadText={
-          <View style={tailwind`w-full flex justify-center items-center`}>
-            <Text style={tailwind`text-white text-[25px] font-normal mb-3`}>
-              Insufficient Balance
-            </Text>
-            <Text
-              style={tailwind`text-white text-center mt-6 text-base font-normal`}
-            >
-              You have 0 coins.
-            </Text>
-            <Text
-              style={tailwind`text-white text-center mt-2 text-base font-normal`}
-            >
-              Please deposit to continue.
-            </Text>
-          </View>
-        }
-        SubText=""
-        handleClick={handleClick}
-        cancelText={""}
-        ModalHeadText=""
       />
     </>
   );
 };
 
+const getRandomIcons = () => icons.sort(() => 0.5 - Math.random()).slice(0, 3);
+
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: "center",
     alignItems: "center",
+    justifyContent: "center",
+    flex: 1,
   },
   resultText: {
+    color: "white",
     fontSize: 24,
-    color: "aliceblue",
-    marginBottom: 30,
+    fontWeight: "bold",
+    marginBottom: 10,
   },
   spinnerContainer: {
     flexDirection: "row",
-    // gap: 7,
-    height: 130, // Container height should match the icon size
-    overflow: "hidden",
-    backgroundColor: "transparent", // Spinner container's background color is transparent
-    width: "100%",
-    display: "flex",
-    justifyContent: "space-between",
+    justifyContent: "space-around",
   },
   spinner: {
-    width: "100%",
-    padding: 5,
-    paddingHorizontal: 7,
-    height: iconSize * numIcons, // Height to accommodate all icons
-    // backgroundColor: "#02281654", // Spinner background color
-    borderRadius: 10,
-    display: "flex",
-    alignItems: "center",
+    height: iconSize * numIcons,
   },
   icon: {
     width: iconSize,
     height: iconSize,
-    // borderRadius: 10, // Rounded corners
-    marginTop: 25, // Margin top and bottom
-    padding: 25, // Padding around icon
-  },
-  buttonText: {
-    color: "white",
-    fontSize: 18,
-    fontWeight: "bold",
+    marginBottom: 10,
+    borderRadius: 10,
   },
 });
 

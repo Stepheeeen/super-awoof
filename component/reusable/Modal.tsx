@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from "react";
+import { ReactNode, useState } from "react";
 import { Modal, View, Text, Button, StyleSheet, Pressable } from "react-native";
 import { DefaultButton } from "./Button";
 import tailwind from "twrnc";
@@ -18,7 +18,7 @@ const ModalContainer = ({
   onClose: any;
   ButtonText: any;
   HeadText: any;
-  SubText: string;
+  SubText: any;
   handleClick: any;
   cancelText: any;
   ModalHeadText: string;
