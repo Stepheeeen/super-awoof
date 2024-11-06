@@ -36,7 +36,7 @@ const ForgotPassword = () => {
           text1: "A password reset link has been sent to your email."
         })
         await AsyncStorage.setItem("passwordEmailReset", email); // Store email in AsyncStorage
-        router.push("/Auth/forgotPassword/OTP");
+        router.push("/Auth/forgotPassword/OTP/");
       }
     } catch (error) {
       console.error("Error requesting password reset:", error);

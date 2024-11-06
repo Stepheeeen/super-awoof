@@ -1,15 +1,11 @@
 import { DefaultButton } from "@/component/reusable/Button";
 import SlotMachine from "@/component/reusable/SlotMachine";
-import Spinner from "@/component/reusable/Spinner";
 import TabBar from "@/component/reusable/TabBar";
 import {
   Image,
-  ImageBackground,
   Pressable,
   Text,
-  TouchableOpacity,
   View,
-  Alert,
 } from "react-native";
 import tailwind from "twrnc";
 import { baseUrl } from "../constants";
@@ -19,36 +15,62 @@ import { useEffect, useState } from "react";
 import ModalContainer from "@/component/reusable/Modal";
 import { useRouter } from "expo-router";
 
-const index = () => {
+const Index = () => {
   const [user, setUser] = useState<any>(null);
+  const [deductedCoins, setDeductedCoins] = useState<number>(0); // Track deducted coins count
   const [deposit, setDeposit] = useState(false);
-  const [showBalanceModal, setShowBalanceModal] = useState(false);
   const router = useRouter();
 
-  // Check balance when coins change
-  useEffect(() => {
-    if (user?.coins === 0) {
-      setShowBalanceModal(true);
-    }
-  }, [user?.coins]);
-
+  // Fetch user data and deducted coin count on initial load
   useEffect(() => {
     const func = async () => {
       const userData = (await AsyncStorage.getItem("user")) as any;
       setUser(JSON.parse(userData));
+      
+      // Retrieve deducted coins count from AsyncStorage
+      const deductedCoinsCount = parseInt(await AsyncStorage.getItem("deductedCoins") || "0", 10);
+      setDeductedCoins(deductedCoinsCount);
     };
     func();
   }, []);
 
-  const submitWinner = async () => {
+  // Check balance when coins change and show balance modal
+  useEffect(() => {
+    if (user?.coins === 0) {
+      setDeposit(true);
+    }
+  }, [user?.coins]);
+
+  // Handle button click: Deduct 1 coin
+  const handleButtonClick = async () => {
+    if (!user || user.coins <= 0) return;
+
+    // Deduct 1 coin from the user balance
+    const newBalance = user.coins - 1;
+    const updatedUser = { ...user, coins: newBalance };
+    
+    // Update the local state and AsyncStorage
+    setUser(updatedUser);
+    await AsyncStorage.setItem("user", JSON.stringify(updatedUser));
+    
+    // Track the number of deducted coins locally
+    const newDeductedCoins = deductedCoins + 1;
+    setDeductedCoins(newDeductedCoins);
+    await AsyncStorage.setItem("deductedCoins", newDeductedCoins.toString());
+
+    // If 5 coins have been deducted, send them to the backend
+    if (newDeductedCoins >= 5) {
+      await sendDeductedCoinsToBackend(newDeductedCoins);
+    }
+  };
+
+  // Send the deducted coins count to the backend
+  const sendDeductedCoinsToBackend = async (deductedCoins: number) => {
     try {
       const access = await AsyncStorage.getItem("accessToken");
 
       const response = await axios.post(
-        `${baseUrl}/system/winner`,
-        {
-          amount: 100,
-        },
+        `${baseUrl}account/reduce-coins/${deductedCoins}`,
         {
           headers: {
             Authorization: `Bearer ${access}`,
@@ -56,19 +78,20 @@ const index = () => {
         }
       );
 
-      console.log(response.data);
-      setUser({ ...user, coins: response?.data?.coins || user.coins });
-    } catch (e: any) {
-      console.error(e);
+      // On success, reset the deducted coins count
+      if (response.data.success) {
+        await AsyncStorage.setItem("deductedCoins", "0");
+        setDeductedCoins(0); // Reset local state as well
+      }
+    } catch (error) {
+      console.error("Error sending deducted coins:", error);
     }
   };
 
   return (
     <>
       <View style={tailwind`h-full bg-[#0F1219] w-full`}>
-        <View
-          style={tailwind`flex flex-row items-center w-full justify-between px-4 pt-6 h-[10%] absolute top-0`}
-        >
+        <View style={tailwind`flex flex-row items-center w-full justify-between px-4 pt-6 h-[10%] absolute top-0`}>
           <Image
             source={require("../../assets/images/favicon.png")}
             style={tailwind`w-[50px] h-[50px]`}
@@ -76,9 +99,7 @@ const index = () => {
 
           <Pressable
             style={tailwind`flex flex-row items-center bg-[#20232A] py-[2px] px-2 rounded`}
-            onPress={() => {
-              setDeposit(true);
-            }}
+            onPress={handleButtonClick}
           >
             <Image
               source={require("../../assets/images/AwoofCoin.png")}
@@ -91,19 +112,14 @@ const index = () => {
         </View>
 
         <View style={tailwind`mt-[22%] w-full pt-8`}>
-          <View
-            style={tailwind`w-full flex items-center justify-center relative h-[530px]`}
-          >
+          <View style={tailwind`w-full flex items-center justify-center relative h-[530px]`}>
             <SlotMachine
-              handleClick={() => {
-                router.push("/Pages/Extras/Deposit/");
-                // console.log("they clicked me")
-              }}
+              handleClick={handleButtonClick}
               checkBalance={() => {
-                if (user?.coins === 0) setShowBalanceModal(true);
+                if (user?.coins === 0) setDeposit(true);
               }}
               difficulty={"difficult"}
-              submitWinner={submitWinner}
+              submitWinner={() => {}}
             />
           </View>
         </View>
@@ -118,18 +134,11 @@ const index = () => {
         ButtonText={"Deposit"}
         HeadText={
           <View style={tailwind`w-full flex justify-center items-center`}>
-            <Text
-              style={tailwind`text-white text-[25px] font-normal ml-[25%] mb-3`}
-            >
+            <Text style={tailwind`text-white text-[25px] font-normal ml-[25%] mb-3`}>
               Balance
             </Text>
-            <View
-              style={tailwind`w-[70%] ml-[25%] h-auto flex flex-row bg-[#31524D] rounded-lg p-3 justify-center items-center`}
-            >
-              <Image
-                source={require("../../assets/images/AwoofCoin.png")}
-                style={tailwind``}
-              />
+            <View style={tailwind`w-[70%] ml-[25%] h-auto flex flex-row bg-[#31524D] rounded-lg p-3 justify-center items-center`}>
+              <Image source={require("../../assets/images/AwoofCoin.png")} style={tailwind``} />
               <Text style={tailwind`text-white text-[25px] font-medium ml-2`}>
                 {user?.coins || 0}
               </Text>
@@ -147,4 +156,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default Index;

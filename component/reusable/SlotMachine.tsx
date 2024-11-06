@@ -56,7 +56,7 @@ const SlotMachine = ({
   checkBalance,
   handleClick,
 }: {
-  submitWinner: () => Promise<void>;
+  submitWinner: any
   difficulty: difficultyType;
   checkBalance: any;
   handleClick: any;
