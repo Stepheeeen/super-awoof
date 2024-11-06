@@ -1,0 +1,125 @@
+import { DefaultInput } from "@/component/reusable/Input";
+import TabBar from "@/component/reusable/TabBar";
+import { Image, Pressable, Text, View } from "react-native";
+import { CgProfile } from "react-icons/cg";
+import { GrPowerReset } from "react-icons/gr";
+import { TbLogout2 } from "react-icons/tb";
+import { GoTrash } from "react-icons/go";
+import { IoIosArrowForward } from "react-icons/io";
+import tailwind from "twrnc";
+import Modal from "@/component/reusable/Modal";
+import { useState } from "react";
+
+const Index = () => {
+  const [modalVisible, setModalVisible] = useState(false);
+  const [deleteAccount, setDeleteAccount] = useState(false);
+  return (
+    <View style={tailwind`h-full bg-[#0F1219] w-full`}>
+      <View
+        style={tailwind`flex flex-row items-center w-full justify-between px-5 py-6 h-[13%] absolute top-0 bg-[#0F1219] z-10 `}
+      >
+        <Image
+          source={require("../../../assets/images/favicon.png")}
+          style={tailwind`w-[50px] h-[50px]`}
+        />
+        <Text style={tailwind`ml-[-15px] font-semibold text-[22px] text-white`}>
+          Profile
+        </Text>
+        <Pressable
+          style={tailwind`flex flex-row items-center py-[2px] px-2 rounded`}
+        ></Pressable>
+      </View>
+
+      <View style={tailwind`mt-[20%] py-6 w-full`}>
+        <Pressable
+          style={tailwind`flex flex-row items-center w-full justify-between py-2 px-5`}
+        >
+          <View style={tailwind`flex flex-row`}>
+            {/* <CgProfile color="#B7B7B7" size={30} /> */}
+            <Text style={tailwind`text-white text-[18px] ml-3`}>
+              View Profile
+            </Text>
+          </View>
+
+          <IoIosArrowForward color="#B7B7B7" size={25} />
+        </Pressable>
+        <Pressable
+          style={tailwind`flex flex-row items-center w-full justify-between py-2 px-5 mt-1 mb-3`}
+        >
+          <View style={tailwind`flex flex-row`}>
+            <GrPowerReset color="#B7B7B7" size={30} />
+            <Text style={tailwind`text-white text-[18px] ml-3`}>
+              Reset Password
+            </Text>
+          </View>
+
+          <IoIosArrowForward color="#B7B7B7" size={25} />
+        </Pressable>
+
+        <hr style={tailwind`w-[87%] border-1 my-5 bg-[#343434]`} />
+
+        <Pressable
+          style={tailwind`flex flex-row items-center w-full justify-between py-2 px-5 mt-3`}
+          onPress={() => setModalVisible(true)}
+        >
+          <View style={tailwind`flex flex-row`}>
+            <TbLogout2 color="#B7B7B7" size={30} />
+            <Text style={tailwind`text-white text-[18px] ml-3`}>Logout</Text>
+          </View>
+
+          <IoIosArrowForward color="#B7B7B7" size={25} />
+        </Pressable>
+
+        <Pressable
+          style={tailwind`flex flex-row items-center w-full justify-between py-2 px-5 my-1`}
+          onPress={() => {
+            setDeleteAccount(true);
+          }}
+        >
+          <View style={tailwind`flex flex-row pl-1`}>
+            <GoTrash color="#B7B7B7" size={25} />
+            <Text style={tailwind`text-white text-[18px] ml-3`}>
+              Delete Account
+            </Text>
+          </View>
+
+          <IoIosArrowForward color="#B7B7B7" size={25} />
+        </Pressable>
+      </View>
+
+      <TabBar />
+
+      <Modal
+        modalVisible={modalVisible}
+        onClose={() => {
+          setModalVisible(false);
+        }}
+        ButtonText={"Log out"}
+        HeadText="Logging Out?"
+        SubText="Are you sure you want to log out from your SupaAwoof account?"
+        handleClick={() => {}}
+        cancelText={
+          <Text style={tailwind`underline my-2 text-white`}>No, Cancel</Text>
+        }
+        ModalHeadText=""
+      />
+
+      <Modal
+        modalVisible={deleteAccount}
+        onClose={() => {
+          setDeleteAccount(false);
+        }}
+        ButtonText={"Delete Account"}
+        HeadText="Delete Account?"
+        SubText="Are you sure you want to delete your SupaAwoof account?"
+        handleClick={() => {}}
+        cancelText={
+          <Text style={tailwind`underline my-2 text-white`}>No, Cancel</Text>
+        }
+        ModalHeadText=""
+      />
+    </View>
+  );
+};
+
+export default Index;

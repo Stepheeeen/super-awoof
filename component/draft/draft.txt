@@ -1,0 +1,318 @@
+import React, { useState, useRef, useEffect } from "react";
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+  Animated,
+  Dimensions,
+  Linking,
+  Alert,
+} from "react-native";
+import { Audio } from "expo-av";
+
+const { width } = Dimensions.get("window");
+const iconSize = 80;
+const numIcons = 7;
+
+// Import images statically
+import icon1 from "../../assets/images/icon1.png";
+import icon2 from "../../assets/images/icon2.png";
+import icon3 from "../../assets/images/icon3.png";
+import icon4 from "../../assets/images/icon4.png";
+import icon5 from "../../assets/images/icon5.png";
+import icon6 from "../../assets/images/icon6.png";
+import icon7 from "../../assets/images/icon7.png";
+// import icon8 from "../../assets/images/icon8.png"; // Assume icon8 is the jackpot icon
+// import icon9 from "../../assets/images/icon9.png";
+// import icon10 from "../../assets/images/icon10.png"; icon8, icon9, icon10,
+import tailwind from "twrnc";
+import ModalContainer from "./Modal";
+import { router } from "expo-router";
+import { difficultyType } from "../types";
+
+const icons = [
+  icon1, icon2, icon3, icon4, icon5, icon6, icon7, 
+];
+
+const rewardPrices = {
+  regular: 50000,
+  jackpot: 100000,
+};
+
+const SlotMachine = ({
+  submitWinner,
+  difficulty,
+  checkBalance,
+}: {
+  submitWinner: () => Promise<void>;
+  difficulty: difficultyType;
+  checkBalance: any;
+}) => {
+  const [winner, setWinner] = useState<boolean | null>(null);
+  const [spinning, setSpinning] = useState(false);
+  const [winningModal, setWinningModal] = useState(false);
+  const [fundAcct, setFundAcct] = useState(false);
+  const [rewardPrice, setRewardPrice] = useState<number | null>(null); // New state for reward price
+  const [reels, setReels] = useState([
+    getInitialIcons(),
+    getInitialIcons(),
+    getInitialIcons(),
+  ]);
+
+  const spinner1 = useRef(new Animated.Value(0)).current;
+  const spinner2 = useRef(new Animated.Value(0)).current;
+  const spinner3 = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    if (winner) {
+      playWinningSound(); // Play sound if user hits the jackpot
+    }
+  }, [winner]);
+
+  useEffect(() => {
+    if (!spinning) {
+      checkWinner();
+    }
+  }, [reels, spinning]);
+
+  function getInitialIcons() {
+    return icons.sort(() => 0.5 - Math.random()).slice(0, 3);
+  }
+
+  const startSpin = async () => {
+    if (spinning) return;
+
+    const balanceIsSufficient = await checkBalance();
+    if (!balanceIsSufficient) {
+      setFundAcct(true);
+      return;
+    }
+
+    setWinner(null);
+    setSpinning(true);
+
+    const newReels = getReelOutcome();
+    setReels(newReels);
+
+    Animated.timing(spinner1, {
+      toValue: -iconSize * numIcons,
+      duration: 1200,
+      useNativeDriver: true,
+    }).start(() => {
+      spinner1.setValue(0);
+    });
+
+    Animated.timing(spinner2, {
+      toValue: -iconSize * numIcons,
+      duration: 1400,
+      useNativeDriver: true,
+    }).start(() => {
+      spinner2.setValue(0);
+    });
+
+    Animated.timing(spinner3, {
+      toValue: -iconSize * numIcons,
+      duration: 1600,
+      useNativeDriver: true,
+    }).start(() => {
+      spinner3.setValue(0);
+      setSpinning(false);
+    });
+  };
+
+  const checkWinner = () => {
+    const reel1Symbol = reels[0][0];
+    const reel2Symbol = reels[1][0];
+    const reel3Symbol = reels[2][0];
+    const isWinner = reel1Symbol === reel2Symbol && reel2Symbol === reel3Symbol;
+
+    if (isWinner) {
+      if (reel1Symbol === icon7) {
+        // Jackpot
+        setRewardPrice(rewardPrices.jackpot);
+      } else {
+        // Regular win
+        setRewardPrice(rewardPrices.regular);
+      }
+      submitWinner();
+      setTimeout(() => {
+        setWinningModal(true);
+      }, 500);
+    }
+
+    setWinner(isWinner);
+  };
+
+  const playWinningSound = async () => {
+    const { sound } = await Audio.Sound.createAsync(
+      require("../../assets/audio/winning_slot.wav")
+    );
+    await sound.playAsync();
+  };
+
+  const handleWinnerLink = async () => {
+    const url = "https://forms.gle/a7JwchrYgKJKzWjZ8";
+    const supported = await Linking.canOpenURL(url);
+    if (supported) {
+      await Linking.openURL(url);
+    } else {
+      Alert.alert(`Don't know how to open this URL: ${url}`);
+    }
+  };
+
+  const getReelOutcome = () => {
+    let isWinningOutcome = false;
+    const randomNum = Math.random();
+
+    switch (difficulty) {
+      case "medium":
+        isWinningOutcome = randomNum < 0.6;
+        break;
+      case "hard":
+        isWinningOutcome = randomNum < 0.3;
+        break;
+      case "difficult":
+        isWinningOutcome = randomNum < 0.1;
+        break;
+      case "impossible":
+        isWinningOutcome = false;
+        break;
+    }
+
+    if (isWinningOutcome) {
+      const winningSymbol = icons[Math.floor(Math.random() * icons.length)];
+      return [
+        [winningSymbol, icons[1], icons[2]],
+        [winningSymbol, icons[3], icons[4]],
+        [winningSymbol, icons[5], icons[6]],
+      ];
+    } else {
+      return [getRandomIcons(), getRandomIcons(), getRandomIcons()];
+    }
+  };
+
+  return (
+    <>
+      <View style={tailwind`w-[95%] relative h-[300px]`}>
+        <Image
+          source={require("../../assets/images/Slot_Bg.png")}
+          style={tailwind`w-full h-full`}
+        />
+        <View style={tailwind`absolute top-0 w-full h-full left-0 p-5 px-3 flex-row`}>
+          <View style={styles.container}>
+            <Text style={styles.resultText}>
+              {winner === null
+                ? "Spinning..."
+                : winner
+                ? "🤑! Jackpot ! 🤑"
+                : "You lose, Keep going!"}
+            </Text>
+            <View style={styles.spinnerContainer}>
+              <View style={tailwind`bg-[#02291654] flex items-center rounded-lg px-1`}>
+                <Animated.View
+                  style={[
+                    styles.spinner,
+                    { transform: [{ translateY: spinner1 }] },
+                  ]}
+                >
+                  {reels[0].map((icon, index) => (
+                    <Image key={index} source={icon} style={styles.icon} />
+                  ))}
+                </Animated.View>
+              </View>
+              <View style={tailwind`bg-[#02291654] flex items-center rounded-lg px-1`}>
+                <Animated.View
+                  style={[
+                    styles.spinner,
+                    { transform: [{ translateY: spinner2 }] },
+                  ]}
+                >
+                  {reels[1].map((icon, index) => (
+                    <Image key={index} source={icon} style={styles.icon} />
+                  ))}
+                </Animated.View>
+              </View>
+              <View style={tailwind`bg-[#02291654] flex items-center rounded-lg px-1`}>
+                <Animated.View
+                  style={[
+                    styles.spinner,
+                    { transform: [{ translateY: spinner3 }] },
+                  ]}
+                >
+                  {reels[2].map((icon, index) => (
+                    <Image key={index} source={icon} style={styles.icon} />
+                  ))}
+                </Animated.View>
+              </View>
+            </View>
+          </View>
+        </View>
+      </View>
+      <TouchableOpacity
+        style={tailwind`mt-[80px]`}
+        onPress={startSpin}
+        disabled={spinning}
+      >
+        <Image
+          source={require("../../assets/images/SpinBtn.png")}
+          style={tailwind``}
+        />
+      </TouchableOpacity>
+
+      <ModalContainer
+        modalVisible={winningModal}
+        onClose={() => setWinningModal(false)}
+        ButtonText={"Proceed"}
+        HeadText={
+          <View style={tailwind`ml-[50%] w-full flex justify-center items-center`}>
+            <Image source={require("../../assets/images/Trophy.png")} />
+            <Text style={tailwind`text-white mt-5 text-[28px] font-bold ml-2`}>
+              {rewardPrice ? `₦${rewardPrice.toLocaleString()}` : ""}
+            </Text>
+          </View>
+        }
+        SubText={
+          <Text style={tailwind`text-center text-sm text-[#1B9C85]`}>
+            You've earned a prize of ₦{rewardPrice?.toLocaleString()}!
+          </Text>
+        }
+        cancelText={""}
+        ModalHeadText=""
+        handleClick={handleWinnerLink}
+      />
+    </>
+  );
+};
+
+const getRandomIcons = () => icons.sort(() => 0.5 - Math.random()).slice(0, 3);
+
+const styles = StyleSheet.create({
+  container: {
+    alignItems: "center",
+    justifyContent: "center",
+    flex: 1,
+  },
+  resultText: {
+    color: "white",
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  spinnerContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+  },
+  spinner: {
+    height: iconSize * numIcons,
+  },
+  icon: {
+    width: iconSize,
+    height: iconSize,
+    marginBottom: 10,
+    borderRadius: 10,
+  },
+});
+
+export default SlotMachine;
