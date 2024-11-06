@@ -78,7 +78,7 @@ const SlotMachine = ({
 
   useEffect(() => {
     if (winner) {
-      playWinningSound(); // Play sound as soon as user hits the jackpot
+      // playWinningSound(); // Play sound as soon as user hits the jackpot
     }
   }, [winner]);
 

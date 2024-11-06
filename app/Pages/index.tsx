@@ -96,7 +96,7 @@ const index = () => {
           >
             <SlotMachine
               handleClick={() => {
-                router.push("/Pages/Extras/Deposit");
+                router.push("/Pages/Extras/Deposit/");
                 // console.log("they clicked me")
               }}
               checkBalance={() => {
@@ -138,7 +138,7 @@ const index = () => {
         }
         SubText=""
         handleClick={() => {
-          router.push("/Pages/Extras/Deposit");
+          router.push("/Pages/Extras/Deposit/");
         }}
         cancelText={""}
         ModalHeadText=""

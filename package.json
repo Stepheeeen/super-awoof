@@ -24,7 +24,7 @@
     "@react-navigation/native": "^6.1.18",
     "axios": "^1.7.7",
     "babel-plugin-react-native-web": "^0.19.12",
-    "expo": "^51.0.38",
+    "expo": "^50.0.21",
     "expo-av": "~13.10.6",
     "expo-dev-client": "~3.3.12",
     "expo-font": "~11.10.3",
