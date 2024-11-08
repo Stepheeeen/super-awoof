@@ -1,12 +1,7 @@
 import { DefaultButton } from "@/component/reusable/Button";
 import SlotMachine from "@/component/reusable/SlotMachine";
 import TabBar from "@/component/reusable/TabBar";
-import {
-  Image,
-  Pressable,
-  Text,
-  View,
-} from "react-native";
+import { Image, Pressable, Text, View } from "react-native";
 import tailwind from "twrnc";
 import { baseUrl } from "../constants";
 import axios from "axios";
@@ -14,21 +9,26 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
 import ModalContainer from "@/component/reusable/Modal";
 import { useRouter } from "expo-router";
+import useProfile from '../hooks/useProfile'
 
 const Index = () => {
   const [user, setUser] = useState<any>(null);
   const [deductedCoins, setDeductedCoins] = useState<number>(0); // Track deducted coins count
   const [deposit, setDeposit] = useState(false);
   const router = useRouter();
+  const User:any = useProfile()
 
   // Fetch user data and deducted coin count on initial load
   useEffect(() => {
     const func = async () => {
       const userData = (await AsyncStorage.getItem("user")) as any;
       setUser(JSON.parse(userData));
-      
+
       // Retrieve deducted coins count from AsyncStorage
-      const deductedCoinsCount = parseInt(await AsyncStorage.getItem("deductedCoins") || "0", 10);
+      const deductedCoinsCount = parseInt(
+        (await AsyncStorage.getItem("deductedCoins")) || "0",
+        10
+      );
       setDeductedCoins(deductedCoinsCount);
     };
     func();
@@ -48,11 +48,11 @@ const Index = () => {
     // Deduct 1 coin from the user balance
     const newBalance = user.coins - 1;
     const updatedUser = { ...user, coins: newBalance };
-    
+
     // Update the local state and AsyncStorage
     setUser(updatedUser);
     await AsyncStorage.setItem("user", JSON.stringify(updatedUser));
-    
+
     // Track the number of deducted coins locally
     const newDeductedCoins = deductedCoins + 1;
     setDeductedCoins(newDeductedCoins);
@@ -69,8 +69,13 @@ const Index = () => {
     try {
       const access = await AsyncStorage.getItem("accessToken");
 
+      console.log("Sending deducted coins to backend:", deductedCoins);
+      console.log("Access token:", access);
+      console.log("URL:", `${baseUrl}/account/reduce-coins/${deductedCoins}`);
+
       const response = await axios.post(
-        `${baseUrl}account/reduce-coins/${deductedCoins}`,
+        `${baseUrl}/account/reduce-coins/${deductedCoins}`,
+        {},
         {
           headers: {
             Authorization: `Bearer ${access}`,
@@ -78,7 +83,6 @@ const Index = () => {
         }
       );
 
-      // On success, reset the deducted coins count
       if (response.data.success) {
         await AsyncStorage.setItem("deductedCoins", "0");
         setDeductedCoins(0); // Reset local state as well
@@ -91,7 +95,9 @@ const Index = () => {
   return (
     <>
       <View style={tailwind`h-full bg-[#0F1219] w-full`}>
-        <View style={tailwind`flex flex-row items-center w-full justify-between px-4 pt-6 h-[10%] absolute top-0`}>
+        <View
+          style={tailwind`flex flex-row items-center w-full justify-between px-4 pt-6 h-[10%] absolute top-0`}
+        >
           <Image
             source={require("../../assets/images/favicon.png")}
             style={tailwind`w-[50px] h-[50px]`}
@@ -99,22 +105,28 @@ const Index = () => {
 
           <Pressable
             style={tailwind`flex flex-row items-center bg-[#20232A] py-[2px] px-2 rounded`}
-            onPress={handleButtonClick}
+            onPress={() => {
+              setDeposit(true);
+            }}
           >
             <Image
               source={require("../../assets/images/AwoofCoin.png")}
               style={tailwind``}
             />
             <Text style={tailwind`text-white text-[17px] mb-1 ml-1`}>
-              {user?.coins || 0}
+              {User?.coins || 0}
             </Text>
           </Pressable>
         </View>
 
         <View style={tailwind`mt-[22%] w-full pt-8`}>
-          <View style={tailwind`w-full flex items-center justify-center relative h-[530px]`}>
+          <View
+            style={tailwind`w-full flex items-center justify-center relative h-[530px]`}
+          >
             <SlotMachine
-              handleClick={handleButtonClick}
+              handleClick={() => {
+                router.push("/Pages/Extras/Deposit/");
+              }}
               checkBalance={() => {
                 if (user?.coins === 0) setDeposit(true);
               }}
@@ -133,19 +145,25 @@ const Index = () => {
         onClose={() => setDeposit(false)}
         ButtonText={"Deposit"}
         HeadText={
-          <View style={tailwind`w-full flex justify-center items-center`}>
-            <Text style={tailwind`text-white text-[25px] font-normal ml-[25%] mb-3`}>
+          <>
+            <Text
+              style={tailwind`text-white text-[25px] font-normal ml-[25%] mb-3`}
+            >
               Balance
             </Text>
-            <View style={tailwind`w-[70%] ml-[25%] h-auto flex flex-row bg-[#31524D] rounded-lg p-3 justify-center items-center`}>
-              <Image source={require("../../assets/images/AwoofCoin.png")} style={tailwind``} />
-              <Text style={tailwind`text-white text-[25px] font-medium ml-2`}>
-                {user?.coins || 0}
-              </Text>
-            </View>
-          </View>
+          </>
         }
-        SubText=""
+        SubText={
+          <>
+            <Image
+              source={require("../../assets/images/AwoofCoin.png")}
+              style={tailwind``}
+            />
+            <Text style={tailwind`text-white text-[25px] font-medium ml-2`}>
+              {User?.coins || 0}
+            </Text>
+          </>
+        }
         handleClick={() => {
           router.push("/Pages/Extras/Deposit/");
         }}
