@@ -95,20 +95,15 @@ const SlotMachine = ({
 
   // Get three different initial icons for each reel
   function getInitialIcons() {
-    // Shuffle the icons array
-    const shuffledIcons = [...icons].sort(() => 0.5 - Math.random());
-
-    // Select the first three unique icons
-    return shuffledIcons.slice(0, 3);
+    return icons.sort(() => 0.5 - Math.random()).slice(0, 3);
   }
 
   const startSpin = async () => {
-    if (spinning) return; // Prevent spinning if already spinning
-
     if (checkBalance === 0) {
       setFundAcct(true);
       return;
     }
+    if (spinning) return; // Prevent spinning if already spinning
 
     setWinner(null); // Reset winner status
     setSpinning(true); // Set spinning state to true
