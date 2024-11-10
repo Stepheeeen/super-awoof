@@ -42,7 +42,7 @@ const Index = () => {
       await AsyncStorage.setItem("accessToken", response?.data?.accessToken);
 
       // Redirect to the dashboard or other authenticated route
-      router.push("/Pages");
+      router.push("/Pages/");
     } catch (error: any) {
       if (error.response) {
         if (error.response.data.message === "Please verify your account in order to login") {
@@ -51,7 +51,7 @@ const Index = () => {
             text1: "Error",
             text2: error.response.data.message,
           });
-          router.push("/Auth/OTP");
+          router.push("/Auth/OTP/");
         } else if (error.response.status === 404) {
           Toast.show({
             type: "error",
@@ -97,7 +97,7 @@ const Index = () => {
           onChangeText={setEmail} // Update email state
         />
 
-        <Pressable onPress={() => router.push("/Auth/signin/phone-number")}>
+        <Pressable onPress={() => router.push("/Auth/signin/phone-number/")}>
           <Text style={tailwind`text-[#00A859] ml-3 mt-2 text-[14px] font-normal`}>
             Use Phone Number Instead
           </Text>
@@ -111,7 +111,7 @@ const Index = () => {
           hidden=""
           value={password}
           onChangeText={setPassword} // Update password state
-          onPress={() => router.push("/Auth/forgotPassword")}
+          onPress={() => router.push("/Auth/forgotPassword/")}
         />
 
         <View style={tailwind`mt-8 w-[95%] mx-auto`}>
@@ -121,7 +121,7 @@ const Index = () => {
 
         <View style={tailwind`flex flex-row w-full items-center justify-center mt-3`}>
           <Text style={tailwind`text-white`}>Don’t have an account?</Text>
-          <Pressable onPress={() => router.push("/Auth/signup/email")}>
+          <Pressable onPress={() => router.push("/Auth/signup/email/")}>
             <Text style={tailwind`text-[#00A859] ml-2`}>Sign up</Text>
           </Pressable>
         </View>
