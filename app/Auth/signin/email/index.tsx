@@ -32,7 +32,7 @@ const Index = () => {
 
       const accountData = {
         ...response?.data?.account,
-        coins: response?.data?.coins,
+        coins: response?.data?.account.coins,
         paymentMethod: response?.data?.paymentMethod,
         mno: response?.data?.mno,
       };

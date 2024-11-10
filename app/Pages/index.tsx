@@ -23,13 +23,6 @@ const Index = () => {
     const func = async () => {
       const userData = (await AsyncStorage.getItem("user")) as any;
       setUser(JSON.parse(userData));
-
-      // Retrieve deducted coins count from AsyncStorage
-      const deductedCoinsCount = parseInt(
-        (await AsyncStorage.getItem("deductedCoins")) || "0",
-        10
-      );
-      setDeductedCoins(deductedCoinsCount);
     };
     func();
   }, []);
@@ -149,7 +142,7 @@ const Index = () => {
               style={tailwind``}
             />
             <Text style={tailwind`text-white text-[17px] mb-1 ml-1`}>
-              {User?.coins || 0}
+              {user?.coins || 0}
             </Text>
           </Pressable>
         </View>
