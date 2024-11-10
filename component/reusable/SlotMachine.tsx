@@ -31,6 +31,7 @@ import tailwind from "twrnc";
 import ModalContainer from "./Modal";
 import { router } from "expo-router";
 import { difficultyType } from "../types";
+import useUserProfile from "@/app/hooks/useProfile";
 
 const icons = [
   icon1,
@@ -75,6 +76,8 @@ const SlotMachine = ({
   const spinner1 = useRef(new Animated.Value(0)).current;
   const spinner2 = useRef(new Animated.Value(0)).current;
   const spinner3 = useRef(new Animated.Value(0)).current;
+  const User:any = useUserProfile()
+
 
   useEffect(() => {
     if (winner) {
@@ -97,8 +100,8 @@ const SlotMachine = ({
   const startSpin = async () => {
     if (spinning) return; // Prevent spinning if already spinning
 
-    const balanceIsSufficient = await checkBalance();
-    if (!balanceIsSufficient) {
+    const balanceIsInSufficient = await checkBalance();
+    if (balanceIsInSufficient) {
       setFundAcct(true);
       return;
     }

@@ -128,7 +128,12 @@ const Index = () => {
                 router.push("/Pages/Extras/Deposit/");
               }}
               checkBalance={() => {
-                if (user?.coins === 0) setDeposit(true);
+                if (user?.coins === 0) {
+                setDeposit(true);
+                }else{
+                  setDeposit(false)
+                }
+                return deposit;
               }}
               difficulty={"difficult"}
               submitWinner={() => {}}

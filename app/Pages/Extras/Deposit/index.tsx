@@ -30,6 +30,7 @@ const Index = () => {
   const [loading, setLoading] = useState(false);
   const [reference, setReference] = useState("");
   const router = useRouter();
+
   const [token, setToken] = useState<string | null>(null);
 
   useEffect(() => {
@@ -39,7 +40,7 @@ const Index = () => {
       setToken(storedToken);
     };
     fetchToken();
-  }, []);
+  }, [token]);
 
   const verifyPayment = async () => {
     try {
