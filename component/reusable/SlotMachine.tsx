@@ -56,11 +56,13 @@ const SlotMachine = ({
   difficulty,
   checkBalance,
   handleClick,
+  deductCoins,
 }: {
   submitWinner: any
   difficulty: difficultyType;
   checkBalance: any;
   handleClick: any;
+  deductCoins: any,
 }) => {
   const [winner, setWinner] = useState<boolean | null>(null);
   const [spinning, setSpinning] = useState(false);
@@ -77,7 +79,6 @@ const SlotMachine = ({
   const spinner2 = useRef(new Animated.Value(0)).current;
   const spinner3 = useRef(new Animated.Value(0)).current;
   const User:any = useUserProfile()
-
 
   useEffect(() => {
     if (winner) {
@@ -112,6 +113,8 @@ const SlotMachine = ({
     // Randomize the icons for each reel
     const newReels = getReelOutcome();
     setReels(newReels); // Set the new randomized icons
+
+    deductCoins();
 
     // Spin animation for each spinner
     Animated.timing(spinner1, {

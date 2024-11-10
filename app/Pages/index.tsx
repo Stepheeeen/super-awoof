@@ -51,17 +51,27 @@ const Index = () => {
 
     // Update the local state and AsyncStorage
     setUser(updatedUser);
-    await AsyncStorage.setItem("user", JSON.stringify(updatedUser));
 
-    // Track the number of deducted coins locally
-    const newDeductedCoins = deductedCoins + 1;
-    setDeductedCoins(newDeductedCoins);
-    await AsyncStorage.setItem("deductedCoins", newDeductedCoins.toString());
+    await AsyncStorage.setItem("user", JSON.stringify(user));
 
-    // If 5 coins have been deducted, send them to the backend
-    if (newDeductedCoins >= 5) {
-      await sendDeductedCoinsToBackend(newDeductedCoins);
-    }
+    await sendUpdatedCoinsToBackend(newBalance);
+
+    // // Track the number of deducted coins locally
+    // const savedCoins =  await AsyncStorage.getItem("deductedCoins");
+
+    // let newDeductedCoins = 0;
+
+    // if(savedCoins){
+    //   newDeductedCoins = parseFloat(savedCoins) +1;
+    // }
+
+    // setDeductedCoins(newDeductedCoins);
+    // await AsyncStorage.setItem("deductedCoins", newDeductedCoins.toString());
+
+    // // If 5 coins have been deducted, send them to the backend
+    // if (newDeductedCoins >= 3) {
+    //   await sendDeductedCoinsToBackend(newDeductedCoins);
+    // }
   };
 
   // Send the deducted coins count to the backend
@@ -89,6 +99,31 @@ const Index = () => {
       }
     } catch (error) {
       console.error("Error sending deducted coins:", error);
+    }
+  };
+
+    // Send the updated coins count to the backend
+  const sendUpdatedCoinsToBackend = async (updatedCoins: number) => {
+    try {
+      const access = await AsyncStorage.getItem("accessToken");
+
+      console.log("Sending updated coins to backend:", deductedCoins);
+
+      const response = await axios.post(
+        `${baseUrl}/account/update-coins/${updatedCoins}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${access}`,
+          },
+        }
+      );
+
+      if (response.data.success) {
+        // setDeductedCoins(0);
+      }
+    } catch (error) {
+      console.error("Error sending updated coins:", error);
     }
   };
 
@@ -137,6 +172,7 @@ const Index = () => {
               }}
               difficulty={"difficult"}
               submitWinner={() => {}}
+              deductCoins={() => handleButtonClick()}
             />
           </View>
         </View>
