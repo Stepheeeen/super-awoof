@@ -15,7 +15,7 @@ const Index = () => {
   const [user, setUser] = useState<any>(null);
   const [deductedCoins, setDeductedCoins] = useState<number>(0); // Track deducted coins count
   const [deposit, setDeposit] = useState(false);
-  const [difficulty, setDifficulty] = useState<difficultyType>("medium");
+  // const [difficulty, setDifficulty] = useState<difficultyType | any>("medium");
   const router = useRouter();
   const User: any = useProfile();
 
@@ -157,7 +157,7 @@ const Index = () => {
                 router.push("/Pages/Extras/Deposit/");
               }}
               checkBalance={user?.coins}
-              difficulty={"difficult"}
+              difficulty={"aggressive"}
               submitWinner={() => {}}
               deductCoins={() => handleButtonClick()}
             />
