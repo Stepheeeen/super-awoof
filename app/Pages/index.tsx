@@ -10,11 +10,13 @@ import { useEffect, useState } from "react";
 import ModalContainer from "@/component/reusable/Modal";
 import { useRouter } from "expo-router";
 import useProfile from '../hooks/useProfile'
+import { difficultyType } from "@/component/types";
 
 const Index = () => {
   const [user, setUser] = useState<any>(null);
   const [deductedCoins, setDeductedCoins] = useState<number>(0); // Track deducted coins count
   const [deposit, setDeposit] = useState(false);
+  const [difficulty, setDifficulty] = useState<difficultyType>("medium");
   const router = useRouter();
   const User:any = useProfile()
 
@@ -26,6 +28,32 @@ const Index = () => {
     };
     func();
   }, []);
+
+  useEffect(() => {
+    const func = async () => {
+    try {
+      const access = await AsyncStorage.getItem("accessToken");
+
+      const response = await axios.get(
+        `${baseUrl}/system/algo-level/`,
+        {
+          headers: {
+            Authorization: `Bearer ${access}`,
+          },
+        }
+      );
+
+      if(response.data?.data){
+      setDifficulty(response.data.data.toLowerCase())
+      };
+
+    } catch (error) {
+      console.error("Error sending updated coins:", error);
+    }
+    }
+
+    func();
+  }, [user])
 
   // Check balance when coins change and show balance modal
   useEffect(() => {
@@ -163,7 +191,7 @@ const Index = () => {
                 }
                 return deposit;
               }}
-              difficulty={"difficult"}
+              difficulty={difficulty}
               submitWinner={() => {}}
               deductCoins={() => handleButtonClick()}
             />
