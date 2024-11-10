@@ -58,11 +58,11 @@ const SlotMachine = ({
   handleClick,
   deductCoins,
 }: {
-  submitWinner: any
+  submitWinner: any;
   difficulty: difficultyType;
   checkBalance: any;
   handleClick: any;
-  deductCoins: any,
+  deductCoins: any;
 }) => {
   const [winner, setWinner] = useState<boolean | null>(null);
   const [spinning, setSpinning] = useState(false);
@@ -78,13 +78,13 @@ const SlotMachine = ({
   const spinner1 = useRef(new Animated.Value(0)).current;
   const spinner2 = useRef(new Animated.Value(0)).current;
   const spinner3 = useRef(new Animated.Value(0)).current;
-  const User:any = useUserProfile()
+  const User: any = useUserProfile();
 
-  useEffect(() => {
-    if (winner) {
-      // playWinningSound(); // Play sound as soon as user hits the jackpot
-    }
-  }, [winner]);
+  // useEffect(() => {
+  //   if (winner) {
+  //     playWinningSound();
+  //   }
+  // }, [winner]);
 
   useEffect(() => {
     // Check winner whenever the reels update
@@ -95,14 +95,17 @@ const SlotMachine = ({
 
   // Get three different initial icons for each reel
   function getInitialIcons() {
-    return icons.sort(() => 0.5 - Math.random()).slice(0, 3);
+    // Shuffle the icons array
+    const shuffledIcons = [...icons].sort(() => 0.5 - Math.random());
+
+    // Select the first three unique icons
+    return shuffledIcons.slice(0, 3);
   }
 
   const startSpin = async () => {
     if (spinning) return; // Prevent spinning if already spinning
 
-    const balanceIsInSufficient = await checkBalance();
-    if (balanceIsInSufficient) {
+    if (checkBalance === 0) {
       setFundAcct(true);
       return;
     }

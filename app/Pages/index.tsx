@@ -102,7 +102,7 @@ const Index = () => {
     }
   };
 
-    // Send the updated coins count to the backend
+  // Send the updated coins count to the backend
   const sendUpdatedCoinsToBackend = async (updatedCoins: number) => {
     try {
       const access = await AsyncStorage.getItem("accessToken");
@@ -162,13 +162,7 @@ const Index = () => {
               handleClick={() => {
                 router.push("/Pages/Extras/Deposit/");
               }}
-              checkBalance={() => {
-                if (user?.coins <= 0) {
-                  setDeposit(true);
-                } else {
-                  setDeposit(false);
-                }
-              }}
+              checkBalance={user?.coins}
               difficulty={"difficult"}
               submitWinner={() => {}}
               deductCoins={() => handleButtonClick()}
