@@ -35,11 +35,11 @@ const Index = () => {
   }, []);
 
   // Check balance when coins change and show balance modal
-  useEffect(() => {
-    if (user?.coins === 0) {
-      setDeposit(true);
-    }
-  }, [user?.coins]);
+  // useEffect(() => {
+  //   if (user?.coins === 0) {
+  //     setDeposit(true);
+  //   }
+  // }, [user?.coins]);
 
   // Handle button click: Deduct 1 coin
   const handleButtonClick = async () => {
@@ -168,7 +168,6 @@ const Index = () => {
                 } else {
                   setDeposit(false);
                 }
-                return deposit;
               }}
               difficulty={"difficult"}
               submitWinner={() => {}}

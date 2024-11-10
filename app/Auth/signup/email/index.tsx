@@ -51,16 +51,16 @@ const Index = () => {
         email: email,
         password: password,
       });
-      console.log(response.data);
+      console.log(response);
 
       showToast(
-        response.data.message || "Account created successfully!",
+        response.data.msg || "Account created successfully!",
         "success"
       );
-      await AsyncStorage.setItem("refreshToken", response.data.refreshToken);
-      await AsyncStorage.setItem("accessToken", response.data.accessToken);
+      // await AsyncStorage.setItem("refreshToken", response.data.refreshToken);
+      // await AsyncStorage.setItem("accessToken", response.data.accessToken);
 
-      saveDataToLocalStorage();
+      // saveDataToLocalStorage();
       setTimeout(() => {
         router.push("/Auth/signup/OTP/"); // Redirect after successful registration
       }, 1500);

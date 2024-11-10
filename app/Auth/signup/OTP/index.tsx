@@ -98,7 +98,7 @@ const OTPInput = ({ duration = 15000 }) => {
       const response = await axios.post(verifyOtpApiUrl, { otp: enteredOtp });
       showToast("OTP verified successfully!", "success");
       setTimeout(() => {
-        router.push("/Pages"); // Redirect after successful verification
+        router.push("/Auth/signin/email/"); // Redirect after successful verification
       }, 1500);
     } catch (error: any) {
       const errorMessage =
