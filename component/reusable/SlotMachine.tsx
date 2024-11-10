@@ -206,7 +206,7 @@ const SlotMachine = ({
         break;
       case "hard":
         isWinningOutcome = randomNum < 0.3;
-      case "difficult":
+      case "aggressive":
         isWinningOutcome = randomNum < 0.1;
       case "impossible":
         isWinningOutcome = false;

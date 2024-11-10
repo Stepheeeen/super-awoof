@@ -15,6 +15,7 @@ const Index = () => {
   const [user, setUser] = useState<any>(null);
   const [deductedCoins, setDeductedCoins] = useState<number>(0); // Track deducted coins count
   const [deposit, setDeposit] = useState(false);
+  const [difficulty, setDifficulty] = useState<difficultyType>("medium");
   const router = useRouter();
   const User: any = useProfile();
 
