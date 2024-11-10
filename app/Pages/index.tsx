@@ -9,14 +9,14 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
 import ModalContainer from "@/component/reusable/Modal";
 import { useRouter } from "expo-router";
-import useProfile from '../hooks/useProfile'
+import useProfile from "../hooks/useProfile";
 
 const Index = () => {
   const [user, setUser] = useState<any>(null);
   const [deductedCoins, setDeductedCoins] = useState<number>(0); // Track deducted coins count
   const [deposit, setDeposit] = useState(false);
   const router = useRouter();
-  const User:any = useProfile()
+  const User: any = useProfile();
 
   // Fetch user data and deducted coin count on initial load
   useEffect(() => {
@@ -28,11 +28,11 @@ const Index = () => {
   }, []);
 
   // Check balance when coins change and show balance modal
-  useEffect(() => {
-    if (user?.coins === 0) {
-      setDeposit(true);
-    }
-  }, [user?.coins]);
+  // useEffect(() => {
+  //   if (user?.coins === 0) {
+  //     setDeposit(true);
+  //   }
+  // }, [user?.coins]);
 
   // Handle button click: Deduct 1 coin
   const handleButtonClick = async () => {
@@ -156,12 +156,11 @@ const Index = () => {
                 router.push("/Pages/Extras/Deposit/");
               }}
               checkBalance={() => {
-                if (user?.coins === 0) {
-                setDeposit(true);
-                }else{
-                  setDeposit(false)
+                if (user?.coins <= 0) {
+                  setDeposit(true);
+                } else {
+                  setDeposit(false);
                 }
-                return deposit;
               }}
               difficulty={"difficult"}
               submitWinner={() => {}}

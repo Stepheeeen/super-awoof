@@ -51,28 +51,21 @@ const Index = () => {
         email: email,
         password: password,
       });
+      console.log(response);
 
       showToast(
-        response.data.message || "Account created successfully!",
+        response.data.msg || "Account created successfully!",
         "success"
       );
-      saveDataToLocalStorage();
+      // await AsyncStorage.setItem("refreshToken", response.data.refreshToken);
+      // await AsyncStorage.setItem("accessToken", response.data.accessToken);
+
+      // saveDataToLocalStorage();
       setTimeout(() => {
-        router.push("/Auth/signup/OTP"); // Redirect after successful registration
+        router.push("/Auth/signup/OTP/"); // Redirect after successful registration
       }, 1500);
     } catch (error: any) {
-      if (error.response) {
-        showToast(
-          error.response.data.message ||
-            "Registration failed! Please try again.",
-          "error"
-        );
-      } else {
-        showToast(
-          "An error occurred. Please check your network and try again.",
-          "error"
-        );
-      }
+      console.error(error.response.data.message);
     }
   };
 
@@ -116,7 +109,7 @@ const Index = () => {
             onChangeText={setEmail}
           />
 
-          <Pressable onPress={() => router.push("/Auth/signup/phone-number")}>
+          <Pressable onPress={() => router.push("/Auth/signup/phone-number/")}>
             <Text
               style={tailwind`text-[#00A859] ml-3 mt-1 text-[14px] font-normal`}
             >
@@ -126,7 +119,7 @@ const Index = () => {
 
           {/* Password Input */}
           <PasswordInput
-            hidden=""
+            hidden="hidden"
             onPress={() => {}}
             placeholder="********"
             label="Create Password"
@@ -137,7 +130,7 @@ const Index = () => {
 
           {/* Confirm Password Input */}
           <PasswordInput
-            hidden=""
+            hidden="hidden"
             onPress={() => {}}
             placeholder="********"
             label="Confirm Password"
@@ -155,7 +148,7 @@ const Index = () => {
             style={tailwind`flex flex-row w-full items-center justify-center mt-3`}
           >
             <Text style={tailwind`text-white`}>Have an account already?</Text>
-            <Pressable onPress={() => router.push("/Auth/signin/email")}>
+            <Pressable onPress={() => router.push("/Auth/signin/email/")}>
               <Text style={tailwind`text-[#00A859] ml-2`}>Sign in</Text>
             </Pressable>
           </View>

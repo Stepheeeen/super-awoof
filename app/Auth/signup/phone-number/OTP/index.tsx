@@ -79,7 +79,7 @@ const OTPInput = ({ duration = 15000 }) => {
             Alert.alert('Success', 'OTP verified successfully!');
 
             // Redirect to another page after successful verification
-            router.push('/Pages');
+            router.push('/Auth/signin/phone-number/');
         } catch (error: any) {
             if (error.response) {
                 // Server responded with an error
