@@ -18,7 +18,8 @@ import { baseUrl } from "@/app/constants";
 import { WebView } from "react-native-webview";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import tailwind from "twrnc";
-import { Toast } from "toastify-react-native";
+import ToastComponent from "@/component/reusable/ToastComponent";
+import Toast from "react-native-toast-message";
 
 const Index = () => {
   const [coin, setCoin] = useState("");
@@ -51,13 +52,23 @@ const Index = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      Alert.alert("Payment successfull", response.data.message);
+      Toast.show({
+        type: "success",
+        text1: "Payment Successful.",
+        // text2: "Payment Successful.",
+      });
+      // Alert.alert("Payment successfull", response.data.message);
       // if (response.data.status === "200") {
       // } else {
       //   Alert.alert("Payment verification error:", response.data.message);
       // }
     } catch (error: any) {
-      Alert.alert("Payment verification error:", error.response.data.message);
+      Toast.show({
+        type: "error",
+        text1: "Payment failed",
+        text2: error.response.data.msg,
+      });
+      // Alert.alert("Payment verification error:", error.response.data.message);
     } finally {
       setLoading(false);
     }
@@ -107,82 +118,89 @@ const Index = () => {
   };
 
   return (
-    <View style={tailwind`h-full bg-[#0F1219] w-full px-1 py-5`}>
-      <View style={tailwind`w-full mt-[5%] mb-[4%] px-3`}>
-        <Text style={tailwind`text-white font-bold text-[27px] text-center`}>
-          Deposit
-        </Text>
-      </View>
+    <>
+      <View style={tailwind`h-full bg-[#0F1219] w-full px-1 py-5`}>
+        <View style={tailwind`w-full mt-[5%] mb-[4%] px-3`}>
+          <Text style={tailwind`text-white font-bold text-[27px] text-center`}>
+            Deposit
+          </Text>
+        </View>
 
-      <DefaultInput
-        customInput={!isCoinValid ? "border-red-500" : ""}
-        label="Coin"
-        placeholder="1"
-        customCss="w-[95%] mx-auto"
-        value={coin}
-        onChangeText={handleCoinChange}
-      />
+        <DefaultInput
+          customInput={!isCoinValid ? "border-red-500" : ""}
+          label="Coin"
+          placeholder="1"
+          customCss="w-[95%] mx-auto"
+          value={coin}
+          onChangeText={handleCoinChange}
+        />
 
-      <View
-        style={tailwind`w-full flex flex-row justify-center items-center mt-5`}
-      >
-        <FontAwesome6 name="arrow-down" size={24} color="white" />
-        <FontAwesome6 name="arrow-up" size={24} color="white" />
-      </View>
+        <View
+          style={tailwind`w-full flex flex-row justify-center items-center mt-5`}
+        >
+          <FontAwesome6 name="arrow-down" size={24} color="white" />
+          <FontAwesome6 name="arrow-up" size={24} color="white" />
+        </View>
 
-      <DefaultInput
-        customInput={!isAmountValid ? "border-red-500" : ""}
-        label="Amount (Naira)"
-        placeholder="25"
-        customCss="w-[95%] mx-auto mt-5"
-        value={amount}
-        onChangeText={handleAmountChange}
-      />
+        <DefaultInput
+          customInput={!isAmountValid ? "border-red-500" : ""}
+          label="Amount (Naira)"
+          placeholder="25"
+          customCss="w-[95%] mx-auto mt-5"
+          value={amount}
+          onChangeText={handleAmountChange}
+        />
 
-      <View style={tailwind`mt-10 w-[95%] mx-auto`}>
-        {!(isAmountValid && isCoinValid) ? (
-          <DisabledButton text="Continue" />
-        ) : (
-          <DefaultButton onPress={handlePaystackPayment} text="Continue" />
+        <View style={tailwind`mt-10 w-[95%] mx-auto`}>
+          {!(isAmountValid && isCoinValid) ? (
+            <DisabledButton text="Continue" />
+          ) : (
+            <DefaultButton onPress={handlePaystackPayment} text="Continue" />
+          )}
+
+          <Pressable onPress={() => router.push("/Pages/")}>
+            <Text
+              style={tailwind`text-[#00A859] mx-auto mt-3 text-[18px] underline`}
+            >
+              Cancel
+            </Text>
+          </Pressable>
+        </View>
+
+        {loading && (
+          <ActivityIndicator
+            size="large"
+            color="green"
+            style={tailwind`mt-5`}
+          />
         )}
 
-        <Pressable onPress={() => router.push("/Pages/")}>
-          <Text
-            style={tailwind`text-[#00A859] mx-auto mt-3 text-[18px] underline`}
-          >
-            Cancel
-          </Text>
-        </Pressable>
+        {showPaystack && paymentUrl && (
+          <Modal visible={showPaystack} animationType="slide">
+            <WebView
+              style={tailwind`mt-[18%]`}
+              source={{ uri: paymentUrl }}
+              onNavigationStateChange={(navState) => {
+                if (navState.url.includes("payment successful")) {
+                  handleWebViewClose();
+                  Alert.alert(
+                    "Payment Verified",
+                    "Your payment has been successfully verified!"
+                  );
+                }
+              }}
+            />
+            <Pressable
+              style={tailwind`absolute top-10 right-10`}
+              onPress={handleWebViewClose}
+            >
+              <MaterialIcons name="cancel" size={30} color="red" />
+            </Pressable>
+          </Modal>
+        )}
       </View>
-
-      {loading && (
-        <ActivityIndicator size="large" color="green" style={tailwind`mt-5`} />
-      )}
-
-      {showPaystack && paymentUrl && (
-        <Modal visible={showPaystack} animationType="slide">
-          <WebView
-            style={tailwind`mt-[18%]`}
-            source={{ uri: paymentUrl }}
-            onNavigationStateChange={(navState) => {
-              if (navState.url.includes("payment successful")) {
-                handleWebViewClose();
-                Alert.alert(
-                  "Payment Verified",
-                  "Your payment has been successfully verified!"
-                );
-              }
-            }}
-          />
-          <Pressable
-            style={tailwind`absolute top-10 right-10`}
-            onPress={handleWebViewClose}
-          >
-            <MaterialIcons name="cancel" size={30} color="red" />
-          </Pressable>
-        </Modal>
-      )}
-    </View>
+      {/* <ToastComponent /> */}
+    </>
   );
 };
 

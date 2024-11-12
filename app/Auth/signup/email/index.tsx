@@ -48,37 +48,37 @@ const Index = () => {
     try {
       const response = await axios.post(`${apiUrl}/account/register`, {
         fullname: fullName,
-        email: email,
-        password: password,
+        email,
+        password,
       });
-      console.log(response);
-
       showToast(
         response.data.msg || "Account created successfully!",
         "success"
       );
+
+      // Uncomment to save tokens if necessary
       // await AsyncStorage.setItem("refreshToken", response.data.refreshToken);
       // await AsyncStorage.setItem("accessToken", response.data.accessToken);
 
-      // saveDataToLocalStorage();
+      // Uncomment to save data if necessary
+      // await saveDataToLocalStorage();
+
       setTimeout(() => {
-        router.push("/Auth/signup/OTP/"); // Redirect after successful registration
+        router.push("/Auth/signup/OTP/");
       }, 1500);
     } catch (error: any) {
-      console.error(error.response.data.message);
+      showToast(error.response.data.error, "error");
     }
   };
 
   return (
     <>
-      <View
-        style={tailwind`h-full bg-[#0F1219] w-full px-1 py-5 overflow-scroll`}
-      >
+      <View style={tailwind`h-full bg-[#0F1219] w-full px-1 py-5`}>
         <ScrollView
           style={tailwind`flex-1`}
           showsVerticalScrollIndicator={false}
         >
-          <View style={tailwind`w-full mt-[5%] mb-4 px-3`}>
+          <View style={tailwind`w-full mt-5 mb-4 px-3`}>
             <Text style={tailwind`text-white font-bold text-[27px]`}>
               Let’s Get Started
             </Text>
@@ -91,7 +91,7 @@ const Index = () => {
 
           {/* Full Name Input */}
           <DefaultInput
-            customInput={""}
+            customInput={() => {}}
             label="Full Name"
             placeholder="John Doe"
             customCss="w-[95%] mx-auto"
@@ -101,7 +101,7 @@ const Index = () => {
 
           {/* Email Address Input */}
           <DefaultInput
-            customInput={""}
+            customInput={() => {}}
             label="Email Address"
             placeholder="johndoe@gmail.com"
             customCss="w-[95%] mx-auto mt-5"
@@ -119,10 +119,10 @@ const Index = () => {
 
           {/* Password Input */}
           <PasswordInput
-            hidden="hidden"
+            hidden=""
             onPress={() => {}}
-            placeholder="********"
             label="Create Password"
+            placeholder="********"
             customCss="mt-3 w-[95%] mx-auto"
             value={password}
             onChangeText={setPassword}
@@ -130,10 +130,10 @@ const Index = () => {
 
           {/* Confirm Password Input */}
           <PasswordInput
-            hidden="hidden"
+            hidden=""
             onPress={() => {}}
-            placeholder="********"
             label="Confirm Password"
+            placeholder="********"
             customCss="mt-3 w-[95%] mx-auto"
             value={confirmPassword}
             onChangeText={setConfirmPassword}
@@ -144,9 +144,7 @@ const Index = () => {
             <DefaultButton onPress={handleRegister} text="Register" />
           </View>
 
-          <View
-            style={tailwind`flex flex-row w-full items-center justify-center mt-3`}
-          >
+          <View style={tailwind`flex-row items-center justify-center mt-3`}>
             <Text style={tailwind`text-white`}>Have an account already?</Text>
             <Pressable onPress={() => router.push("/Auth/signin/email/")}>
               <Text style={tailwind`text-[#00A859] ml-2`}>Sign in</Text>

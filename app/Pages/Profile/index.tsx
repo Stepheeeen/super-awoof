@@ -13,6 +13,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { useRouter } from "expo-router";
 import { baseUrl } from "@/app/constants";
+import Toast from "react-native-toast-message";
 
 const Index = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -96,12 +97,19 @@ const Index = () => {
         }
       );
       if (response.status === 200) {
-        Alert.alert("Success", "Logged out successfully");
-        router.push("/Auth/signin/email");
+        Toast.show({
+          type: "success",
+          text1: "Logged out successfully",
+        });
+        // Alert.alert("Success", "Logged out successfully");
+        router.push("/Auth/signin/email/");
       }
     } catch (error) {
       console.error("Logout Error:", error);
-      Alert.alert("Error", "Failed to log out");
+      Toast.show({
+        type: "error",
+        text1: "Failed to log out",
+      });
     }
   };
 
@@ -112,138 +120,150 @@ const Index = () => {
         headers: { Authorization: `Bearer ${accessToken}` },
       });
       if (response.status === 200) {
-        Alert.alert("Success", "Account deleted successfully");
-        router.push("/Auth/signup/email");
+        Toast.show({
+          type: "success",
+          text1: "Account deleted successfully",
+        });
+        // Alert.alert("Success", "Account deleted successfully");
+        router.push("/Auth/signup/email/");
       }
     } catch (error) {
       console.error("Delete Account Error:", error);
-      Alert.alert("Error", "Failed to delete account");
+      Toast.show({
+        type: "error",
+        text1: "Failed to delete account",
+      });
+      // Alert.alert("Error", "");
     }
   };
 
   return (
-    <View style={tailwind`h-full bg-[#0F1219] w-full`}>
-      <View
-        style={tailwind`flex flex-row items-center w-full justify-between px-5 py-6 h-[13%] absolute top-0 bg-[#0F1219] z-10 `}
-      >
-        <Image
-          source={require("../../../assets/images/favicon.png")}
-          style={tailwind`w-[50px] h-[50px]`}
-        />
-        <Text style={tailwind`ml-[-15px] font-semibold text-[22px] text-white`}>
-          Profile
-        </Text>
-        <Pressable
-          style={tailwind`flex flex-row items-center py-[2px] px-2 rounded`}
-          onPress={() => {}}
-        ></Pressable>
-      </View>
-
-      <View style={tailwind`mt-[20%] py-6 w-full`}>
-        <Pressable
-          style={tailwind`flex flex-row items-center w-full justify-between py-3 px-5`}
-          onPress={() => {
-            console.log(profile);
-            router.push(
-              profile === "Phone"
-                ? "/Pages/Profile/ViewProfile/phone-number"
-                : "/Pages/Profile/ViewProfile/email"
-            );
-          }}
-        >
-          <View style={tailwind`flex flex-row items-center`}>
-            <AntDesign name="profile" size={25} color="white" />
-            <Text style={tailwind`text-white text-[18px] ml-3`}>
-              View Profile
-            </Text>
-          </View>
-          <MaterialIcons name="navigate-next" size={25} color="white" />
-        </Pressable>
-
-        <Pressable
-          style={tailwind`flex flex-row items-center w-full justify-between py-3 px-5 mt-1 mb-3`}
-          onPress={() => {
-            router.push("/Auth/passwordReset");
-          }}
-        >
-          <View style={tailwind`flex flex-row`}>
-            <MaterialIcons name="lock-reset" size={25} color="white" />
-            <Text style={tailwind`text-white text-[18px] ml-3`}>
-              Update Password
-            </Text>
-          </View>
-          <MaterialIcons name="navigate-next" size={25} color="white" />
-        </Pressable>
-
+    <>
+      <View style={tailwind`h-full bg-[#0F1219] w-full`}>
         <View
-          style={tailwind`w-[87%] mx-auto my-5 h-[1px] bg-[#343434]`}
-        ></View>
-
-        <Pressable
-          style={tailwind`flex flex-row items-center w-full justify-between py-3 px-5 mt-3`}
-          onPress={() => setModalVisible(true)}
+          style={tailwind`flex flex-row items-center w-full justify-between px-5 py-6 h-[13%] absolute top-0 bg-[#0F1219] z-10 `}
         >
-          <View style={tailwind`flex flex-row`}>
-            <Feather name="power" size={23} color="white" />
-            <Text style={tailwind`text-white text-[18px] ml-3`}>Logout</Text>
-          </View>
-          <MaterialIcons name="navigate-next" size={25} color="white" />
-        </Pressable>
+          <Image
+            source={require("../../../assets/images/favicon.png")}
+            style={tailwind`w-[50px] h-[50px]`}
+          />
+          <Text
+            style={tailwind`ml-[-15px] font-semibold text-[22px] text-white`}
+          >
+            Profile
+          </Text>
+          <Pressable
+            style={tailwind`flex flex-row items-center py-[2px] px-2 rounded`}
+            onPress={() => {}}
+          ></Pressable>
+        </View>
 
-        <Pressable
-          style={tailwind`flex flex-row items-center w-full justify-between py-3 px-5 my-1`}
-          onPress={() => setDeleteAccount(true)}
-        >
-          <View style={tailwind`flex flex-row items-center ml-[-4px]`}>
-            <EvilIcons name="trash" size={30} color="#Ff4757" />
-            <Text style={tailwind`text-[#Ff4757] text-[18px] ml-2 mt-1`}>
-              Delete Account
+        <View style={tailwind`mt-[20%] py-6 w-full`}>
+          <Pressable
+            style={tailwind`flex flex-row items-center w-full justify-between py-3 px-5`}
+            onPress={() => {
+              console.log(profile);
+              router.push(
+                profile === "Phone"
+                  ? "/Pages/Profile/ViewProfile/phone-number/"
+                  : "/Pages/Profile/ViewProfile/email/"
+              );
+            }}
+          >
+            <View style={tailwind`flex flex-row items-center`}>
+              <AntDesign name="profile" size={25} color="white" />
+              <Text style={tailwind`text-white text-[18px] ml-3`}>
+                View Profile
+              </Text>
+            </View>
+            <MaterialIcons name="navigate-next" size={25} color="white" />
+          </Pressable>
+
+          <Pressable
+            style={tailwind`flex flex-row items-center w-full justify-between py-3 px-5 mt-1 mb-3`}
+            onPress={() => {
+              router.push("/Auth/passwordReset/");
+            }}
+          >
+            <View style={tailwind`flex flex-row`}>
+              <MaterialIcons name="lock-reset" size={25} color="white" />
+              <Text style={tailwind`text-white text-[18px] ml-3`}>
+                Update Password
+              </Text>
+            </View>
+            <MaterialIcons name="navigate-next" size={25} color="white" />
+          </Pressable>
+
+          <View
+            style={tailwind`w-[87%] mx-auto my-5 h-[1px] bg-[#343434]`}
+          ></View>
+
+          <Pressable
+            style={tailwind`flex flex-row items-center w-full justify-between py-3 px-5 mt-3`}
+            onPress={() => setModalVisible(true)}
+          >
+            <View style={tailwind`flex flex-row`}>
+              <Feather name="power" size={23} color="white" />
+              <Text style={tailwind`text-white text-[18px] ml-3`}>Logout</Text>
+            </View>
+            <MaterialIcons name="navigate-next" size={25} color="white" />
+          </Pressable>
+
+          <Pressable
+            style={tailwind`flex flex-row items-center w-full justify-between py-3 px-5 my-1`}
+            onPress={() => setDeleteAccount(true)}
+          >
+            <View style={tailwind`flex flex-row items-center ml-[-4px]`}>
+              <EvilIcons name="trash" size={30} color="#Ff4757" />
+              <Text style={tailwind`text-[#Ff4757] text-[18px] ml-2 mt-1`}>
+                Delete Account
+              </Text>
+            </View>
+            <MaterialIcons name="navigate-next" size={25} color="#Ff4757" />
+          </Pressable>
+        </View>
+
+        <Modal
+          modalVisible={modalVisible}
+          onClose={() => setModalVisible(false)}
+          ButtonText={"Log out"}
+          HeadText={
+            <Text
+              style={tailwind`text-white text-[22px] font-semibold mt-[-25px]`}
+            >
+              Logging Out?
             </Text>
-          </View>
-          <MaterialIcons name="navigate-next" size={25} color="#Ff4757" />
-        </Pressable>
+          }
+          SubText="Are you sure you want to log out from your SupaAwoof account?"
+          handleClick={handleLogout}
+          cancelText={
+            <Text style={tailwind`underline my-2 text-white`}>No, Cancel</Text>
+          }
+          ModalHeadText=""
+        />
+
+        <Modal
+          modalVisible={deleteAccount}
+          onClose={() => setDeleteAccount(false)}
+          ButtonText={"Delete Account"}
+          HeadText={
+            <Text
+              style={tailwind`text-white text-[22px] font-semibold mt-[-25px]`}
+            >
+              Delete Account?
+            </Text>
+          }
+          SubText="Are you sure you want to delete your SupaAwoof account?"
+          handleClick={handleDeleteAccount}
+          cancelText={
+            <Text style={tailwind`underline my-2 text-white`}>No, Cancel</Text>
+          }
+          ModalHeadText=""
+        />
+
+        <TabBar />
       </View>
-
-      <Modal
-        modalVisible={modalVisible}
-        onClose={() => setModalVisible(false)}
-        ButtonText={"Log out"}
-        HeadText={
-          <Text
-            style={tailwind`text-white text-[22px] font-semibold mt-[-25px]`}
-          >
-            Logging Out?
-          </Text>
-        }
-        SubText="Are you sure you want to log out from your SupaAwoof account?"
-        handleClick={handleLogout}
-        cancelText={
-          <Text style={tailwind`underline my-2 text-white`}>No, Cancel</Text>
-        }
-        ModalHeadText=""
-      />
-
-      <Modal
-        modalVisible={deleteAccount}
-        onClose={() => setDeleteAccount(false)}
-        ButtonText={"Delete Account"}
-        HeadText={
-          <Text
-            style={tailwind`text-white text-[22px] font-semibold mt-[-25px]`}
-          >
-            Delete Account?
-          </Text>
-        }
-        SubText="Are you sure you want to delete your SupaAwoof account?"
-        handleClick={handleDeleteAccount}
-        cancelText={
-          <Text style={tailwind`underline my-2 text-white`}>No, Cancel</Text>
-        }
-        ModalHeadText=""
-      />
-
-      <TabBar />
-    </View>
+    </>
   );
 };
 

@@ -1,9 +1,9 @@
-import React, {forwardRef} from 'react';
-import { Text, View } from 'react-native';
+import React, { forwardRef } from 'react';
+import { Text, View, StyleSheet } from 'react-native';
 import Toast from 'react-native-toast-message';
 
 const ToastComponent = () => {
-  const ref = forwardRef()
+  const ref = forwardRef();
 
   return <Toast ref={(ref) => Toast.setRef(ref)} config={toastConfig} />;
 };
@@ -11,22 +11,48 @@ const ToastComponent = () => {
 // Custom Toast configuration
 const toastConfig = {
   success: ({ text1, text2 }) => (
-    <ToastView style={{ backgroundColor: '#28a745', paddingVertical: 15, borderRadius: 5 }}>
-      <Text style={{ color: '#fff', fontWeight: 'bold', marginBottom: 5}}>{text1}</Text>
-      <Text style={{ color: '#fff' }}>{text2}</Text>
+    <ToastView style={styles.success}>
+      <Text style={styles.title}>{text1}</Text>
+      <Text style={styles.message}>{text2}</Text>
     </ToastView>
   ),
   error: ({ text1, text2 }) => (
-    <ToastView style={{ backgroundColor: '#dc3545', paddingVertical: 15, borderRadius: 5 }}>
-      <Text style={{ color: '#fff', fontWeight: 'bold', marginBottom: 5}}>{text1}</Text>
-      <Text style={{ color: '#fff' }}>{text2}</Text>
+    <ToastView style={styles.error}>
+      <Text style={styles.title}>{text1}</Text>
+      <Text style={styles.message}>{text2}</Text>
     </ToastView>
   ),
-  // Add more custom types if needed
+  // Additional custom toast types can be added here
 };
 
+// Wrapper for custom toast view styling
 const ToastView = ({ children, style }) => (
-  <View style={[{ padding: 10, margin: 11, width: '90%' }, style]}>{children}</View>
+  <View style={[styles.toastContainer, style]}>{children}</View>
 );
+
+const styles = StyleSheet.create({
+  toastContainer: {
+    padding: 5,
+    margin: 11,
+    width: '90%',
+    borderRadius: 5,
+  },
+  success: {
+    backgroundColor: '#28a745',
+    paddingVertical: 10,
+  },
+  error: {
+    backgroundColor: '#dc3545',
+    paddingVertical: 10,
+  },
+  title: {
+    color: '#fff',
+    fontWeight: 'semibold',
+    // marginBottom: 5,
+  },
+  message: {
+    color: '#fff',
+  },
+});
 
 export default ToastComponent;
