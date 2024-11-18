@@ -12,8 +12,7 @@ import { router } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { useRouter } from "expo-router";
-import { baseUrl } from "@/app/constants";
-import Toast from "react-native-toast-message";
+import { baseUrl, showToast } from "@/app/constants";
 
 const Index = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -96,20 +95,13 @@ const Index = () => {
           headers: { Authorization: `Bearer ${refreshToken}` },
         }
       );
-      if (response.status === 200) {
-        Toast.show({
-          type: "success",
-          text1: "Logged out successfully",
-        });
-        // Alert.alert("Success", "Logged out successfully");
-        router.push("/Auth/signin/email/");
-      }
+      setTimeout(() => {
+        showToast("Logged out succeccfully", "success");
+      }, 1000);
+      router.push("/Auth/signin/email/");
     } catch (error) {
       console.error("Logout Error:", error);
-      Toast.show({
-        type: "error",
-        text1: "Failed to log out",
-      });
+      showToast("Failed to log out", "error");
     }
   };
 
@@ -119,21 +111,14 @@ const Index = () => {
       const response = await axios.delete(deleteAccountUrl, {
         headers: { Authorization: `Bearer ${accessToken}` },
       });
-      if (response.status === 200) {
-        Toast.show({
-          type: "success",
-          text1: "Account deleted successfully",
-        });
-        // Alert.alert("Success", "Account deleted successfully");
-        router.push("/Auth/signup/email/");
-      }
+      setTimeout(() => {
+        showToast("Account deleted succeccfully", "success");
+      }, 1000);
+      router.push("/Auth/signin/email/");
+      
     } catch (error) {
       console.error("Delete Account Error:", error);
-      Toast.show({
-        type: "error",
-        text1: "Failed to delete account",
-      });
-      // Alert.alert("Error", "");
+      showToast("Failed to delete account", "error");
     }
   };
 

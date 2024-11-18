@@ -1,12 +1,40 @@
 import { DefaultInput } from "@/component/reusable/Input";
 import TabBar from "@/component/reusable/TabBar";
-import { Image, Pressable, Text, View } from "react-native";
+import { Image, Pressable, Text, View, Alert } from "react-native";
 import { useRouter } from "expo-router";
 import IonIcons from "@expo/vector-icons/Ionicons";
 import tailwind from "twrnc";
+import { useEffect, useState } from "react";
+import { Profile } from "@/app/constants";
 
-const index = () => {
+const ProfileScreen = () => {
   const router = useRouter();
+  const [profileData, setProfileData] = useState({
+    fullName: "",
+    email: "",
+  });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const data = await Profile();
+        if (data) {
+          setProfileData({
+            fullName: data.fullname || "",
+            email: data.email || "",
+          });
+        }
+      } catch (error) {
+        Alert.alert("Error", "Failed to fetch profile");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProfile();
+  }, []);
+
   return (
     <View style={tailwind`h-full bg-[#0F1219] w-full`}>
       <View
@@ -31,19 +59,21 @@ const index = () => {
         <DefaultInput
           customInput={""}
           label="Full Name"
-          placeholder="Adebayo Halah"
+          placeholder="Full Name"
           customCss="w-[95%] mx-auto my-4"
           onChangeText={() => {}}
-          value={""}
+          value={profileData.fullName}
+          disabled={false}
         />
 
         <DefaultInput
           customInput={""}
           label="Email"
-          placeholder="adebayohaliah@gmail.com"
+          placeholder="Email Address"
           customCss="w-[95%] mx-auto"
           onChangeText={() => {}}
-          value={""}
+          value={profileData.email}
+          disabled={false}
         />
       </View>
 
@@ -52,4 +82,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default ProfileScreen;

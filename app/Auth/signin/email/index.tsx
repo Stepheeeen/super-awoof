@@ -6,7 +6,7 @@ import { Pressable, Text, View } from "react-native";
 import axios from "axios";
 import tailwind from "twrnc";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { baseUrl } from "@/app/constants";
+import { baseUrl, showToast } from "@/app/constants";
 import Toast from "react-native-toast-message";
 import ToastComponent from "@/component/reusable/ToastComponent";
 
@@ -41,18 +41,24 @@ const Index = () => {
       await AsyncStorage.setItem("refreshToken", response?.data?.refreshToken);
       await AsyncStorage.setItem("accessToken", response?.data?.accessToken);
 
+      showToast("Account Successfully Logged in", "success");
       // Redirect to the dashboard or other authenticated route
-      router.push("/Pages/");
+      setTimeout(() => {
+        router.push("/Pages/");
+      }, 1000);
     } catch (error: any) {
       if (error.response) {
-        if (error.response.data.message === "Please verify your account in order to login") {
+        if (
+          error.response.data.message ===
+          "Please verify your account in order to login"
+        ) {
           Toast.show({
             type: "error",
             text1: "Error",
             text2: error.response.data.message,
           });
           router.push("/Auth/OTP/");
-        } else if (error.response.status === 404) {
+        } else if (error.response.code === 404) {
           Toast.show({
             type: "error",
             text1: "Error",
@@ -62,15 +68,13 @@ const Index = () => {
           Toast.show({
             type: "error",
             text1: "Error",
-            text2: error.response.data.message || "An error occurred. Please try again.",
+            text2:
+              error.response.data.message ||
+              "An error occurred. Please try again.",
           });
         }
       } else {
-        Toast.show({
-          type: "error",
-          text1: "Error",
-          text2: "An error occurred. Please try again.",
-        });
+        showToast("An error occurred. Please try again.", "error");
       }
     }
   };
@@ -89,7 +93,7 @@ const Index = () => {
 
         {/* Email Input */}
         <DefaultInput
-        customInput={""}
+          customInput={""}
           label="Email Address"
           placeholder="johndoe@gmail.com"
           customCss="w-[95%] mx-auto"
@@ -98,7 +102,9 @@ const Index = () => {
         />
 
         <Pressable onPress={() => router.push("/Auth/signin/phone-number/")}>
-          <Text style={tailwind`text-[#00A859] ml-3 mt-2 text-[14px] font-normal`}>
+          <Text
+            style={tailwind`text-[#00A859] ml-3 mt-2 text-[14px] font-normal`}
+          >
             Use Phone Number Instead
           </Text>
         </Pressable>
@@ -119,7 +125,9 @@ const Index = () => {
           <DefaultButton onPress={handleLogin} text="Login" />
         </View>
 
-        <View style={tailwind`flex flex-row w-full items-center justify-center mt-3`}>
+        <View
+          style={tailwind`flex flex-row w-full items-center justify-center mt-3`}
+        >
           <Text style={tailwind`text-white`}>Don’t have an account?</Text>
           <Pressable onPress={() => router.push("/Auth/signup/email/")}>
             <Text style={tailwind`text-[#00A859] ml-2`}>Sign up</Text>

@@ -6,9 +6,8 @@ import tailwind from "twrnc";
 import axios from "axios";
 import { useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { baseUrl } from "@/app/constants";
+import { baseUrl, showToast } from "@/app/constants";
 import ToastComponent from "@/component/reusable/ToastComponent";
-import Toast from "react-native-toast-message";
 
 const Index = () => {
   const router = useRouter();
@@ -28,14 +27,6 @@ const Index = () => {
     } catch (error) {
       showToast("Error saving data", "error");
     }
-  };
-
-  // Show toast notifications
-  const showToast = (message: string, type: "success" | "error") => {
-    Toast.show({
-      type: type,
-      text1: message,
-    });
   };
 
   // Handle form submission
@@ -119,7 +110,7 @@ const Index = () => {
 
           {/* Password Input */}
           <PasswordInput
-            hidden=""
+            hidden="hidden"
             onPress={() => {}}
             label="Create Password"
             placeholder="********"
@@ -130,7 +121,7 @@ const Index = () => {
 
           {/* Confirm Password Input */}
           <PasswordInput
-            hidden=""
+            hidden="hidden"
             onPress={() => {}}
             label="Confirm Password"
             placeholder="********"
