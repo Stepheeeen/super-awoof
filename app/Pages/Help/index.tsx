@@ -8,10 +8,9 @@ import {
   Text,
   TextInput,
   View,
-  Alert,
-  ActivityIndicator,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
-import { send, EmailJSResponseStatus } from "@emailjs/react-native";
 import tailwind from "twrnc";
 import axios from "axios";
 import { baseUrl } from "@/app/constants";
@@ -20,15 +19,14 @@ import Toast from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const HelpPage = () => {
-  const [email, setEmail] = useState(""); // State for email input
-  const [name, setName] = useState(""); // State for name input
-  const [message, setMessage] = useState(""); // State for message input
-  const [loading, setLoading] = useState(false); // State for loading indicator
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const onSubmit = async () => {
-    const token = await AsyncStorage.getItem("accessToken")
+    const token = await AsyncStorage.getItem("accessToken");
 
-    // Basic input validation
     if (!email || !name || !message) {
       Toast.show({
         type: "error",
@@ -38,39 +36,39 @@ const HelpPage = () => {
       return;
     }
 
-    setLoading(true); // Set loading to true
+    setLoading(true);
 
     try {
-      const response = await axios.post(`${baseUrl}/system/email-send`, {
-        title: name, // Set 'title' to be the name
-        descr: email, // Set 'descr' to be the email
-        body: message, // Set 'body' to be the message
-      },
-    {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    });
+      await axios.post(
+        `${baseUrl}/system/email-send`,
+        {
+          title: name,
+          descr: email,
+          body: message,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-      console.log("SUCCESS!", response.data);
       Toast.show({
         type: "success",
         text1: "Email sent successfully!",
-        text2: "We would respond to you very soon!",
+        text2: "We will respond to you soon.",
       });
-      // Clear the fields after successful submission
       setEmail("");
       setName("");
       setMessage("");
     } catch (err) {
-      console.log("ERROR", err);
       Toast.show({
         type: "error",
         text1: "Error",
         text2: "Failed to send email. Please try again.",
       });
     } finally {
-      setLoading(false); // Set loading back to false
+      setLoading(false);
     }
   };
 
@@ -103,63 +101,62 @@ const HelpPage = () => {
               <Text
                 style={tailwind`text-white font-light text-[16px] mt-2 mb-4`}
               >
-                Send a message across with your questions and we will swiftly
-                respond.
+                Send a message with your questions and we will respond.
               </Text>
             </View>
 
-            <DefaultInput
-              customInput={""}
-              label="Your Name"
-              placeholder="Your Name"
-              customCss="w-[95%] mx-auto"
-              onChangeText={setName}
-              value={name}
-            />
-
-            <DefaultInput
-              customInput={""}
-              label="Email Address"
-              placeholder="adebayohaliah@gmail.com"
-              customCss="w-[95%] mx-auto mt-4"
-              onChangeText={setEmail}
-              value={email}
-            />
-
-            <View style={tailwind`mt-6`}>
-              <Text
-                style={tailwind`text-white mb-2 ml-4 text-[17px] font-normal`}
-              >
-                Message
-              </Text>
-              <TextInput
-                style={tailwind`border mx-auto border-[#34363B] rounded-lg p-3 bg-[#20232A] h-[220px] text-white w-[95%] text-[16px] font-normal`}
-                multiline={true}
-                numberOfLines={7}
-                placeholder="Write message here..."
-                placeholderTextColor="#9CA3AF"
-                onChangeText={setMessage}
-                value={message}
+            <KeyboardAvoidingView
+              style={{ flex: 1, marginBottom: 80 }}
+              behavior={Platform.OS === "ios" ? "padding" : "height"}
+            >
+              <DefaultInput
+                customInput={""}
+                label="Your Name"
+                placeholder="Your Name"
+                customCss="w-[95%] mx-auto"
+                onChangeText={setName}
+                value={name}
               />
-            </View>
 
-            <View style={tailwind`w-[95%] mx-auto mt-8`}>
-              <DefaultButton
-                onPress={onSubmit}
-                text={loading ? "Sending..." : "Submit"}
+              <DefaultInput
+                customInput={""}
+                label="Email Address"
+                placeholder="adebayohaliah@gmail.com"
+                customCss="w-[95%] mx-auto mt-4"
+                onChangeText={setEmail}
+                value={email}
               />
-              {/* <Text>
-              {loading && <ActivityIndicator size="small" color="#ffffff" />}{" "}
-              Show loading indicator
-            </Text> */}
-            </View>
+
+              <View style={tailwind`mt-6`}>
+                <Text
+                  style={tailwind`text-white mb-2 ml-4 text-[17px] font-normal`}
+                >
+                  Message
+                </Text>
+                <TextInput
+                  style={tailwind`border mx-auto border-[#34363B] rounded-lg p-3 bg-[#20232A] h-[220px] text-white w-[95%] text-[16px] font-normal`}
+                  multiline={true}
+                  numberOfLines={7}
+                  placeholder="Write message here..."
+                  placeholderTextColor="#9CA3AF"
+                  onChangeText={setMessage}
+                  value={message}
+                />
+              </View>
+
+              <View style={tailwind`w-[95%] mx-auto mt-8`}>
+                <DefaultButton
+                  onPress={onSubmit}
+                  text={loading ? "Sending..." : "Submit"}
+                />
+              </View>
+            </KeyboardAvoidingView>
           </View>
         </ScrollView>
-
-        <TabBar />
       </View>
 
       <ToastComponent />
+      <TabBar />
     </>
   );
 };

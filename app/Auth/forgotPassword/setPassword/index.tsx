@@ -36,7 +36,7 @@ const NewPassword = () => {
 
       if (response.status === 200) {
         Alert.alert("Success", "Password has been successfully reset.");
-        router.push("/Auth/signin/email");
+        router.push("/Auth/signin/email/");
       }
     } catch (error: any) {
       console.error("Error resetting password:", error.response?.data);
