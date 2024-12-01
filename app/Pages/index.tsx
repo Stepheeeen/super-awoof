@@ -49,23 +49,6 @@ const Index = () => {
     await AsyncStorage.setItem("user", JSON.stringify(user));
 
     await sendUpdatedCoinsToBackend(newBalance);
-
-    // // Track the number of deducted coins locally
-    // const savedCoins =  await AsyncStorage.getItem("deductedCoins");
-
-    // let newDeductedCoins = 0;
-
-    // if(savedCoins){
-    //   newDeductedCoins = parseFloat(savedCoins) +1;
-    // }
-
-    // setDeductedCoins(newDeductedCoins);
-    // await AsyncStorage.setItem("deductedCoins", newDeductedCoins.toString());
-
-    // // If 5 coins have been deducted, send them to the backend
-    // if (newDeductedCoins >= 3) {
-    //   await sendDeductedCoinsToBackend(newDeductedCoins);
-    // }
   };
 
   // Send the deducted coins count to the backend
@@ -195,7 +178,16 @@ const Index = () => {
         handleClick={() => {
           router.push("/Pages/Extras/Deposit/");
         }}
-        cancelText={""}
+        cancelText={
+          <Pressable
+            onPress={() => {
+              router.push("#");
+            }}
+            style={tailwind` w-[100%] mt-2`}
+          >
+            <Text style={tailwind`underline text-white text-[16px]`}>Wallet</Text>
+          </Pressable>
+        }
         ModalHeadText=""
       />
     </>

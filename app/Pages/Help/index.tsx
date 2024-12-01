@@ -112,7 +112,7 @@ const HelpPage = () => {
               <DefaultInput
                 customInput={""}
                 label="Your Name"
-                placeholder="Your Name"
+                placeholder="Cuatomer Care"
                 customCss="w-[95%] mx-auto"
                 onChangeText={setName}
                 value={name}
@@ -121,7 +121,7 @@ const HelpPage = () => {
               <DefaultInput
                 customInput={""}
                 label="Email Address"
-                placeholder="adebayohaliah@gmail.com"
+                placeholder="enquiries@superawoof.ng"
                 customCss="w-[95%] mx-auto mt-4"
                 onChangeText={setEmail}
                 value={email}

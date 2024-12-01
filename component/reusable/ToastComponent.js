@@ -1,11 +1,9 @@
-import React, { forwardRef } from 'react';
+import React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import Toast from 'react-native-toast-message';
 
 const ToastComponent = () => {
-  const ref = forwardRef();
-
-  return <Toast ref={(ref) => Toast.setRef(ref)} config={toastConfig} />;
+  return <Toast config={toastConfig} />;
 };
 
 // Custom Toast configuration
@@ -22,7 +20,6 @@ const toastConfig = {
       <Text style={styles.message}>{text2}</Text>
     </ToastView>
   ),
-  // Additional custom toast types can be added here
 };
 
 // Wrapper for custom toast view styling
@@ -47,8 +44,7 @@ const styles = StyleSheet.create({
   },
   title: {
     color: '#fff',
-    fontWeight: 'semibold',
-    // marginBottom: 5,
+    fontWeight: '600', // Adjusted to a valid fontWeight value
   },
   message: {
     color: '#fff',
