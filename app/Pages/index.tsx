@@ -181,7 +181,7 @@ const Index = () => {
         cancelText={
           <Pressable
             onPress={() => {
-              router.push("#");
+              router.push("/Pages/Extras/Wallet/");
             }}
             style={tailwind` w-[100%] mt-2`}
           >
