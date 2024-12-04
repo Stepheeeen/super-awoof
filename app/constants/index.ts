@@ -14,7 +14,7 @@ export const showToast = (message: string, type: "success" | "error") => {
 export const Profile = async () => {
   try {
     const token = await AsyncStorage.getItem("accessToken");
-    
+
     if (!token) {
       showToast("No access token found", "error");
       return null;
@@ -34,6 +34,16 @@ export const Profile = async () => {
     } else {
       showToast("Unexpected error", "error");
     }
+    return null;
+  }
+};
+
+export const getAccessToken = async () => {
+  try {
+    const token = await AsyncStorage.getItem("accessToken");
+    return token;
+  } catch (error) {
+    console.error("Error retrieving access token:", error);
     return null;
   }
 };

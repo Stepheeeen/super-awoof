@@ -182,19 +182,19 @@ const SlotMachine = ({
   //   await sound.playAsync();
   // };
 
-  const handleWinnerLink = async () => {
-    const url = "https://forms.gle/a7JwchrYgKJKzWjZ8"; // Replace with your external link
+  // const handleWinnerLink = async () => {
+  //   const url = "https://forms.gle/a7JwchrYgKJKzWjZ8"; // Replace with your external link
 
-    // Check if the URL can be opened
-    const supported = await Linking.canOpenURL(url);
-    if (supported) {
-      // Open the URL
-      await Linking.openURL(url);
-    } else {
-      // Show an alert if the URL can't be opened
-      Alert.alert(`Don't know how to open this URL: ${url}`);
-    }
-  };
+  //   // Check if the URL can be opened
+  //   const supported = await Linking.canOpenURL(url);
+  //   if (supported) {
+  //     // Open the URL
+  //     await Linking.openURL(url);
+  //   } else {
+  //     // Show an alert if the URL can't be opened
+  //     Alert.alert(`Don't know how to open this URL: ${url}`);
+  //   }
+  // };
 
   const getReelOutcome = () => {
     let isWinningOutcome = false;
@@ -326,7 +326,7 @@ const SlotMachine = ({
           </View>
         }
         SubText="Congratulations, you just won Jackpot. Proceed to redeem your cash price."
-        handleClick={handleWinnerLink}
+        handleClick={() => router.push("/Pages/Extras/Wallet/")}
         cancelText={""}
         ModalHeadText=""
       />
