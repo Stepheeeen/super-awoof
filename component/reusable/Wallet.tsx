@@ -173,7 +173,7 @@ export const WalletCard = () => {
               text="Withdraw"
             />
           ) : (
-            <DisabledButton text="Withdraw" />
+            <DisabledButton text="Withdraw" /> 
           )}
         </View>
       </ImageBackground>
