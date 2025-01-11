@@ -173,7 +173,7 @@ export const WalletCard = () => {
               text="Withdraw"
             />
           ) : (
-            <DisabledButton text="Withdraw" /> 
+            <DisabledButton text="Withdraw" />
           )}
         </View>
       </ImageBackground>
@@ -205,7 +205,9 @@ export const WalletCard = () => {
             <View style={tailwind`bg-[#282C34] rounded-lg mb-4`}>
               <Picker
                 selectedValue={selectedAccount}
-                onValueChange={(itemValue) => setSelectedAccount(itemValue)}
+                onValueChange={(itemValue: any) =>
+                  setSelectedAccount(itemValue)
+                }
                 style={tailwind`text-white`}
               >
                 <Picker.Item label="Select Account" value="" color="#bbb" />
